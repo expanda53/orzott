@@ -1,4 +1,4 @@
-<?php
+<?php 
   require_once 'firebird.php';
   require_once 'converter.php';
   $request  = strstr($_SERVER['REQUEST_URI'],".php");

@@ -8,9 +8,13 @@ class Firebird {
 		$driver="firebird";
 		$user="SYSDBA";
 		$password="masterkey";
-		$host="192.168.22.122";
+		//$host="192.168.22.122";
+		//$dbname="C:\ALFA\TIR\DAT\F2010\F2010_TESZT.GDB" ;
+		$host="192.168.1.68";
+		$dbname="D:\ALFA\TIR\DAT\F2013\F2013.GDB" ;
+
 		$port="3050";
-		$dbname="C:\ALFA\TIR\DAT\F2010\F2010_TESZT.GDB" ;
+		
         		
 		
 		$dsn = "${driver}:";
