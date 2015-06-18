@@ -1,3 +1,4 @@
+
 #divheader{
 	background-color:yellow;
 	height:20px;
@@ -15,6 +16,16 @@
 	top:40px;
 	left:20px;
 	right:20px;
-
 }
- 
+.tmibizlist td { 
+	padding:5px;
+	background-color:white;
+} 
+#divpanel {
+	display:none;
+}
+#rendszam {
+	padding:5px;
+	font-size: 20px;
+}
+

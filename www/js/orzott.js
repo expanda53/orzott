@@ -2,9 +2,9 @@ function ajaxCall( func, d,asyn,fn) {
   var res;
   $.ajax({
         type: "POST",
-        //url: "http://localhost/orzottsrv/service.php/" + func,
-		url: "http://192.168.1.68:82/orzottsrv/service.php/" + func,
-		//url: "http://localhost:82/orzottsrv/service.php/" + func,
+		url: "http://localhost/orzottsrv/service.php/" + func, /*akh teszt*/
+		//url: "http://192.168.1.68:82/orzottsrv/service.php/" + func, /* otthoni eles */
+		//url: "http://localhost:82/orzottsrv/service.php/" + func, /* otthoni teszt */
         data: d,
 		async: asyn,
         dataType: "json",
@@ -49,21 +49,68 @@ for (var i = 0;i < result.length;i++){
 }
 	
 }
-
-function obeerk_init() {
+/* beerkezes */
+function oBeerkMibizlist(result) {
 	panelName = 'obeerk';
+	sor = '';
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		sor += '<tr id="'+res.MIBIZ+'">';
+		sor +=  '<td class="tmibiz">'+res.MIBIZ+'</td>'; 
+		sor += '<td>'+res.FUVAR+'</td>'; 
+		sor += '</tr>';
+	}
+	
+	css='';
 	$.get( "css/"+panelName+".css", function( data ) {
 		css = '<head><style>' + data + '</style></head>';
 		$.get( "views/"+panelName+".tpl", function( data ) { 
-			tpl = data; 
+			tpl = data.replace('<{sorok}>',sor); 
 			$('#divContent').html(css + tpl);
 			$('#divContent').show();
-
 		});
 		
 	})
 
 }
+	
+
+
+function obeerk_init() {
+	fn = 'oBeerkMibizlist';
+	r = ajaxCall(fn,{'biztip':'MO06', 'login':'100'},true, fn);
+	/* obeerk.tpl beolvas, tr click -re mibiz átadása selectTask-nak. tr click az obeerk.tpl-ben van*/
+}
+
+function oBeerkRendszamok(result) {
+	sor = '';
+	$("#rendszam").html('');
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		$("#rendszam").append('<option value='+res.TAPADO+'>'+res.TAPADO+'</option>');
+	}
+	$('#divpanel').show();
+}
+function oBeerkPanelInit(result) {
+	sor = '';
+
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		$(".dataSofor").html(res.MSZAM3);
+	}
+	
+}
+
+
+function selectTask(id) {
+	$('#divmibizlist').hide();
+	fn = 'oBeerkPanelInit';
+	r = ajaxCall(fn,{'id':id, 'login':'100'},true, fn);
+	fn = 'oBeerkRendszamok';
+	ajaxCall(fn,{'id':id, 'login':'100'},true, fn);
+}
+/* beerkezes eddig */
+
 
 function showMenu() {
 	panelName = 'menu';
@@ -83,6 +130,8 @@ function showMenu() {
 		
 	})
 }
+
+
 $(document).ready(function () {
 	showMenu();
 })

@@ -49,11 +49,11 @@ var app = {
 };
 if(!window.cordova){
 	//alert('teszt');
-	var parentElement = document.getElementById('deviceready');
-	var receivedElement = parentElement.querySelector('.received');
-	var listeningElement = parentElement.querySelector('.listening');
-	listeningElement.setAttribute('style', 'display:none;');
-	receivedElement.setAttribute('style', 'display:block;');	
+	// var parentElement = document.getElementById('deviceready');
+	// var receivedElement = parentElement.querySelector('.received');
+	// var listeningElement = parentElement.querySelector('.listening');
+ 	// listeningElement.setAttribute('style', 'display:none;');
+	// receivedElement.setAttribute('style', 'display:block;');	
 } 
 else {
 	//alert('cordova ok');
