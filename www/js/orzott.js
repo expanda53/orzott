@@ -2,8 +2,8 @@ function ajaxCall( func, d,asyn,fn) {
   var res;
   $.ajax({
         type: "POST",
-		url: "http://localhost/orzottsrv/service.php/" + func, /*akh teszt*/
-		//url: "http://192.168.1.68:82/orzottsrv/service.php/" + func, /* otthoni eles */
+		//url: "http://localhost/orzottsrv/service.php/" + func, /*akh teszt*/
+		url: "http://192.168.1.68:82/orzottsrv/service.php/" + func, /* otthoni eles */
 		//url: "http://localhost:82/orzottsrv/service.php/" + func, /* otthoni teszt */
         data: d,
 		async: asyn,

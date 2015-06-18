@@ -11,7 +11,7 @@ class Firebird {
 		//$host="192.168.22.122";
 		//$dbname="C:\ALFA\TIR\DAT\F2010\F2010_TESZT.GDB" ;
 		$host="192.168.1.68";
-		$dbname="D:\ALFA\TIR\DAT\F2013\F2013.GDB" ;
+		$dbname="D:\ALFA\TIR\DAT\F2007\F2013.GDB" ;
 
 		$port="3050";
 		
