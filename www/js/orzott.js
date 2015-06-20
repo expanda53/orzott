@@ -1,5 +1,5 @@
 var orzott = null;
-
+$.ajaxSetup({ cache: false });
 function ajaxCall( func, d,asyn,fn) {
   var res;
   $.ajax({
@@ -37,7 +37,6 @@ var OBeerk = function(){
 	/* obeerk.tpl beolvas, tr click -re mibiz átadása selectTask-nak. tr click az obeerk.tpl-ben van*/
 }
 OBeerk.prototype.mibizList = function(result) {
-	alert('teszt');
 	panelName = 'obeerk';
 	sor = '';
 	for (var i = 0;i < result.length;i++){
@@ -65,12 +64,16 @@ OBeerk.prototype.panelInit = function (result) {
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		$(".dataSofor").html(res.MSZAM3);
+		$(".dataCeg").html(res.CEGNEV);
+		$(".dataMeret").html(res.MERETMINTA);
+		$(".dataFegu").html(res.FEGU);
 	}
 }
 
 OBeerk.prototype.getRendszamok = function(result) {
 	sor = '';
 	$("#rendszam").html('');
+	$("#rendszam").append('<option value="-">Válasszon</option>');
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		$("#rendszam").append('<option value='+res.TAPADO+'>'+res.TAPADO+'</option>');
@@ -80,7 +83,7 @@ OBeerk.prototype.getRendszamok = function(result) {
 
 OBeerk.prototype.selectTask = function(id) {
 	$('#divmibizlist').hide();
-	fn = 'oBeerkPanelInit';
+	fn = 'oBeerkPanelInit'; 
 	r = ajaxCall(fn,{'id':id, 'login':'100'},true, fn);
 	fn = 'oBeerkRendszamok';
 	ajaxCall(fn,{'id':id, 'login':'100'},true, fn);

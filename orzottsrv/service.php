@@ -5,12 +5,6 @@
   $p     = explode("/", $request);
   $func = $p[1];
   $r = $_REQUEST;
-  if ($func==='tesztws') {
-		$res = array();
-		$res[]=array('op1'=>$r['op1']);
-		echo json_encode($res);
-	  
-  }
   if ($func==='oBeerkMibizlist'){
 		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTLERAK (:biztip, :login)";
 		$stmt = Firebird::prepare($sql);

@@ -4,6 +4,14 @@
 		id = tr.find(".tmibiz").html();
 		selectTask(id);
 	})
+	
+	$('#bOBeerkMenu').bind('click',function () {
+		showMenu();
+	})
+	$('#rendszam').bind('change',function () {
+		alert('change');
+	})	
+	
 </script>
 <body>
 <div id=tploBeerk>
@@ -26,7 +34,7 @@
 		<!-- panel -->
 		<div id=divpanel>
 			<div class=buttons>
-				<button>Menü</button>
+				<button id=bOBeerkMenu>Menü</button>
 			</div>
 			<div class='dsofor'>
 				<span class='labelSofor'>Sofőr</span>
@@ -38,6 +46,18 @@
 				<{rendszamok}>
 				</select>
 			</div>
+			<div class='dceg'>
+				<span class='labelCeg'>Cég</span>
+				<span class='dataCeg'></span>
+			</div>
+			<div class='dmeretminta'>
+				<span class='labelMeret'>Méret,minta</span>
+				<span class='dataMeret'></span>
+			</div>
+			<div class='dfegu'>
+				<span class='labelFelniGumi'>Felni/Gumi</span>
+				<span class='dataFegu'></span>
+			</div>		
 		</div>
 		<!-- panel end -->
 		
