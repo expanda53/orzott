@@ -2,18 +2,22 @@
 	$('.tmibizlist tr').bind('click',function(){
 		tr = $(this);
 		id = tr.find(".tmibiz").html();
-		selectTask(id);
+		orzott.selectTask(id);
 	})
 	
 	$('#bOBeerkMenu').bind('click',function () {
 		showMenu();
 	})
 	$('#rendszam').bind('change',function () {
-		alert('change');
+		orzott.rszChange();
 	})	
+	$('#bGumi, #bGumiFelni, #bFelni').bind('click',function () {
+		orzott.printClick($(this));
+	})
 	
 </script>
 <body>
+<input type=hidden id=hAZON>
 <div id=tploBeerk>
 	<div id=divheader>
 		Örzött beérkezés
@@ -46,18 +50,35 @@
 				<{rendszamok}>
 				</select>
 			</div>
-			<div class='dceg'>
-				<span class='labelCeg'>Cég</span>
-				<span class='dataCeg'></span>
+			<div class='rszadatok'>
+				<div class='dceg'>
+					<span class='labelCeg'>Cég:</span>
+					<span class='dataCeg'></span>
+				</div>
+				<div class='dmeretminta'>
+					<span class='labelMeret'>Méret,minta:</span>
+					<span class='dataMeret'></span>
+				</div>
+				<div class='dfegu'>
+					<span class='labelFelniGumi'>Felni/Gumi:</span>
+					<span class='dataFegu'></span>
+				</div>
+				<div class=ddrbvart>
+					<span class='labelDrbVart'>várt</span>
+					<span class='dataDrbVart'>0</span>
+				</div>
+				<div class=ddrbkesz>
+					<span class='labelDrbKesz'>lepakolva</span>
+					<span class='dataDrbKesz'>0</span>
+				</div>
+				<div class=dButtons>
+					<button id=bGumi>Gumi</button>
+					<button id=bGumiFelni>Gumi+Felni</button>
+					<button id=bFelni>Felni</button>
+					<button id=bJavitas>Javítás</button>
+					<button id=bNincsMeg>Nincs meg</button>
+				</div>
 			</div>
-			<div class='dmeretminta'>
-				<span class='labelMeret'>Méret,minta</span>
-				<span class='dataMeret'></span>
-			</div>
-			<div class='dfegu'>
-				<span class='labelFelniGumi'>Felni/Gumi</span>
-				<span class='dataFegu'></span>
-			</div>		
 		</div>
 		<!-- panel end -->
 		
