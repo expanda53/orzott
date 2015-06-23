@@ -17,7 +17,7 @@
 		echo json_encode(Converter::win2utf_array($res));
   }
   if ($func==='oBeerkRendszamok'){
-		$mibiz = $r['id'];
+		$mibiz = $r['mibiz'];
 		$sql= "SELECT DISTINCT TAPADO, TAPADO RSZ FROM BSOR INNER JOIN BFEJ ON BFEJ.AZON=BSOR.BFEJ WHERE MIBIZ=:mibiz ORDER BY TAPADO";
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':mibiz', $mibiz, PDO::PARAM_STR);
@@ -27,9 +27,9 @@
 
   }
   if ($func==='oBeerkPanelInit'){
-		$mibiz = $r['id'];
+		$mibiz = $r['mibiz'];
 		$login = $r['login'];
-		$sql=" SELECT FIRST 1  BFEJ.AZON
+		$sql=" SELECT FIRST 1  BFEJ.AZON,BFEJ.MIBIZ
 				FROM BFEJ 
 				WHERE BFEJ.MIBIZ=:mibiz AND (COALESCE(BFEJ.STAT3,'R') IN ('R', 'W','H') --AND (SELECT COUNT(1) FROM BSOR SOROK WHERE SOROK.BFEJ=BFEJ.AZON AND COALESCE(SOROK.DEVEAR,0)=CAST(:login AS INTEGER))>0
 				)";
@@ -66,5 +66,39 @@
 
   }
   
+  if ($func==='taskReg'){
+		$mibiz = $r['mibiz'];
+		$login = $r['login'];
+		$sql=" EXECUTE PROCEDURE PDA_TASKREG(:mibiz,:login) ";
+
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':mibiz', $mibiz, PDO::PARAM_STR);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode(Converter::win2utf_array($res));
+
+  }
+  
+  if ($func==='oBeerkRszMent') {
+		$azon = $r['azon'];
+		$sorsz = $r['sorsz'];
+		$drb2 = $r['drb2'];
+		$drb2 = $drb2 + 1;
+		$login = $r['login'];
+		$rowstat='R';
+		$sql=" SELECT RESULT FROM PDA_ORZOTTLERAK_SORUPDATE(:azon, :sorsz, :drb2, :rowstat, :login) ";
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->bindParam(':sorsz', $sorsz, PDO::PARAM_STR);
+		$stmt->bindParam(':drb2', $drb2, PDO::PARAM_STR);
+		$stmt->bindParam(':rowstat', $rowstat, PDO::PARAM_STR);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+	  
+  }
   
 ?>

@@ -17,4 +17,14 @@
 	right:20px;
 
 }
+#bbeerk {
+	padding:20px;
+	background-color:lightgreen;
+	width:100px;
+	margin: 5px auto;
+	float:left;
+	font-size:14px;
+	font-weight:bold;
+	border:1px white solid;
+}
  

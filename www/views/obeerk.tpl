@@ -18,6 +18,8 @@
 </script>
 <body>
 <input type=hidden id=hAZON>
+<input type=hidden id=hMIBIZ>
+<input type=hidden id=hSORSZ>
 <div id=tploBeerk>
 	<div id=divheader>
 		Örzött beérkezés
@@ -27,8 +29,8 @@
 		<div id=divmibizlist>
 			<table class=tmibizlist>
 				<tr>
-					<th>Bizonylatszám</th>
-					<th>Sofőr</th>
+				<th>Sofőr</th>
+				<th>Bizonylatszám</th>
 				</tr>
 				
 				<{sorok}>

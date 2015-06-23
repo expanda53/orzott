@@ -1,7 +1,8 @@
 /* beerkezes */
+login_id = '100';
 var OBeerk = function(){
 	fn = 'oBeerkMibizlist';
-	r = ajaxCall(fn,{'biztip':'MO06', 'login':'100'},true, fn);
+	r = ajaxCall(fn,{'biztip':'MO06', 'login':login_id},true, fn);
 	/* obeerk.tpl beolvas, tr click -re mibiz átadása selectTask-nak. tr click az obeerk.tpl-ben van*/
 }
 OBeerk.prototype.mibizList = function(result) {
@@ -10,8 +11,8 @@ OBeerk.prototype.mibizList = function(result) {
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		sor += '<tr id="'+res.MIBIZ+'">';
-		sor +=  '<td class="tmibiz">'+res.MIBIZ+'</td>'; 
 		sor += '<td>'+res.FUVAR+'</td>'; 
+		sor +=  '<td class="tmibiz">'+res.MIBIZ+'</td>'; 
 		sor += '</tr>';
 	}
 	
@@ -27,11 +28,13 @@ OBeerk.prototype.mibizList = function(result) {
 	})
 
 }
+
 OBeerk.prototype.panelInit = function (result) {
 	sor = '';
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		$("#hAZON").val(res.AZON);
+		$("#hMIBIZ").val(res.MIBIZ);
 	}
 }
 
@@ -46,12 +49,13 @@ OBeerk.prototype.getRendszamok = function(result) {
 	$('#divpanel').show();
 }
 
-OBeerk.prototype.selectTask = function(id) {
+OBeerk.prototype.selectTask = function(mibiz) {
+	ajaxCall('taskReg',{'mibiz':mibiz, 'login':login_id},true, '');
 	$('#divmibizlist').hide();
 	fn = 'oBeerkPanelInit'; 
-	r = ajaxCall(fn,{'id':id, 'login':'100'},true, fn);
+	r = ajaxCall(fn,{'mibiz':mibiz, 'login':login_id},true, fn);
 	fn = 'oBeerkRendszamok';
-	ajaxCall(fn,{'id':id, 'login':'100'},true, fn);
+	ajaxCall(fn,{'mibiz':mibiz, 'login':login_id},true, fn);
 
 }
 OBeerk.prototype.oBeerkRszAdatok = function (result){
@@ -64,6 +68,7 @@ OBeerk.prototype.oBeerkRszAdatok = function (result){
 		$(".dataFegu").html(res.FEGU);
 		$(".dataDrbVart").html(res.DRB);
 		$(".dataDrbKesz").html(res.CDRB);
+		$("#hSORSZ").val(res.SORSZ);
 	}
 	$('.rszadatok').show();
 
@@ -82,7 +87,38 @@ OBeerk.prototype.rszChange = function (){
 
 OBeerk.prototype.printClick = function (obj) {
 	id=obj.attr('id');
-	alert(id);
+	this.updateStart(id);
+	//alert(id);
+}
+
+OBeerk.prototype.updateStart = function (tip) {
+	azon = $('#hAZON').val();
+	sorsz = $('#hSORSZ').val();	
+	drb = $('.dataDrbVart').html();
+	drb2 = $('.dataDrbKesz').html();
+	if (drb2<drb) {
+	  fn = 'oBeerkRszMent';
+	  r = ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'login':login_id},true, fn);
+	}
+	else {
+		alert('A beérkezett mennyiség '+drb+' db!');
+		
+	}
+
+}
+
+OBeerk.prototype.rszMent = function(result) {
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		if (res.RESULT!=-1)	$('.dataDrbKesz').html(res.RESULT);
+		else alert('Hiba');
+	}
+}
+
+
+
+function oBeerkRszMent(result) {
+	orzott.rszMent(result);
 }
 
 function oBeerkMibizlist(result){
