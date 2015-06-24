@@ -5,9 +5,9 @@ function ajaxCall( func, d,asyn,fn) {
   $.ajax({
         type: "POST",
 		//url: "http://localhost/orzottsrv/service.php/" + func, /*akh teszt*/
-		url: "http://192.168.22.175/orzottsrv/service.php/" + func, /* akh eles */
+		//url: "http://192.168.22.175/orzottsrv/service.php/" + func, /* akh eles */
 		//url: "http://192.168.1.68:82/orzottsrv/service.php/" + func, /* otthoni eles */
-		//url: "http://localhost:82/orzottsrv/service.php/" + func, /* otthoni teszt */
+		url: "http://localhost:82/orzottsrv/service.php/" + func, /* otthoni teszt */
         data: d,
 		async: asyn,
         dataType: "json",

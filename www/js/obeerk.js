@@ -1,6 +1,9 @@
 /* beerkezes */
 login_id = '100';
 var OBeerk = function(){
+	this.initMibizList();
+}
+OBeerk.prototype.initMibizList = function(){
 	fn = 'oBeerkMibizlist';
 	r = ajaxCall(fn,{'biztip':'MO06', 'login':login_id},true, fn);
 	/* obeerk.tpl beolvas, tr click -re mibiz átadása selectTask-nak. tr click az obeerk.tpl-ben van*/
@@ -15,6 +18,7 @@ OBeerk.prototype.mibizList = function(result) {
 		sor +=  '<td class="tmibiz">'+res.MIBIZ+'</td>'; 
 		sor += '</tr>';
 	}
+	
 	
 	css='';
 	$.get( "css/"+panelName+".css", function( data ) {
@@ -84,14 +88,34 @@ OBeerk.prototype.rszChange = function (){
 	else $('.rszadatok').hide();
 	
 }
-
-OBeerk.prototype.printClick = function (obj) {
-	id=obj.attr('id');
-	this.updateStart(id);
-	//alert(id);
+OBeerk.prototype.rszJavitasDone = function (result) {
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		if (res.RESULT!=-1)	$('.dataDrbKesz').html(res.RESULT);
+		else alert('Hiba');
+	}
 }
 
-OBeerk.prototype.updateStart = function (tip) {
+OBeerk.prototype.rszJavitas = function () {
+	var r = confirm("A rendszámhoz tartozo elozo nyomtatas torlese,mehet?");
+	if (r == true) {
+		azon = $('#hAZON').val();
+		sorsz = $('#hSORSZ').val();	
+		rsz = $('#rendszam').val();
+		drb2 = $('.dataDrbKesz').html();
+		if (drb2>0) {
+		  fn = 'oBeerkRszJav';
+		  r = ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'rsz':rsz,'login':login_id},true, fn);
+		}
+	} else {
+
+	}	
+
+}
+
+
+OBeerk.prototype.updateStart = function (obj) {
+	tip=obj.attr('id');
 	azon = $('#hAZON').val();
 	sorsz = $('#hSORSZ').val();	
 	drb = $('.dataDrbVart').html();
@@ -116,6 +140,80 @@ OBeerk.prototype.rszMent = function(result) {
 }
 
 
+OBeerk.prototype.oBeerkReviewGet = function(result) {
+	sor = '';
+	$('.tableReview tbody').html('');
+	var hianydb = 0;
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		sor += '<tr id="'+res.RENDSZAM+'">';
+		sor += '<td>'+res.RENDSZAM+'</td>';
+		sor += '<td>'+res.DRB+'</td>'; 
+		sor +=  '<td class="tmibiz">'+res.DRB2+'</td>'; 
+		sor += '</tr>';
+		if (res.DRB2<res.DRB) {
+			hianydb = parseInt(hianydb) + parseInt(res.DRB) - parseInt(res.DRB2);
+		}
+		
+	}
+	$('.tableReview tbody').append(sor);
+	if (hianydb!=0){
+		$('.labelHiany').html('Hiányzó mennyiség:');
+		$('.dataHiany').html(hianydb);
+	}
+	$('#divreview').show();
+}
+
+
+OBeerk.prototype.showReview = function() {
+	azon = $('#hAZON').val();
+	$('#divpanel').hide();
+	fn = 'oBeerkReviewGet';
+	r = ajaxCall(fn,{'azon':azon,'login':login_id},true, fn);
+}
+
+OBeerk.prototype.folytKesobb=function(){
+	fn = 'oBeerkFolytUpdate';
+	azon = $('#hAZON').val();
+	r = ajaxCall(fn,{'azon':azon,'login':login_id},true, fn);
+}
+OBeerk.prototype.folytUpdate=function(result){
+		$('#divreview').hide();
+		orzott.initMibizList();
+}
+
+OBeerk.prototype.lezarStart = function(){
+	hianydb = $('.dataHiany').html();
+	stat='Z';
+	mehet=true;
+	if (hianydb!='' && hianydb!=0) {
+		var mehet = confirm("Vannak hiányzó tételek, ennek ellenére lezárja?");
+		stat='X';
+	}
+	if (mehet) {
+		alert('hiany:'+hianydb+' stat:'+stat);
+		mibiz=$("#hMIBIZ").val();
+		fn = 'oBeerkLezarUpdate';
+		r = ajaxCall(fn,{'mibiz':mibiz,'stat':stat,'login':login_id},true, fn);
+	}
+}
+
+
+function oBeerkLezarUpdate(result){
+	orzott.folytUpdate(result);
+}
+
+
+function oBeerkFolytUpdate(result){
+	orzott.folytUpdate(result);
+}
+function oBeerkReviewGet(result){
+	orzott.oBeerkReviewGet(result);
+}
+
+function oBeerkRszJav(result) {
+	orzott.rszJavitasDone(result);
+}
 
 function oBeerkRszMent(result) {
 	orzott.rszMent(result);

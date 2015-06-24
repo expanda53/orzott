@@ -6,14 +6,28 @@
 	})
 	
 	$('#bOBeerkMenu').bind('click',function () {
-		showMenu();
+		//showMenu();
+		orzott.showReview();
 	})
 	$('#rendszam').bind('change',function () {
 		orzott.rszChange();
 	})	
 	$('#bGumi, #bGumiFelni, #bFelni').bind('click',function () {
-		orzott.printClick($(this));
+		orzott.updateStart($(this));
 	})
+	$('#bJavitas').bind('click',function () {
+		orzott.rszJavitas();
+	})
+	$('#bFolytMost').bind('click',function () {
+		$('#divreview').hide();
+		$('#divpanel').show();
+	})
+	$('#bFolytKesobb').bind('click',function () {
+		orzott.folytKesobb();
+	})	
+	$('#bLezar').bind('click',function () {
+		orzott.lezarStart();
+	})	
 	
 </script>
 <body>
@@ -39,9 +53,6 @@
 		<!-- tasklist end -->
 		<!-- panel -->
 		<div id=divpanel>
-			<div class=buttons>
-				<button id=bOBeerkMenu>Menü</button>
-			</div>
 			<div class='dsofor'>
 				<span class='labelSofor'>Sofőr</span>
 				<span class='dataSofor'></span>
@@ -79,10 +90,33 @@
 					<button id=bFelni>Felni</button>
 					<button id=bJavitas>Javítás</button>
 					<button id=bNincsMeg>Nincs meg</button>
+					<button id=bOBeerkMenu>Átnézés</button>					
 				</div>
 			</div>
 		</div>
 		<!-- panel end -->
+		<div id=divreview>
+			<table class=tableReview>
+				<thead>
+				<tr>
+					<th>Rendszám</th>
+					<th>Lerakodandó</th>
+					<th>Lerakodott</th>
+				</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+			<div id=divhiany>
+				<span class=labelHiany></span>
+				<span class=dataHiany></span>
+			</div>
+			<div class=dButtons>
+				<button id=bFolytMost>Folyt. most</button>
+				<button id=bFolytKesobb>Folyt. később</button>
+				<button id=bLezar>Lezárás</button>
+			</div>			
+		</div>
 		
 	</div>
 </div>

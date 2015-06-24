@@ -11,11 +11,11 @@
 	padding:5px;
  }
 #tploBeerk {
-	padding:10px;
+	padding:5px;
 	position:fixed;
-	top:40px;
-	left:20px;
-	right:20px;
+	top:5px;
+	left:5px;
+	right:5px;
 }
 .tmibizlist td { 
 	padding:20px;
@@ -51,4 +51,8 @@ clear:both;
 .dButtons button {
 	padding:15px;
 } 
+
+#divreview {
+	display:none;
+}
 

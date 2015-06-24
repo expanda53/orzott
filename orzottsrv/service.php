@@ -100,5 +100,71 @@
 		echo json_encode(Converter::win2utf_array($res));
 	  
   }
+
+  if ($func==='oBeerkRszJav') {
+		$azon = $r['azon'];
+		$sorsz = $r['sorsz'];
+		$rsz = $r['rsz'];
+		$login = $r['login'];
+		$sql=" SELECT RESULT FROM PDA_ORZOTTLERAK_JAVITAS(:azon, :sorsz, :rsz, :login) ";
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->bindParam(':sorsz', $sorsz, PDO::PARAM_STR);
+		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+	  
+  }  
   
+  if ($func==='oBeerkReviewGet'){
+		$azon = $r['azon'];
+		$login = $r['login'];
+		$sql=" SELECT BSOR.TAPADO RENDSZAM, CAST(DRB AS INTEGER) DRB, CAST(DRB2 AS INTEGER) DRB2
+				FROM BSOR
+				WHERE BSOR.BFEJ=:azon
+				";
+
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode(Converter::win2utf_array($res));
+
+  }  
+  if ($func==='oBeerkFolytUpdate') {
+		$azon = $r['azon'];
+		$login = $r['login'];
+		$sql=" UPDATE BSOR SET STAT3='U' WHERE COALESCE(BSOR.STAT3,'')='N' AND BSOR.BFEJ = :azon  ";
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->execute();
+		//$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		$res=array();
+		$res[0]['STATUS']='OK';
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+	  
+  }
+  if ($func==='oBeerkLezarUpdate') {
+		$mibiz = $r['mibiz'];
+		$stat = $r['stat'];
+		$login = $r['login'];
+		$sql=" EXECUTE PROCEDURE PDA_LERAKODAS_LEZAR(:mibiz,:stat)  ";
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':mibiz', $mibiz, PDO::PARAM_STR);
+		$stmt->bindParam(':stat', $stat, PDO::PARAM_STR);
+		$stmt->execute();
+		//$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		$res=array();
+		$res[0]['STATUS']='OK';
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+	  
+  }
+  
+
 ?>
