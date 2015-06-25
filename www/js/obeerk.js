@@ -4,11 +4,11 @@ var OBeerk = function(){
 	this.initMibizList();
 }
 OBeerk.prototype.initMibizList = function(){
-	fn = 'oBeerkMibizlist';
+	fn = 'orzott.oBeerkMibizlist';
 	r = ajaxCall(fn,{'biztip':'MO06', 'login':login_id},true, fn);
 	/* obeerk.tpl beolvas, tr click -re mibiz átadása selectTask-nak. tr click az obeerk.tpl-ben van*/
 }
-OBeerk.prototype.mibizList = function(result) {
+OBeerk.prototype.oBeerkMibizlist = function(result) {
 	panelName = 'obeerk';
 	sor = '';
 	for (var i = 0;i < result.length;i++){
@@ -42,7 +42,7 @@ OBeerk.prototype.panelInit = function (result) {
 	}
 }
 
-OBeerk.prototype.getRendszamok = function(result) {
+OBeerk.prototype.oBeerkRendszamok = function(result) {
 	sor = '';
 	$("#rendszam").html('');
 	$("#rendszam").append('<option value="-">Válasszon</option>');
@@ -56,9 +56,9 @@ OBeerk.prototype.getRendszamok = function(result) {
 OBeerk.prototype.selectTask = function(mibiz) {
 	ajaxCall('taskReg',{'mibiz':mibiz, 'login':login_id},true, '');
 	$('#divmibizlist').hide();
-	fn = 'oBeerkPanelInit'; 
+	fn = 'orzott.panelInit'; 
 	r = ajaxCall(fn,{'mibiz':mibiz, 'login':login_id},true, fn);
-	fn = 'oBeerkRendszamok';
+	fn = 'orzott.oBeerkRendszamok';
 	ajaxCall(fn,{'mibiz':mibiz, 'login':login_id},true, fn);
 
 }
@@ -82,13 +82,13 @@ OBeerk.prototype.rszChange = function (){
 	rsz = $('#rendszam').val();
 	if (rsz!='-') {
 		azon = $('#hAZON').val();
-		fn = 'oBeerkRszAdatok';
+		fn = 'orzott.oBeerkRszAdatok';
 		r = ajaxCall(fn,{'rsz':rsz,'azon':azon},true, fn);
 	}
 	else $('.rszadatok').hide();
 	
 }
-OBeerk.prototype.rszJavitasDone = function (result) {
+OBeerk.prototype.oBeerkRszJav = function (result) {
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		if (res.RESULT!=-1)	$('.dataDrbKesz').html(res.RESULT);
@@ -104,7 +104,7 @@ OBeerk.prototype.rszJavitas = function () {
 		rsz = $('#rendszam').val();
 		drb2 = $('.dataDrbKesz').html();
 		if (drb2>0) {
-		  fn = 'oBeerkRszJav';
+		  fn = 'orzott.oBeerkRszJav';
 		  r = ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'rsz':rsz,'login':login_id},true, fn);
 		}
 	} else {
@@ -121,7 +121,7 @@ OBeerk.prototype.updateStart = function (obj) {
 	drb = $('.dataDrbVart').html();
 	drb2 = $('.dataDrbKesz').html();
 	if (drb2<drb) {
-	  fn = 'oBeerkRszMent';
+	  fn = 'orzott.oBeerkRszMent';
 	  r = ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'login':login_id},true, fn);
 	}
 	else {
@@ -131,7 +131,7 @@ OBeerk.prototype.updateStart = function (obj) {
 
 }
 
-OBeerk.prototype.rszMent = function(result) {
+OBeerk.prototype.oBeerkRszMent = function(result) {
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		if (res.RESULT!=-1)	$('.dataDrbKesz').html(res.RESULT);
@@ -168,16 +168,16 @@ OBeerk.prototype.oBeerkReviewGet = function(result) {
 OBeerk.prototype.showReview = function() {
 	azon = $('#hAZON').val();
 	$('#divpanel').hide();
-	fn = 'oBeerkReviewGet';
+	fn = 'orzott.oBeerkReviewGet';
 	r = ajaxCall(fn,{'azon':azon,'login':login_id},true, fn);
 }
 
 OBeerk.prototype.folytKesobb=function(){
-	fn = 'oBeerkFolytUpdate';
+	fn = 'orzott.oBeerkFolytUpdate';
 	azon = $('#hAZON').val();
 	r = ajaxCall(fn,{'azon':azon,'login':login_id},true, fn);
 }
-OBeerk.prototype.folytUpdate=function(result){
+OBeerk.prototype.oBeerkFolytUpdate=function(result){
 		$('#divreview').hide();
 		orzott.initMibizList();
 }
@@ -193,50 +193,14 @@ OBeerk.prototype.lezarStart = function(){
 	if (mehet) {
 		alert('hiany:'+hianydb+' stat:'+stat);
 		mibiz=$("#hMIBIZ").val();
-		fn = 'oBeerkLezarUpdate';
+		fn = 'orzott.oBeerkLezarUpdate';
 		r = ajaxCall(fn,{'mibiz':mibiz,'stat':stat,'login':login_id},true, fn);
 	}
 }
 
 
-function oBeerkLezarUpdate(result){
-	orzott.folytUpdate(result);
-}
-
-
-function oBeerkFolytUpdate(result){
-	orzott.folytUpdate(result);
-}
-function oBeerkReviewGet(result){
-	orzott.oBeerkReviewGet(result);
-}
-
-function oBeerkRszJav(result) {
-	orzott.rszJavitasDone(result);
-}
-
-function oBeerkRszMent(result) {
-	orzott.rszMent(result);
-}
-
-function oBeerkMibizlist(result){
-	orzott.mibizList(result);
-}
-
-
-function oBeerkRendszamok(result) {
-	orzott.getRendszamok(result);
-}
-function oBeerkRszAdatok(result) {
-	orzott.oBeerkRszAdatok(result);
-}
-
-function oBeerkPanelInit(result) {
-	orzott.panelInit(result);
-}
-
-function selectTask(id) {
-	orzott.selectTask(id);
+OBeerk.prototype.oBeerkLezarUpdate =function(result){
+	orzott.oBeerkFolytUpdate(result);
 }
 
 /* beerkezes eddig */

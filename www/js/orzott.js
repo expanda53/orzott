@@ -12,14 +12,20 @@ function ajaxCall( func, d,asyn,fn) {
 		async: asyn,
         dataType: "json",
         success: function(data) {
-		  res=data; 
-		  if (fn) {
-			  var myFunc = window[fn];
-			  if(typeof myFunc === 'function') {
-				myFunc(data);
-			  }
+			res=data; 
+			if (fn) {
+				f=fn.split(".");
+				if (f.length>1) {
+					var myFunc = window[f[0]][f[1]];
+				}
+				else {
+					var myFunc = window[fn];
+				}
+				if(typeof myFunc === 'function') {
+					myFunc(data);
+				}
 			  
-		  }
+			}
         },
         error: function(data) {
             console.log(data);
