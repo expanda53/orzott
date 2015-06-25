@@ -2,10 +2,10 @@
 <body>
 <div id=tplMenu>
 	<div id=divheader>
-		Menü
+		Őrzött abroncsok menü
 	</div>
 	<div id=divcontent>
-		<button type=button id=bbeerk>Beérkezés</button>
+		<div id=bbeerk>Beérkezés</div>
 	</div>
 </div>
 </body>

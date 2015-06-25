@@ -12,7 +12,7 @@
 	$('#rendszam').bind('change',function () {
 		orzott.rszChange();
 	})	
-	$('#bGumi, #bGumiFelni, #bFelni').bind('click',function () {
+	$('#bGumi, #bGumiFelni, #bFelni, #bPlus').bind('click',function () {
 		orzott.updateStart($(this));
 	})
 	$('#bJavitas').bind('click',function () {
@@ -56,15 +56,14 @@
 		<!-- tasklist end -->
 		<!-- panel -->
 		<div id=divpanel>
-			<div class='dsofor'>
-				<span class='labelSofor'>Sofőr</span>
-				<span class='dataSofor'></span>
-			</div>
 			<div class='drendszam'>
-				<span class='labelRendszam'>Rendszám</span>
 				<select id=rendszam>
 				<{rendszamok}>
 				</select>
+			</div>
+			<div class='dsofor'>
+				<span class='labelSofor'>Sofőr</span>
+				<span class='dataSofor'></span>
 			</div>
 			<div class='rszadatok'>
 				<div class='dceg'>
@@ -79,21 +78,28 @@
 					<span class='labelFelniGumi'>Felni/Gumi:</span>
 					<span class='dataFegu'></span>
 				</div>
-				<div class=ddrbvart>
-					<span class='labelDrbVart'>várt</span>
-					<span class='dataDrbVart'>0</span>
-				</div>
-				<div class=ddrbkesz>
-					<span class='labelDrbKesz'>lepakolva</span>
-					<span class='dataDrbKesz'>0</span>
+			</div>
+			<div class='dcontrol'>
+				<div class=divlabels>
+					<div class=ddrbvart>
+						<span class='labelDrbVart'>várt</span>
+						<span class='dataDrbVart'>0</span>
+					</div>
+					<div class=ddrbkesz>
+						<span class='labelDrbKesz'>lepakolva</span>
+						<span class='dataDrbKesz'>0</span>
+					</div>
 				</div>
 				<div class=dButtons>
-					<button id=bGumi>Gumi</button>
-					<button id=bGumiFelni>Gumi+Felni</button>
-					<button id=bFelni>Felni</button>
-					<button id=bJavitas>Javítás</button>
-					<button id=bNincsMeg>Nincs meg</button>
-					<button id=bOBeerkMenu>Átnézés</button>					
+					<div class='labelPrint'>Címke nyomtatás</div>
+					<button class='bprint' id=bGumi>Gumi</button>
+					<button class='bprint' id=bGumiFelni>Gumi+Felni</button>
+					<button class='bprint' id=bFelni>Felni</button>
+					<div class='labelPrint'>Nyomtatás nélkül</div>
+					<button class='bnoprint' id=bPlus>+1</button>
+					<button class='bnoprint' id=bJavitas>Javítás</button>
+					<button class='bnoprint' id=bNincsMeg>Nincs meg</button>
+					<button class='bnoprint' id=bOBeerkMenu>Átnézés</button>					
 				</div>
 			</div>
 		</div>

@@ -75,6 +75,7 @@ OBeerk.prototype.oBeerkRszAdatok = function (result){
 		$("#hSORSZ").val(res.SORSZ);
 	}
 	$('.rszadatok').show();
+	$('.dcontrol').show();
 
 }
 
@@ -85,7 +86,10 @@ OBeerk.prototype.rszChange = function (){
 		fn = 'orzott.oBeerkRszAdatok';
 		r = ajaxCall(fn,{'rsz':rsz,'azon':azon},true, fn);
 	}
-	else $('.rszadatok').hide();
+	else {
+		$('.rszadatok').hide();
+		$('.dcontrol').hide();
+	}
 	
 }
 OBeerk.prototype.oBeerkRszJav = function (result) {
@@ -121,8 +125,11 @@ OBeerk.prototype.updateStart = function (obj) {
 	drb = $('.dataDrbVart').html();
 	drb2 = $('.dataDrbKesz').html();
 	if (drb2<drb) {
-	  fn = 'orzott.oBeerkRszMent';
-	  r = ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'login':login_id},true, fn);
+		if (tip!='bPlus') {
+			/* print */
+		}
+		fn = 'orzott.oBeerkRszMent';
+		r = ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'login':login_id},true, fn);
 	}
 	else {
 		alert('A beérkezett mennyiség '+drb+' db!');

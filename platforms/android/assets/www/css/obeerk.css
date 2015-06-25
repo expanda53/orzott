@@ -1,20 +1,98 @@
+ 
 #divheader{
 	background-color:yellow;
-	height:20px;
+	height:12px;
 	padding:5px;
  }
  
  #divcontent{
 	background-color:orange;
-	height:100px;
+	height:270px;
 	padding:5px;
  }
 #tploBeerk {
-	padding:10px;
+	padding:5px;
 	position:fixed;
-	top:40px;
-	left:20px;
-	right:20px;
+	top:5px;
+	left:5px;
+	right:5px;
+}
+.tmibizlist td { 
+	padding:20px;
+	background-color:white;
+} 
+#divpanel {
+	display:none;
+}
+#rendszam {
+	padding:10px 15px;
+	font-size: 20px;
+	-webkit-appearance: menulist-text;
 
 }
- 
+.dsofor {
+	padding:2px;
+}
+.divlabels {
+	width:300px;
+	margin:0 auto;
+	text-align:center;
+}
+.ddrbvart, .ddrbkesz{
+	padding:5px;
+	width:40%;
+	margin:5px 2px;
+	
+}
+.ddrbvart{
+	background-color:yellow;
+		float:left;
+}
+.ddrbkesz {
+	background-color:lightgreen;
+	font-weight:bold;
+		float:right;
+}
+.rszadatok {
+	display:none;
+	position:fixed;
+	top:37px;
+	left:165px;
+	line-height:20px;
+	background-color:aliceblue;
+	padding:2px;
+	width:435px;
+	border:1px solid black;
+}
+.dcontrol {
+	display:none;
+}
+.dButtons {
+	clear:both;
+	margin:0px auto;
+	width:90%;
+}
+.dButtons button {
+	padding:15px; 
+	margin:3px auto;
+} 
+
+.dButtons  .bprint{
+	width:30%;
+} 
+.dButtons  .bnoprint{
+	width:22%;
+} 
+
+.dButtons .labelPrint {
+	width:91%;
+	text-align:center;
+	background-color:yellow;
+	padding:2px;
+	margin:2px 0px;
+} 
+
+#divreview {
+	display:none;
+}
+

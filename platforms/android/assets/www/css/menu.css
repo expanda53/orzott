@@ -10,11 +10,21 @@
 	padding:5px;
  }
 #tplMenu {
-	padding:10px;
+	padding:5px;
 	position:fixed;
-	top:40px;
-	left:20px;
-	right:20px;
+	top:5px;
+	left:5px;
+	right:5px;
 
+}
+#bbeerk {
+	padding:20px;
+	background-color:lightgreen;
+	width:100px;
+	margin: 5px auto;
+	float:left;
+	font-size:14px;
+	font-weight:bold;
+	border:1px white solid;
 }
  
