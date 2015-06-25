@@ -28,6 +28,9 @@
 	$('#bLezar').bind('click',function () {
 		orzott.lezarStart();
 	})	
+	$('#bNincsMeg').bind('click',function () {
+		orzott.nincsMeg();
+	})	
 	
 </script>
 <body>

@@ -203,4 +203,20 @@ OBeerk.prototype.oBeerkLezarUpdate =function(result){
 	orzott.oBeerkFolytUpdate(result);
 }
 
+OBeerk.prototype.nincsMeg = function(){
+		mibiz = $('#hMIBIZ').val();
+		sorsz = $('#hSORSZ').val();	
+		rsz = $('#rendszam').val();
+		fn = 'orzott.oBeerkNincsMeg';
+		r = ajaxCall(fn,{'mibiz':mibiz,'sorsz':sorsz,'rsz':rsz,'login':login_id},true, fn);
+}
+OBeerk.prototype.oBeerkNincsMeg = function (result) {
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		if (res.RESULT!=-1)	$('.dataDrbKesz').html('0');
+		else alert('Hiba');
+	}
+}
+
+
 /* beerkezes eddig */
