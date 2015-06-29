@@ -2,6 +2,7 @@
 login_id = '100';
 var OBeerk = function(){
 	this.initMibizList();
+	
 }
 OBeerk.prototype.initMibizList = function(){
 	fn = 'orzott.oBeerkMibizlist';

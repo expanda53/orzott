@@ -17,6 +17,7 @@
  * under the License.
  */
 var app = {
+	
     // Application Constructor
     initialize: function() {
         this.bindEvents();
@@ -37,15 +38,34 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
+        /*var parentElement = document.getElementById(id);
         var listeningElement = parentElement.querySelector('.listening');
         var receivedElement = parentElement.querySelector('.received');
 
         listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
+        receivedElement.setAttribute('style', 'display:block;');*/
+		app.BTEnabled();				
         console.log('Received Event: ' + id);
-    }
+		
+    },
+	BTEnabled:function(){
+		console.log('teszt');
+
+			bluetoothSerial.isEnabled(
+				function(){alert('enabled')},
+				function(){alert('not enabled')}
+			); 			
+			bluetoothSerial.list(
+				function(results) {
+					alert('ok');
+                    $('#mac').val(JSON.stringify(results));
+                },
+                function(error) {
+					alert('not ok');
+                    $('#mac').val(JSON.stringify(error));
+                }
+            );	
+	}
 };
 if(!window.cordova){
 	//alert('teszt');
@@ -59,3 +79,4 @@ else {
 	//alert('cordova ok');
 }
 app.initialize();
+

@@ -37,6 +37,7 @@
 <input type=hidden id=hAZON>
 <input type=hidden id=hMIBIZ>
 <input type=hidden id=hSORSZ>
+<input id=mac>
 <div id=tploBeerk>
 	<div id=divheader>
 		Örzött beérkezés
