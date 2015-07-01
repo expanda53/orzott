@@ -17,6 +17,8 @@
  * under the License.
  */
 var app = {
+	printerId:"",
+	printerName:"",
 	
     // Application Constructor
     initialize: function() {
@@ -38,34 +40,103 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        /*var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');*/
-		app.BTEnabled();				
+		document.addEventListener("backbutton", this.onBackKeyDown, false);
+		showMenu();
         console.log('Received Event: ' + id);
 		
     },
+	onBackKeyDown:function() {
+    },	
+	/* bt */
 	BTEnabled:function(){
-		console.log('teszt');
-
-			bluetoothSerial.isEnabled(
-				function(){alert('enabled')},
-				function(){alert('not enabled')}
-			); 			
-			bluetoothSerial.list(
-				function(results) {
-					alert('ok');
-                    $('#mac').val(JSON.stringify(results));
-                },
+		if(typeof bluetoothSerial != 'undefined'){ alert('teszt');
+			var btAssign = function() {
+				bluetoothSerial.list(function(devices) {
+					devices.forEach(function(device) {
+						if (device.class=='1664') {app.printerId = device.id;app.printerName=device.name;app.manageConnection();}
+					})
+				},
                 function(error) {
-					alert('not ok');
-                    $('#mac').val(JSON.stringify(error));
+					console.log('bt list error');
+                    //$('#mac').val(JSON.stringify(error));
                 }
-            );	
-	}
+				)
+			}
+			bluetoothSerial.isEnabled(
+				btAssign,
+				function(){alert('not enabled')}
+			); 
+
+		}
+	},
+	
+	
+   manageConnection: function() {
+		if(typeof bluetoothSerial != 'undefined') {
+			// connect() will get called only if isConnected() (below)
+			// returns failure. In other words, if not connected, then connect:
+			var connect = function () {
+				// if not connected, do this:
+				// clear the screen and display an attempt to connect
+				// attempt to connect:
+				bluetoothSerial.connect(
+					app.printerId,  // device to connect to
+					app.openPort,    // start listening if you succeed
+					app.showError    // show the error if you fail
+				);
+			};
+
+			// disconnect() will get called only if isConnected() (below)
+			// returns success  In other words, if  connected, then disconnect:
+			var disconnect = function () {
+				// if connected, do this:
+				bluetoothSerial.disconnect(
+					app.closePort,     // stop listening to the port
+					app.showError      // show the error if you fail
+				);
+			};
+
+			// here's the real action of the manageConnection function:
+			bluetoothSerial.isConnected(disconnect, connect);
+		}
+    },
+/*
+    subscribes to a Bluetooth serial listener for newline
+    and changes the button:
+*/
+    openPort: function() {
+        // if you get a good Bluetooth serial connection:
+        alert("Connected to: " + app.printerId);
+        // set up a listener to listen for newlines
+        // and display any new data that's come in since
+        // the last newline:
+        bluetoothSerial.subscribe('\n', function (data) {
+            alert(data);
+        });
+    },
+
+/*
+    unsubscribes from any Bluetooth serial listener and changes the button:
+*/
+    closePort: function() {
+        // if you get a good Bluetooth serial connection:
+        // unsubscribe from listening:
+        bluetoothSerial.unsubscribe(
+                function (data) {
+                    alert(data);
+                },
+                app.showError
+        );
+    },
+/*
+    appends @error to the message div:
+*/
+    showError: function(error) {
+        alert(error);
+    }
+	
+	
+	/* bt eddig*/
 };
 if(!window.cordova){
 	//alert('teszt');

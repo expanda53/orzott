@@ -2,6 +2,7 @@ var orzott = null;
 $.ajaxSetup({ cache: false });
 function ajaxCall( func, d,asyn,fn) {
   var res;
+  console.debug('ajax:'+func+' data:'+JSON.stringify(d));
   $.ajax({
         type: "POST",
 		//url: "http://localhost/orzottsrv/service.php/" + func, /*akh teszt*/
@@ -12,6 +13,7 @@ function ajaxCall( func, d,asyn,fn) {
 		async: asyn,
         dataType: "json",
         success: function(data) {
+			console.debug('ajax success:'+fn+' data:'+JSON.stringify(data));
 			res=data; 
 			if (fn) {
 				f=fn.split(".");
@@ -22,13 +24,14 @@ function ajaxCall( func, d,asyn,fn) {
 					var myFunc = window[fn];
 				}
 				if(typeof myFunc === 'function') {
+					console.debug('ajax success,start func:'+fn+' data:'+JSON.stringify(data));
 					myFunc(data);
 				}
 			  
 			}
         },
         error: function(data) {
-            console.log(data);
+            console.debug('ajax error:'+func+' data:'+JSON.stringify(data));
 			res='ERROR';
         }
   });
@@ -60,6 +63,6 @@ function showMenu() {
 
 
 $(document).ready(function () {
-	showMenu();
+		//showMenu();	
 })
 

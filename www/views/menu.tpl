@@ -1,4 +1,3 @@
-
 <body>
 <div id=tplMenu>
 	<div id=divheader>

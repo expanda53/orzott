@@ -83,7 +83,6 @@ public class BluetoothSerial extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, CordovaArgs args, CallbackContext callbackContext) throws JSONException {
-
         LOG.d(TAG, "action = " + action);
 
         if (bluetoothAdapter == null) {
@@ -118,10 +117,15 @@ public class BluetoothSerial extends CordovaPlugin {
             callbackContext.success();
 
         } else if (action.equals(WRITE)) {
+			final byte[] data = args.getArrayBuffer(0);
+			final CallbackContext callbackContextTemp = callbackContext;
+			cordova.getThreadPool().execute(new Runnable() {
+                public void run() {
+                    bluetoothSerialService.write(data);
+					callbackContextTemp.success();
 
-            byte[] data = args.getArrayBuffer(0);
-            bluetoothSerialService.write(data);
-            callbackContext.success();
+                }
+            });
 
         } else if (action.equals(AVAILABLE)) {
 

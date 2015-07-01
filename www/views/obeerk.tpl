@@ -31,6 +31,16 @@
 	$('#bNincsMeg').bind('click',function () {
 		orzott.nincsMeg();
 	})	
+	$('#bMenu').bind('click',function () {
+		showMenu();
+	})	
+	$('#bteszt').bind('click',function () {
+		$('#divteszt').show();
+	})	
+	$('#bteszthide').bind('click',function () {
+		$('#divteszt').hide();
+	})	
+	
 	
 </script>
 <body>
@@ -45,6 +55,7 @@
 	<div id=divcontent>
 		<!-- tasklist -->
 		<div id=divmibizlist>
+			<button id=bMenu>Menü</button>
 			<table class=tmibizlist>
 				<tr>
 				<th>Sofőr</th>
@@ -101,6 +112,12 @@
 					<button class='bnoprint' id=bJavitas>Javítás</button>
 					<button class='bnoprint' id=bNincsMeg>Nincs meg</button>
 					<button class='bnoprint' id=bOBeerkMenu>Átnézés</button>					
+					<!-- <button class='bteszt' id=bteszt>Teszt</button>					-->
+				</div>
+				<div id=divteszt>
+					<textarea id=tplprint rows="10" cols="50">
+					</textarea>
+					<button id=bteszthide>bezár</button>					
 				</div>
 			</div>
 		</div>
@@ -130,4 +147,5 @@
 		
 	</div>
 </div>
+
 </body>

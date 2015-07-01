@@ -2,7 +2,6 @@
 login_id = '100';
 var OBeerk = function(){
 	this.initMibizList();
-	
 }
 OBeerk.prototype.initMibizList = function(){
 	fn = 'orzott.oBeerkMibizlist';
@@ -35,6 +34,7 @@ OBeerk.prototype.oBeerkMibizlist = function(result) {
 }
 
 OBeerk.prototype.panelInit = function (result) {
+	app.BTEnabled();
 	sor = '';
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
@@ -55,6 +55,7 @@ OBeerk.prototype.oBeerkRendszamok = function(result) {
 }
 
 OBeerk.prototype.selectTask = function(mibiz) {
+	//app.BTEnabled();						
 	ajaxCall('taskReg',{'mibiz':mibiz, 'login':login_id},true, '');
 	$('#divmibizlist').hide();
 	fn = 'orzott.panelInit'; 
@@ -82,6 +83,15 @@ OBeerk.prototype.oBeerkRszAdatok = function (result){
 
 OBeerk.prototype.rszChange = function (){
 	rsz = $('#rendszam').val();
+
+	/*
+	$.get( "views/prn_rendszam_lerak.tpl", function( data ) {
+				tpl = data.replace('[LVKODRENDSZ]',rsz); 
+				tpl += '\r\n';
+				$('#tplprint').val(tpl);
+				
+		})
+	*/
 	if (rsz!='-') {
 		azon = $('#hAZON').val();
 		fn = 'orzott.oBeerkRszAdatok';
@@ -120,6 +130,26 @@ OBeerk.prototype.rszJavitas = function () {
 
 
 OBeerk.prototype.updateStart = function (obj) {
+	var btPrint = function() {
+		tip=obj.attr('id');
+		rsz = $('#rendszam').val();
+		$.get( "views/prn_rendszam_lerak.tpl", function( data ) {
+				//data = $('#tplprint').val();
+				tpl = data.replace('[LVKODRENDSZ]',rsz); 
+				tpl += '\r\n';
+				var writeOk = function(){
+					fn = 'orzott.oBeerkRszMent';
+					r = ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'login':login_id},true, fn);
+				}
+				var writeError = function(){
+					console.log('btprint write error');
+				}
+				bluetoothSerial.write(tpl,writeOk);
+				
+		})
+		
+		
+	}
 	tip=obj.attr('id');
 	azon = $('#hAZON').val();
 	sorsz = $('#hSORSZ').val();	
@@ -128,9 +158,16 @@ OBeerk.prototype.updateStart = function (obj) {
 	if (drb2<drb) {
 		if (tip!='bPlus') {
 			/* print */
+			/*  */
+			if(typeof bluetoothSerial != 'undefined') {
+				bluetoothSerial.isConnected(btPrint, function(){console.log('btprint error')});
+			}			
+			/*  */
 		}
-		fn = 'orzott.oBeerkRszMent';
-		r = ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'login':login_id},true, fn);
+		else {
+			fn = 'orzott.oBeerkRszMent';
+			r = ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'login':login_id},true, fn);
+		}
 	}
 	else {
 		alert('A beérkezett mennyiség '+drb+' db!');

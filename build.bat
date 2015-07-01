@@ -1,1 +1,1 @@
-cordova build
+cordova build --debug
