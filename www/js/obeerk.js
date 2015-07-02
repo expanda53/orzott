@@ -263,5 +263,32 @@ OBeerk.prototype.oBeerkNincsMeg = function (result) {
 	}
 }
 
+OBeerk.prototype.melysegMeres = function(){
+	panelName='meres';
+	$.get( "css/"+panelName+".css", function( data ) {
+		css = '<head><style>' + data + '</style></head>';
+		$.get( "views/"+panelName+".tpl", function( data ) { 
+			rsz = $('#rendszam').val();
+			fn='orzott.getFelniTip';
+			$('#divmeres').html(css + data);
+			$('#divpanel').hide();
+			$('#divmeres').show();
+			ajaxCall(fn,{'rsz':rsz,'login':login_id},true, fn);
+			
+		});
+		
+	})
+}
+
+OBeerk.prototype.getFelniTip=function(result){
+	sor = '';
+	$("#felnitip").html('');
+	$("#felnitip").append('<option value="-">Válasszon</option>');
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		$("#felnitip").append('<option value='+res.KOD+'>'+res.KOD+'</option>');
+	}
+	
+}
 
 /* beerkezes eddig */

@@ -34,6 +34,9 @@
 	$('#bMenu').bind('click',function () {
 		showMenu();
 	})	
+	$('#bMelyseg').bind('click',function () {
+		orzott.melysegMeres();
+	})	
 	$('#bteszt').bind('click',function () {
 		$('#divteszt').show();
 	})	
@@ -47,7 +50,6 @@
 <input type=hidden id=hAZON>
 <input type=hidden id=hMIBIZ>
 <input type=hidden id=hSORSZ>
-<input id=mac>
 <div id=tploBeerk>
 	<div id=divheader>
 		Örzött beérkezés
@@ -111,7 +113,8 @@
 					<button class='bnoprint' id=bPlus>+1</button>
 					<button class='bnoprint' id=bJavitas>Javítás</button>
 					<button class='bnoprint' id=bNincsMeg>Nincs meg</button>
-					<button class='bnoprint' id=bOBeerkMenu>Átnézés</button>					
+					<button class='bnoprint' id=bOBeerkMenu>Átnézés</button>
+					<button class='bnoprint' id=bMelyseg>Mérés</button>
 					<!-- <button class='bteszt' id=bteszt>Teszt</button>					-->
 				</div>
 				<div id=divteszt>
@@ -122,6 +125,10 @@
 			</div>
 		</div>
 		<!-- panel end -->
+		<!-- melysegmeres panel -->
+		<div id=divmeres>
+		</div>
+		<!-- melysegmeres panel end -->
 		<div id=divreview>
 			<table class=tableReview>
 				<thead>

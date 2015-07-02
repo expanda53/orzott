@@ -70,7 +70,7 @@
 .dButtons {
 	clear:both;
 	margin:0px auto;
-	width:90%;
+	width:100%;
 }
 .dButtons button {
 	padding:15px; 
@@ -78,14 +78,14 @@
 } 
 
 .dButtons  .bprint{
-	width:30%;
+	width:33%;
 } 
 .dButtons  .bnoprint{
-	width:22%;
+	width:19%;
 } 
 
 .dButtons .labelPrint {
-	width:91%;
+	width:auto;
 	text-align:center;
 	background-color:yellow;
 	padding:2px;
@@ -100,4 +100,7 @@
 	position:fixed;
 	top:0px;
 	left:0px;
+}
+#divmeret {
+	display:none;
 }
