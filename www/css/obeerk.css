@@ -6,7 +6,7 @@
  }
  
  #divcontent{
-	background-color:orange;
+	background-color:black;
 	height:270px;
 	padding:5px;
  }
@@ -95,6 +95,25 @@
 #divreview {
 	display:none;
 }
+#divhiany {
+	margin:10px 0px;
+}
+#divhiany span{
+	background-color:yellow;
+	padding:5px;
+}
+
+.tableReview {
+		background-color:white;
+}
+.tableReview th {
+	border-bottom:1px solid orange;
+	
+}
+.tableReview td {
+	padding:5px;
+	text-align:center;
+}
 #divteszt {
 	display:none;
 	position:fixed;
@@ -103,4 +122,7 @@
 }
 #divmeret {
 	display:none;
+}
+#bMenu {
+	padding:10px 20px;
 }

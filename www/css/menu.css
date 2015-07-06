@@ -1,13 +1,14 @@
 #divheader{
 	background-color:yellow;
-	height:20px;
+	height:12px;
 	padding:5px;
  }
  
- #divcontent{
-	background-color:orange;
+ #divmenu{
+	background-color:black;
 	height:100px;
 	padding:5px;
+	height:270px;
  }
 #tplMenu {
 	padding:5px;
@@ -15,11 +16,10 @@
 	top:5px;
 	left:5px;
 	right:5px;
-
 }
 #bbeerk {
 	padding:20px;
-	background-color:lightgreen;
+	background-color:orange;
 	width:100px;
 	margin: 5px auto;
 	float:left;

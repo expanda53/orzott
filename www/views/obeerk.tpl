@@ -13,7 +13,8 @@
 		orzott.rszChange();
 	})	
 	$('#bGumi, #bGumiFelni, #bFelni, #bPlus').bind('click',function () {
-		orzott.updateStart($(this));
+		//orzott.updateStart($(this));
+		orzott.showPozPanel($(this));
 	})
 	$('#bJavitas').bind('click',function () {
 		orzott.rszJavitas();
