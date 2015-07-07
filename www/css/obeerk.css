@@ -94,6 +94,7 @@
 
 #divreview {
 	display:none;
+	width:301px;
 }
 #divhiany {
 	margin:10px 0px;
@@ -103,14 +104,22 @@
 	padding:5px;
 }
 
-.tableReview {
-		background-color:white;
+#divreview table {
+	display:block;
+	background-color:white;
+	max-height: 170px;
+	overflow-y: scroll;
 }
-.tableReview th {
+#divreview  table tbody {
+	background-color:white;
+	overflow:auto;
+}
+
+#divreview  table th {
 	border-bottom:1px solid orange;
 	
 }
-.tableReview td {
+#divreview  table td {
 	padding:5px;
 	text-align:center;
 }
@@ -125,4 +134,16 @@
 }
 #bMenu {
 	padding:10px 20px;
+}
+::-webkit-scrollbar {
+    width: 32px;
+}
+ 
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 5px;
+}
+ 
+::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
 }
