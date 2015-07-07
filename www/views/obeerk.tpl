@@ -115,7 +115,7 @@
 					<button class='bnoprint' id=bJavitas>Javítás</button>
 					<button class='bnoprint' id=bNincsMeg>Nincs meg</button>
 					<button class='bnoprint' id=bOBeerkMenu>Átnézés</button>
-					<button class='bnoprint' id=bMelyseg>Mérés</button>
+					<!--<button class='bnoprint' id=bMelyseg>Mérés</button>-->
 					<!-- <button class='bteszt' id=bteszt>Teszt</button>					-->
 				</div>
 				<div id=divteszt>
