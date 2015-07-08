@@ -87,12 +87,16 @@
 		$drb2 = $r['drb2'];
 		$drb2 = $drb2 + 1;
 		$login = $r['login'];
+		$poz = $r['poz'];
+		$tip = $r['tip'];
 		$rowstat='R';
-		$sql=" SELECT RESULT FROM PDA_ORZOTTLERAK_SORUPDATE(:azon, :sorsz, :drb2, :rowstat, :login) ";
+		$sql=" SELECT RESULT FROM PDA_ORZOTTLERAK_SORUPDATE(:azon, :sorsz, :drb2, :poz, :tip, :rowstat, :login) ";
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
 		$stmt->bindParam(':sorsz', $sorsz, PDO::PARAM_STR);
 		$stmt->bindParam(':drb2', $drb2, PDO::PARAM_STR);
+		$stmt->bindParam(':poz', $poz, PDO::PARAM_STR);
+		$stmt->bindParam(':tip', $tip, PDO::PARAM_STR);
 		$stmt->bindParam(':rowstat', $rowstat, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
 		$stmt->execute();
@@ -193,6 +197,15 @@
 		echo json_encode(Converter::win2utf_array($res));
 	  
   }  
-  
+  if ($func==='orzott.getMelyseg') {
+		$login = $r['login'];
+		$sql=" SELECT KOD FROM AKHSTAT WHERE TIPUS='G' ORDER BY NEV, KOD ";
+		$stmt = Firebird::prepare($sql);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+	  
+  }    
 
 ?>
