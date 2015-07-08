@@ -27,6 +27,13 @@
 		<{felnik}>
 	</select>
 </div>
-<div id=divallapot></div>
+<div id=divallapot>
+	<div id=divgstat>
+		<span>Állapot</span>
+		<select id=gstat>
+		</select>
+		
+	</div>
+</div>
 <button id=bMeresClose>Bezár</button>
 </div>

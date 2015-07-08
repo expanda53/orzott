@@ -1,12 +1,13 @@
 var orzott = null;
+var teszt = false;
 $.ajaxSetup({ cache: false });
 function ajaxCall( func, d,asyn,fn) {
   var res;
   console.debug('ajax:'+func+' data:'+JSON.stringify(d));
   $.ajax({
         type: "POST",
-		url: "http://192.168.22.237/orzottsrv/service.php/" + func, /* akh eles */
-		//url: "http://192.168.1.68:82/orzottsrv/service.php/" + func, /* otthoni eles */
+		//url: "http://192.168.22.237/orzottsrv/service.php/" + func, /* akh eles */
+		url: "http://192.168.1.68:82/orzottsrv/service.php/" + func, /* otthoni eles */
         data: d,
 		async: asyn,
         dataType: "json",

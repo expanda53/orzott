@@ -172,7 +172,8 @@ OBeerk.prototype.updateStart = function (obj) {
 				var writeError = function(){
 					console.log('btprint write error');
 				}
-				bluetoothSerial.write(tpl,writeOk);
+				if (!teszt && orzott.currentItem!='bGumiFelni') bluetoothSerial.write(tpl,writeOk);
+				if (teszt || orzott.currentItem=='bGumiFelni') writeOk();
 				
 		})
 		
@@ -192,13 +193,14 @@ OBeerk.prototype.updateStart = function (obj) {
 			}
 			else {
 				alert('printer not found');
+				if (teszt) btPrint();
 				
 			}
 			/*  */
 		}
 		else {
 			fn = 'orzott.oBeerkRszMent';
-			r = ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'tip':'','poz':'','login':login_id},true, fn);
+			ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'tip':'','poz':'','login':login_id},true, fn);
 		}
 	}
 	else {
@@ -215,9 +217,14 @@ OBeerk.prototype.oBeerkRszMent = function(result) {
 		if (res.RESULT!=-1)	{
 			$('.dataDrbKesz').html(res.RESULT);
 			id=orzott.currentPosition;
+			$('#'+id).attr('disabled','disabled');
 			if (orzott.meresKell) {
-				$('#'+id).attr('disabled','disabled');
 				//meres panel betoltese
+				$('#divallapot').show();
+				if (orzott.currentItem=='bGumi' || orzott.currentItem=='bGumiFelni') {
+					fn = 'orzott.getMelyseg';
+					ajaxCall(fn,{'poz':orzott.currentPosition, 'login':login_id},true, fn);
+				}
 			}
 			
 			
@@ -338,13 +345,22 @@ OBeerk.prototype.melysegMeres = function(obj){
 }
 
 OBeerk.prototype.getFelniTip=function(result){
-	sor = '';
 	$("#felnitip").html('');
 	$("#felnitip").append('<option value="-">Válasszon</option>');
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		$("#felnitip").append('<option value='+res.KOD+'>'+res.KOD+'</option>');
 	}
+	
+}
+OBeerk.prototype.getMelyseg=function(result){
+	$("#gstat").html('');
+	$("#gstat").append('<option value="-">Válasszon</option>');
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		$("#gstat").append('<option value='+res.KOD+'>'+res.KOD+'</option>');
+	}
+	$('#divgstat').show();
 	
 }
 
