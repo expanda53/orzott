@@ -1,5 +1,11 @@
 .bpozicio {
 	padding:10px 20px;
-	margin:5px 2px;
+	margin:5px;
 	font-size:15px;
 } 
+
+.meres span {
+	background-color:yellow;
+	padding:5px;
+	margin:5px;
+}

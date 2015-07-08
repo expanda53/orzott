@@ -8,7 +8,9 @@
 	})
 	
 </script>
+<div class=meres>
 Állapot felmérés<br>
+<span id=muvelet></span>
 <div id=divpozicio>
 	<button class=bpozicio id=bJE>JE</button>
 	<button class=bpozicio id=bJH>JH</button>
@@ -25,4 +27,6 @@
 		<{felnik}>
 	</select>
 </div>
+<div id=divallapot></div>
 <button id=bMeresClose>Bezár</button>
+</div>

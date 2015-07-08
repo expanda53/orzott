@@ -12,9 +12,12 @@
 	$('#rendszam').bind('change',function () {
 		orzott.rszChange();
 	})	
-	$('#bGumi, #bGumiFelni, #bFelni, #bPlus').bind('click',function () {
-		//orzott.updateStart($(this));
+	$('#bGumi, #bGumiFelni, #bFelni').bind('click',function () {
 		orzott.showPozPanel($(this));
+	})
+	$('#bPlus').bind('click',function () {
+		orzott.showPozPanel($(this));
+		
 	})
 	$('#bJavitas').bind('click',function () {
 		orzott.rszJavitas();
@@ -34,9 +37,6 @@
 	})	
 	$('#bMenu').bind('click',function () {
 		showMenu();
-	})	
-	$('#bMelyseg').bind('click',function () {
-		orzott.melysegMeres();
 	})	
 	$('#bteszt').bind('click',function () {
 		$('#divteszt').show();

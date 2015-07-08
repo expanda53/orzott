@@ -152,9 +152,14 @@ OBeerk.prototype.showPozPanel = function(obj) {
 
 OBeerk.prototype.updateStart = function (obj) {
 	/* nyomtatas inditas + mentes ajax*/
+	tip = this.currentItem;
+	var poz = "";
+	if (obj == null) {tip='bPlus';poz='bJE';}
+	else poz=obj.attr('id');
+	this.currentPosition = poz;
+	var orzott = this;
 	var btPrint = function() {
-		tip = this.currentItem;
-		poz=obj.attr('id');
+		//tip = orzott.currentItem;
 		rsz = $('#rendszam').val();
 		$.get( "views/prn_rendszam_lerak.tpl", function( data ) {
 				//data = $('#tplprint').val();
@@ -162,7 +167,7 @@ OBeerk.prototype.updateStart = function (obj) {
 				tpl += '\r\n';
 				var writeOk = function(){
 					fn = 'orzott.oBeerkRszMent';
-					r = ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'login':login_id},true, fn);
+					r = ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'tip':orzott.currentItem, 'poz':orzott.currentPosition, 'login':login_id},true, fn);
 				}
 				var writeError = function(){
 					console.log('btprint write error');
@@ -173,8 +178,7 @@ OBeerk.prototype.updateStart = function (obj) {
 		
 		
 	}
-	tip = this.currentItem;
-	poz=obj.attr('id');
+	
 	azon = $('#hAZON').val();
 	sorsz = $('#hSORSZ').val();	
 	drb = $('.dataDrbVart').html();
@@ -185,12 +189,16 @@ OBeerk.prototype.updateStart = function (obj) {
 			/*  */
 			if(typeof bluetoothSerial != 'undefined') {
 				bluetoothSerial.isConnected(btPrint, function(){console.log('btprint error')});
-			}			
+			}
+			else {
+				alert('printer not found');
+				
+			}
 			/*  */
 		}
 		else {
 			fn = 'orzott.oBeerkRszMent';
-			r = ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'login':login_id},true, fn);
+			r = ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'tip':'','poz':'','login':login_id},true, fn);
 		}
 	}
 	else {
@@ -204,7 +212,16 @@ OBeerk.prototype.oBeerkRszMent = function(result) {
 	/* mentes ajax eredmenye */
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
-		if (res.RESULT!=-1)	$('.dataDrbKesz').html(res.RESULT);
+		if (res.RESULT!=-1)	{
+			$('.dataDrbKesz').html(res.RESULT);
+			id=orzott.currentPosition;
+			if (orzott.meresKell) {
+				$('#'+id).attr('disabled','disabled');
+				//meres panel betoltese
+			}
+			
+			
+		}
 		else alert('Hiba');
 	}
 }
@@ -298,6 +315,7 @@ OBeerk.prototype.oBeerkNincsMeg = function (result) {
 
 OBeerk.prototype.melysegMeres = function(obj){
 	this.currentItem = obj.attr('id'); 
+	var orzott = this;
 	panelName='meres';
 	$.get( "css/"+panelName+".css", function( data ) {
 		css = '<head><style>' + data + '</style></head>';
@@ -307,6 +325,11 @@ OBeerk.prototype.melysegMeres = function(obj){
 			$('#divmeres').html(css + data);
 			$('#divpanel').hide();
 			$('#divmeres').show();
+			var muvelet = "";
+			if (orzott.currentItem=="bGumi") muvelet = "beérkezés: gumi";
+			if (orzott.currentItem=="bFelni") muvelet = "beérkezés: felni";
+			if (orzott.currentItem=="bGumiFelni") muvelet = "beérkezés: kerék";
+			$('#muvelet').html(muvelet);
 			ajaxCall(fn,{'rsz':rsz,'login':login_id},true, fn);
 			
 		});
