@@ -1,4 +1,4 @@
-var orzott = null;
+var beerk = null;
 var teszt = false;
 $.ajaxSetup({ cache: false });
 function ajaxCall( func, d,asyn,fn) {
@@ -50,7 +50,7 @@ function showMenu() {
 			$('#divContent').html(css + tpl);
 
 			$('#bbeerk').bind('click',function () {
-				orzott = new OBeerk();
+				beerk = new OBeerk();
 			}
 			) 
 			$('#divContent').show();

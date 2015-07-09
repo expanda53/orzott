@@ -49,11 +49,11 @@ var app = {
     },	
 	/* bt */
 	BTEnabled:function(){
-		if(typeof bluetoothSerial != 'undefined'){ alert('teszt');
+		if(typeof bluetoothSerial != 'undefined'){ 
 			var btAssign = function() {
 				bluetoothSerial.list(function(devices) {
 					devices.forEach(function(device) {
-						if (device.class=='1664') {app.printerId = device.id;app.printerName=device.name;app.manageConnection();}
+						if (device.class=='1664') {app.printerId = device.id;app.printerName=device.name;app.manageConnection(true);}
 					})
 				},
                 function(error) {
@@ -64,14 +64,16 @@ var app = {
 			}
 			bluetoothSerial.isEnabled(
 				btAssign,
-				function(){alert('not enabled')}
+				function(){alert('bluetooth not enabled')}
 			); 
 
 		}
 	},
+	BTDisabled:function(){
+		app.manageConnection(false);
+	},
 	
-	
-   manageConnection: function() {
+   manageConnection: function(needConnect) {
 		if(typeof bluetoothSerial != 'undefined') {
 			// connect() will get called only if isConnected() (below)
 			// returns failure. In other words, if not connected, then connect:
@@ -97,7 +99,8 @@ var app = {
 			};
 
 			// here's the real action of the manageConnection function:
-			bluetoothSerial.isConnected(disconnect, connect);
+			if (needConnect) bluetoothSerial.isConnected(null, connect);
+			else bluetoothSerial.isConnected(disconnect,null);
 		}
     },
 /*
@@ -106,12 +109,13 @@ var app = {
 */
     openPort: function() {
         // if you get a good Bluetooth serial connection:
-        alert("Connected to: " + app.printerId);
+        console.log("Connected to: " + app.printerId);
         // set up a listener to listen for newlines
         // and display any new data that's come in since
         // the last newline:
         bluetoothSerial.subscribe('\n', function (data) {
-            alert(data);
+            console.log(data);
+			//alert(data);
         });
     },
 
@@ -123,7 +127,8 @@ var app = {
         // unsubscribe from listening:
         bluetoothSerial.unsubscribe(
                 function (data) {
-                    alert(data);
+                    //alert(data);
+					console.log(data);
                 },
                 app.showError
         );

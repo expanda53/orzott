@@ -2,38 +2,38 @@
 	$('.tmibizlist tr').bind('click',function(){
 		tr = $(this);
 		id = tr.find(".tmibiz").html();
-		orzott.selectTask(id);
+		beerk.selectTask(id);
 	})
 	
 	$('#bOBeerkMenu').bind('click',function () {
 		//showMenu();
-		orzott.showReview();
+		beerk.showReview();
 	})
 	$('#rendszam').bind('change',function () {
-		orzott.rszChange();
+		beerk.rszChange();
 	})	
 	$('#bGumi, #bGumiFelni, #bFelni').bind('click',function () {
-		orzott.showPozPanel($(this));
+		beerk.showPozPanel($(this));
 	})
 	$('#bPlus').bind('click',function () {
-		orzott.showPozPanel($(this));
+		beerk.showPozPanel($(this));
 		
 	})
 	$('#bJavitas').bind('click',function () {
-		orzott.rszJavitas();
+		beerk.rszJavitas();
 	})
 	$('#bFolytMost').bind('click',function () {
 		$('#divreview').hide();
 		$('#divpanel').show();
 	})
 	$('#bFolytKesobb').bind('click',function () {
-		orzott.folytKesobb();
+		beerk.folytKesobb();
 	})	
 	$('#bLezar').bind('click',function () {
-		orzott.lezarStart();
+		beerk.lezarStart();
 	})	
 	$('#bNincsMeg').bind('click',function () {
-		orzott.nincsMeg();
+		beerk.nincsMegStart();
 	})	
 	$('#bMenu').bind('click',function () {
 		showMenu();
@@ -111,7 +111,7 @@
 					<button class='bprint' id=bGumiFelni>Gumi+Felni</button>
 					<button class='bprint' id=bFelni>Felni</button>
 					<div class='labelPrint'>Nyomtatás nélkül</div>
-					<button class='bnoprint' id=bPlus>+1</button>
+					<!--<button class='bnoprint' id=bPlus>+1</button>-->
 					<button class='bnoprint' id=bJavitas>Javítás</button>
 					<button class='bnoprint' id=bNincsMeg>Nincs meg</button>
 					<button class='bnoprint' id=bOBeerkMenu>Átnézés</button>
