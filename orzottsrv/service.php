@@ -6,7 +6,7 @@
   $p     = explode("/", $request);
   $func = $p[1];
   $r = $_REQUEST;
-  if ($func==='orzott.oBeerkMibizlist'){
+  if ($func==='beerk.mibizList'){
 		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTLERAK (:biztip, :login)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
@@ -17,7 +17,7 @@
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
   }
-  if ($func==='orzott.oBeerkRendszamok'){
+  if ($func==='beerk.rszList'){
 		$mibiz = $r['mibiz'];
 		$sql= "SELECT DISTINCT TAPADO, TAPADO RSZ FROM BSOR INNER JOIN BFEJ ON BFEJ.AZON=BSOR.BFEJ WHERE MIBIZ=:mibiz ORDER BY TAPADO";
 		$stmt = Firebird::prepare($sql);
@@ -27,7 +27,7 @@
 		echo json_encode(Converter::win2utf_array($res));
 
   }
-  if ($func==='orzott.panelInit'){
+  if ($func==='beerk.panelInit'){
 		$mibiz = $r['mibiz'];
 		$login = $r['login'];
 		$sql=" SELECT FIRST 1  BFEJ.AZON,BFEJ.MIBIZ
@@ -43,7 +43,7 @@
 		echo json_encode(Converter::win2utf_array($res));
 
   }
-  if ($func==='orzott.oBeerkRszAdatok'){
+  if ($func==='beerk.rszAdatok'){
 		$azon = $r['azon'];
 		$rsz = $r['rsz'];
 		$sql=" SELECT FIRST 1  SORSZ, CAST(ABS(DRB) AS INTEGER) AS DRB ,CEG.NEV CEGNEV ,CAST(DRB2 AS INTEGER) AS CDRB,AKTSOR.DEVEAR AS PDAKEZ, AKTSOR.STAT3 AS ROWSTAT,
@@ -81,7 +81,7 @@
 
   }
   
-  if ($func==='orzott.oBeerkRszMent') {
+  if ($func==='beerk.rszMent') {
 		$azon = $r['azon'];
 		$sorsz = $r['sorsz'];
 		$drb2 = $r['drb2'];
@@ -106,7 +106,7 @@
 	  
   }
 
-  if ($func==='orzott.oBeerkRszJav') {
+  if ($func==='beerk.rszJav') {
 		$azon = $r['azon'];
 		$sorsz = $r['sorsz'];
 		$rsz = $r['rsz'];
@@ -124,7 +124,7 @@
 	  
   }  
   
-  if ($func==='orzott.oBeerkReviewGet'){
+  if ($func==='beerk.reviewGet'){
 		$azon = $r['azon'];
 		$login = $r['login'];
 		$sql=" SELECT BSOR.TAPADO RENDSZAM, CAST(DRB AS INTEGER) DRB, CAST(DRB2 AS INTEGER) DRB2
@@ -140,7 +140,7 @@
 		echo json_encode(Converter::win2utf_array($res));
 
   }  
-  if ($func==='orzott.oBeerkFolytUpdate') {
+  if ($func==='beerk.folytUpdate') {
 		$azon = $r['azon'];
 		$login = $r['login'];
 		$sql=" UPDATE BSOR SET STAT3='U' WHERE COALESCE(BSOR.STAT3,'')='N' AND BSOR.BFEJ = :azon  ";
@@ -154,7 +154,7 @@
 		echo json_encode(Converter::win2utf_array($res));
 	  
   }
-  if ($func==='orzott.oBeerkLezarUpdate') {
+  if ($func==='beerk.lezarUpdate') {
 		$mibiz = $r['mibiz'];
 		$stat = $r['stat'];
 		$login = $r['login'];
@@ -170,7 +170,7 @@
 		echo json_encode(Converter::win2utf_array($res));
 	  
   }
-  if ($func==='orzott.oBeerkNincsMeg') {
+  if ($func==='beerk.nincsMeg') {
 		$mibiz = $r['mibiz'];
 		$sorsz = $r['sorsz'];
 		$login = $r['login'];
@@ -185,7 +185,20 @@
 		echo json_encode(Converter::win2utf_array($res));
 	  
   }
-  if ($func==='orzott.getFelniTip') {
+  if ($func==='beerk.getPositions') {
+		$rsz = $r['rsz'];
+		$mibiz = $r['mibiz'];
+		$login = $r['login'];
+		$sql=" SELECT * FROM PDA_ORZOTTLERAK_GETPOZ(:mibiz, :rsz) ";
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
+		$stmt->bindParam(':mibiz', $mibiz, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+  }  
+  if ($func==='beerk.getFelniTip') {
 		$rsz = $r['rsz'];
 		$login = $r['login'];
 		$sql=" SELECT KOD FROM PDA_FELNITIPUSOK(:rsz) ";
@@ -197,15 +210,36 @@
 		echo json_encode(Converter::win2utf_array($res));
 	  
   }  
-  if ($func==='orzott.getMelyseg') {
+  if ($func==='beerk.getMelyseg') {
 		$login = $r['login'];
-		$sql=" SELECT KOD FROM AKHSTAT WHERE TIPUS='G' ORDER BY NEV, KOD ";
+		$sql=" SELECT KOD FROM AKHSTAT WHERE TIPUS='G' ORDER BY KOD3,KOD2,KOD";
 		$stmt = Firebird::prepare($sql);
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
 	  
-  }    
+  } 
+  if ($func==='beerk.allapotMent') {
+		$rsz = $r['rsz'];
+		$mibiz = $r['mibiz'];
+		$login = $r['login'];
+		$poz = $r['poz'];
+		$tip = $r['tip'];
+		$melyseg = $r['melyseg'];
+		$sql=" SELECT * FROM PDA_ORZOTTLERAK_ALLAPOTMENT(:mibiz, :rsz, :poz,:tip, :melyseg,:login) ";
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
+		$stmt->bindParam(':mibiz', $mibiz, PDO::PARAM_STR);
+		$stmt->bindParam(':poz', $poz, PDO::PARAM_STR);
+		$stmt->bindParam(':tip', $tip, PDO::PARAM_STR);
+		$stmt->bindParam(':melyseg', $melyseg, PDO::PARAM_STR);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+  }  
+
 
 ?>
