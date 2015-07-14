@@ -66,6 +66,7 @@ select, #rendszam {
 	padding:2px;
 	width:435px;
 	border:1px solid black;
+	font-size:15px;
 }
 .dcontrol {
 	display:none;

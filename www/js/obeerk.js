@@ -89,7 +89,7 @@ OBeerk.prototype.rszAdatok = function (result){
 		res = result[i];
 
 		$(".dataSofor").html(res.MSZAM3);
-		$(".dataCeg").html(res.CEGNEV);
+		//$(".dataCeg").html(res.CEGNEV);
 		$(".dataMeret").html(res.MERETMINTA);
 		$(".dataFegu").html(res.FEGU);
 		$(".dataDrbVart").html(res.DRB);

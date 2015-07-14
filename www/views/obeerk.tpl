@@ -81,10 +81,12 @@
 				<span class='dataSofor'></span>
 			</div>
 			<div class='rszadatok'>
+				<!--
 				<div class='dceg'>
 					<span class='labelCeg'>Cég:</span>
 					<span class='dataCeg'></span>
 				</div>
+				-->
 				<div class='dmeretminta'>
 					<span class='labelMeret'>Méret,minta:</span>
 					<span class='dataMeret'></span>

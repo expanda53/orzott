@@ -53,7 +53,7 @@ var app = {
 			var btAssign = function() {
 				bluetoothSerial.list(function(devices) {
 					devices.forEach(function(device) {
-						if (device.class=='1664') {app.printerId = device.id;app.printerName=device.name;app.manageConnection(true);}
+						if (device.class=='1664') {alert('teszt');app.printerId = device.id;app.printerName=device.name;app.manageConnection(true);}
 					})
 				},
                 function(error) {
