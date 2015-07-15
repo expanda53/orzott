@@ -2,13 +2,16 @@
 	$('.tmibizlist tr').bind('click',function(){
 		tr = $(this);
 		id = tr.find(".tmibiz").html();
-		beerk.selectTask(id);
+		mszam3 = tr.find(".tmszam3").html();
+		beerk.selectTask(id,mszam3);
 	})
 	
+/*
 	$('#bOBeerkMenu').bind('click',function () {
 		//showMenu();
 		beerk.showReview();
 	})
+*/	
 	$('#rendszam').bind('change',function () {
 		beerk.rszChange();
 	})	
@@ -32,9 +35,11 @@
 	$('#bLezar').bind('click',function () {
 		beerk.lezarStart();
 	})	
+	/*
 	$('#bNincsMeg').bind('click',function () {
 		beerk.nincsMegStart();
-	})	
+	})
+*/	
 	$('#bMenu').bind('click',function () {
 		showMenu();
 	})	
@@ -51,6 +56,7 @@
 <input type=hidden id=hAZON>
 <input type=hidden id=hMIBIZ>
 <input type=hidden id=hSORSZ>
+<input type=hidden id=rendszam>
 <div id=tploBeerk>
 	<div id=divheader>
 		Örzött beérkezés
@@ -72,13 +78,7 @@
 		<!-- panel -->
 		<div id=divpanel>
 			<div class='drendszam'>
-				<select id=rendszam>
-				<{rendszamok}>
-				</select>
-			</div>
-			<div class='dsofor'>
-				<span class='labelSofor'>Sofőr</span>
-				<span class='dataSofor'></span>
+				<span id=srendszam onclick='beerk.showReview()'></span>
 			</div>
 			<div class='rszadatok'>
 				<!--
@@ -115,8 +115,8 @@
 					<div class='labelPrint'>Nyomtatás nélkül</div>
 					<!--<button class='bnoprint' id=bPlus>+1</button>-->
 					<button class='bnoprint' id=bJavitas>Javítás</button>
-					<button class='bnoprint' id=bNincsMeg>Nincs meg</button>
-					<button class='bnoprint' id=bOBeerkMenu>Átnézés</button>
+					<!-- <button class='bnoprint' id=bNincsMeg>Nincs meg</button> -->
+					<!--<button class='bnoprint' id=bOBeerkMenu>Átnézés</button>-->
 					<!--<button class='bnoprint' id=bMelyseg>Mérés</button>-->
 					<!-- <button class='bteszt' id=bteszt>Teszt</button>					-->
 				</div>
@@ -133,6 +133,24 @@
 		</div>
 		<!-- melysegmeres panel end -->
 		<div id=divreview>
+			<div class=divReviewTables>
+			<div class=divreviewLeft>
+				<!--
+				<div class=divreviewLeftFilter>
+					<button id=letter1>1</button>
+					<button id=letter2>2</button>
+					<button id=letter3>3</button>
+				</div>
+				-->
+				<div class='divreviewLeftContent'>
+					<table class=tableReviewFilter>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+				
+			</div>
+			<div class=divreviewRight>
 			<table class=tableReview>
 				<thead>
 				<tr>
@@ -144,6 +162,8 @@
 				<tbody>
 				</tbody>
 			</table>
+			</div>
+			</div>
 			<div id=divhiany>
 				<span class=labelHiany></span>
 				<span class=dataHiany></span>

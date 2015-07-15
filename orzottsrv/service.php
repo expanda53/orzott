@@ -17,16 +17,7 @@
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
   }
-  if ($func==='beerk.rszList'){
-		$mibiz = $r['mibiz'];
-		$sql= "SELECT DISTINCT TAPADO, TAPADO RSZ FROM BSOR INNER JOIN BFEJ ON BFEJ.AZON=BSOR.BFEJ WHERE MIBIZ=:mibiz ORDER BY TAPADO";
-		$stmt = Firebird::prepare($sql);
-		$stmt->bindParam(':mibiz', $mibiz, PDO::PARAM_STR);
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		echo json_encode(Converter::win2utf_array($res));
 
-  }
   if ($func==='beerk.panelInit'){
 		$mibiz = $r['mibiz'];
 		$login = $r['login'];
@@ -124,10 +115,10 @@
 	  
   }  
   
-  if ($func==='beerk.reviewGet'){
+  if ($func==='beerk.reviewRszFilter'){
 		$azon = $r['azon'];
 		$login = $r['login'];
-		$sql=" SELECT BSOR.TAPADO RENDSZAM, CAST(DRB AS INTEGER) DRB, CAST(DRB2 AS INTEGER) DRB2
+		$sql=" SELECT DISTINCT LEFT(BSOR.TAPADO,2) RENDSZAM
 				FROM BSOR
 				WHERE BSOR.BFEJ=:azon
 				";
@@ -140,6 +131,29 @@
 		echo json_encode(Converter::win2utf_array($res));
 
   }  
+  
+  if ($func==='beerk.reviewRszGet'){
+		$filter = $r['filter'];
+		$filterStr='';
+		if ($filter!='*') {
+			$filterStr = " AND BSOR.TAPADO STARTING WITH '$filter' ";
+		}
+		$azon = $r['azon'];
+		$login = $r['login'];
+		$sql=" SELECT BSOR.TAPADO RENDSZAM, CAST(DRB AS INTEGER) DRB, CAST(DRB2 AS INTEGER) DRB2
+				FROM BSOR
+				WHERE BSOR.BFEJ=:azon $filterStr
+				";
+
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode(Converter::win2utf_array($res));
+
+  }  
+  
   if ($func==='beerk.folytUpdate') {
 		$azon = $r['azon'];
 		$login = $r['login'];

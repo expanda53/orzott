@@ -26,15 +26,20 @@ body {
 #divpanel {
 	display:none;
 }
-select, #rendszam {
+select {
 	margin:2px 0px;
 	padding:10px 15px;
 	font-size: 20px;
 	-webkit-appearance: menulist-text;
 
 }
-.dsofor {
-	padding:2px;
+#srendszam {
+	margin:2px 0px;
+	padding:10px 15px;
+	font-size: 20px;
+	-webkit-appearance: menulist-text;
+	background-color:white;
+
 }
 .divlabels {
 	width:300px;
@@ -107,13 +112,31 @@ select, #rendszam {
 	background-color:yellow;
 	padding:5px;
 }
+.divreviewLeft{
+	position:relative;
+	top:0px;
+	left:10px;
+	background-color:white;
+	width:70px;
+	
+}
+
+.divreviewRight {
+	position:absolute;
+	top:32px;
+	left:90px;
+	background-color:white;
+	
+}
 
 #divreview table {
 	display:block;
 	background-color:white;
-	max-height: 170px;
+	height: 170px;
 	overflow-y: scroll;
+	font-size:15px;
 }
+
 #divreview  table tbody {
 	background-color:white;
 	overflow:auto;
@@ -127,6 +150,9 @@ select, #rendszam {
 	padding:5px;
 	text-align:center;
 }
+.tableReviewFilter {
+	width:70px;
+}
 #divteszt {
 	display:none;
 	position:fixed;
@@ -139,6 +165,7 @@ select, #rendszam {
 #bMenu {
 	padding:10px 20px;
 }
+/*
 ::-webkit-scrollbar {
     width: 32px;
 }
@@ -151,3 +178,4 @@ select, #rendszam {
 ::-webkit-scrollbar-thumb {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
 }
+*/

@@ -19,7 +19,7 @@ OBeerk.prototype.mibizList = function(result) {
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		sor += '<tr id="'+res.MIBIZ+'">';
-		sor += '<td>'+res.FUVAR+'</td>'; 
+		sor += '<td  class="tmszam3">'+res.FUVAR+'</td>'; 
 		sor +=  '<td class="tmibiz">'+res.MIBIZ+'</td>'; 
 		sor += '</tr>';
 	}
@@ -37,22 +37,20 @@ OBeerk.prototype.mibizList = function(result) {
 	})
 
 }
-OBeerk.prototype.selectTask = function(mibiz) {
+OBeerk.prototype.selectTask = function(mibiz,mszam3) {
 	/* feladat valaszto ajax inditas */
 	//app.BTEnabled();						
 	this.meresKell = confirm("Állapotfelméréssel együtt?");
 	if (this.meresKell) {
-		$('#divheader').html('Õrzött beérkezés - állapot felméréssel');
+		$('#divheader').html('Õrzött beérkezés - állapot felméréssel - Sofõr:'+mszam3);
 	}
 	else {
-		$('#divheader').html('Õrzött beérkezés - állapot felmérés nélkül');
+		$('#divheader').html('Õrzött beérkezés - állapot felmérés nélkül - Sofõr:'+mszam3);
 	}
 	ajaxCall('taskReg',{'mibiz':mibiz, 'login':login_id},true, '');
 	$('#divmibizlist').hide();
 	fn = 'beerk.panelInit'; 
 	r = ajaxCall(fn,{'mibiz':mibiz, 'login':login_id},true, fn);
-	fn = 'beerk.rszList';
-	ajaxCall(fn,{'mibiz':mibiz, 'login':login_id},true, fn);
 
 }
 OBeerk.prototype.panelInit = function (result) {
@@ -64,31 +62,20 @@ OBeerk.prototype.panelInit = function (result) {
 		$("#hAZON").val(res.AZON);
 		$("#hMIBIZ").val(res.MIBIZ);
 	}
+	beerk.showReview();
+	$('#bFolytMost').hide();
 	
 }
 
 /* feladat valasztas eddig */
 
 /* fopanel */
-OBeerk.prototype.rszList = function(result) {
-	/* rendszam lista eredménye*/
-	sor = '';
-	$("#rendszam").html('');
-	$("#rendszam").append('<option value="-">Válasszon</option>');
-	for (var i = 0;i < result.length;i++){
-		res = result[i];
-		$("#rendszam").append('<option value='+res.TAPADO+'>'+res.TAPADO+'</option>');
-	}
-	$('#divpanel').show();
-}
 
 
 OBeerk.prototype.rszAdatok = function (result){
 	/* rendszam valasztas ajax eredmenye */
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
-
-		$(".dataSofor").html(res.MSZAM3);
 		//$(".dataCeg").html(res.CEGNEV);
 		$(".dataMeret").html(res.MERETMINTA);
 		$(".dataFegu").html(res.FEGU);
@@ -98,6 +85,7 @@ OBeerk.prototype.rszAdatok = function (result){
 	}
 	$('.rszadatok').show();
 	$('.dcontrol').show();
+	
 
 }
 
@@ -152,8 +140,9 @@ OBeerk.prototype.rszJavitas = function () {
 }
 
 
+/*
 OBeerk.prototype.nincsMegStart = function(){
-	/* nincs meg gomb ajax inditas */
+	//nincs meg gomb ajax inditas
 	mibiz = $('#hMIBIZ').val();
 	sorsz = $('#hSORSZ').val();	
 	rsz = $('#rendszam').val();
@@ -161,14 +150,14 @@ OBeerk.prototype.nincsMegStart = function(){
 	ajaxCall(fn,{'mibiz':mibiz,'sorsz':sorsz,'rsz':rsz,'login':login_id},true, fn);
 }
 OBeerk.prototype.nincsMeg = function (result) {
-	/* nincs meg gomb ajax eredmenye */
+	nincs meg gomb ajax eredmenye
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		if (res.RESULT!=-1)	$('.dataDrbKesz').html('0');
 		else alert('Hiba');
 	}
 }
-
+*/
 
 OBeerk.prototype.showPozPanel = function(obj) {
 	this.showAllapotPanel(obj);
@@ -182,6 +171,7 @@ OBeerk.prototype.showPozPanel = function(obj) {
 /* allapot panel */
 OBeerk.prototype.showAllapotPanel = function(obj){
 	this.currentItem = obj.attr('id'); 
+	$('#bAllapotClose').show();
 	if (this.meresKell || beerk.currentItem=="bGumi") {
 		/* ha meressel kerte, vagy meres nelkul de gumit valasztott */
 		panelName='meres';
@@ -302,29 +292,24 @@ OBeerk.prototype.selectPosition = function (obj) {
 	}
 	
 	if (drb2<drb) {
-		if (tip!='bGumiFelni') {
-			/* print */
-			/*  */
-			if(typeof bluetoothSerial != 'undefined') {
-				bluetoothSerial.isConnected(btPrint, printError);
-			}
-			else {
-				alert('printer not found');
-				if (teszt) btPrint();
-				
-			}
-			/*  */
+		alert('A beérkezett mennyiség '+drb+' db!');
+	}
+	if (tip!='bGumiFelni') {
+		/* print */
+		if(typeof bluetoothSerial != 'undefined') {
+			bluetoothSerial.isConnected(btPrint, printError);
 		}
 		else {
-			/* kerek valasztasnal nincs nyomtatas (mivel mossak oket, es kesobb nyomtatjak)*/
-			fn = 'beerk.rszMent';
-			ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'tip':tip,'poz':poz,'login':login_id},true, fn);
+			alert('printer not found');
+			if (teszt) btPrint();
 		}
 	}
 	else {
-		alert('A beérkezett mennyiség '+drb+' db!');
-		
+		/* kerek valasztasnal nincs nyomtatas (mivel mossak oket, es kesobb nyomtatjak)*/
+		fn = 'beerk.rszMent';
+		ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'tip':tip,'poz':poz,'login':login_id},true, fn);
 	}
+
 
 }
 
@@ -341,6 +326,7 @@ OBeerk.prototype.rszMent = function(result) {
 				//meres panel betoltese
 				$('#divallapot').show();
 				$('#bAllapotMent').show();
+				$('#bAllapotClose').hide();
 				if (beerk.currentItem=='bGumi' || beerk.currentItem=='bGumiFelni') {
 					fn = 'beerk.getMelyseg';
 					ajaxCall(fn,{'poz':beerk.currentPosition, 'login':login_id},true, fn);
@@ -370,11 +356,14 @@ OBeerk.prototype.getMelyseg=function(result){
 OBeerk.prototype.allapotMentes=function(){
 	poz = this.currentPosition;
 	melyseg = $('#gstat').val();
-	rsz = $('#rendszam').val();
-	mibiz = $('#hMIBIZ').val();
-	tip=beerk.currentItem;
-	fn='beerk.allapotMent';
-	ajaxCall(fn,{'rsz':rsz,'mibiz':mibiz,'poz':poz,'melyseg':melyseg,'login':login_id,'tip':tip},true, fn);
+	if (this.meresKell && melyseg=='-' ) alert('Mentés elõtt mérd meg a mélységet!');
+	else {
+		rsz = $('#rendszam').val();
+		mibiz = $('#hMIBIZ').val();
+		tip=beerk.currentItem;
+		fn='beerk.allapotMent';
+		ajaxCall(fn,{'rsz':rsz,'mibiz':mibiz,'poz':poz,'melyseg':melyseg,'login':login_id,'tip':tip},true, fn);
+	}
 }
 OBeerk.prototype.allapotMent=function(result){
 	$('#bAllapotClose').trigger( "click" );
@@ -382,7 +371,7 @@ OBeerk.prototype.allapotMent=function(result){
 /* allapot panel eddig */
 
 /* atnezo panel */
-OBeerk.prototype.reviewGet = function(result) {
+OBeerk.prototype.reviewRszGet = function(result) {
 	/* atnezo panel ajax eredenye */
 	sor = '';
 	$('.tableReview tbody').html('');
@@ -390,7 +379,7 @@ OBeerk.prototype.reviewGet = function(result) {
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		sor += '<tr id="'+res.RENDSZAM+'">';
-		sor += '<td>'+res.RENDSZAM+'</td>';
+		sor += '<td class="tdrsz">'+res.RENDSZAM+'</td>';
 		sor += '<td>'+res.DRB+'</td>'; 
 		sor +=  '<td class="tmibiz">'+res.DRB2+'</td>'; 
 		sor += '</tr>';
@@ -400,6 +389,16 @@ OBeerk.prototype.reviewGet = function(result) {
 		
 	}
 	$('.tableReview tbody').append(sor);
+	$('.tableReview tbody tr').bind('click',function(){
+		tr = $(this);
+		rsz = tr.find(".tdrsz").html();
+		$('#rendszam').val(rsz);
+		$('#srendszam').html(rsz);
+		beerk.rszChange();
+		$('#bFolytMost').trigger('click');
+
+	})
+
 	if (hianydb!=0){
 		$('.labelHiany').html('Hiányzó mennyiség:');
 		$('.dataHiany').html(hianydb);
@@ -407,13 +406,48 @@ OBeerk.prototype.reviewGet = function(result) {
 	$('#divreview').show();
 }
 
+OBeerk.prototype.reviewRszFilter = function(result) {
+	/* atnezo panel filter ajax eredenye */
+	sor = '';
+	$('.tableReviewFilter tbody').html('');
+	var hianydb = 0;
+	sor += '<tr >';
+	sor += '<td id="rszall">*</td>';
+	sor += '</tr>';
+
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		sor += '<tr >';
+		sor += '<td id="'+res.RENDSZAM+'">'+res.RENDSZAM+'</td>';
+		sor += '</tr>';
+		
+	}
+	$('.tableReviewFilter tbody').append(sor);
+	
+	$('.tableReviewFilter tbody td').bind('click',function(){
+		curTD = $(this);
+		filter = curTD.html();
+		azon = $('#hAZON').val();
+		fn = 'beerk.reviewRszGet';
+		r = ajaxCall(fn,{'filter':filter,'azon':azon,'login':login_id},true, fn);
+	})
+	
+	
+	filter='*';
+	azon = $('#hAZON').val();
+	fn = 'beerk.reviewRszGet';
+	r = ajaxCall(fn,{'filter':filter,'azon':azon,'login':login_id},true, fn);
+}
+
 
 OBeerk.prototype.showReview = function() {
 	/* atnezo panel ajax inditas */
+	$('bFolytMost').show();
 	azon = $('#hAZON').val();
 	$('#divpanel').hide();
-	fn = 'beerk.reviewGet';
+	fn = 'beerk.reviewRszFilter';
 	r = ajaxCall(fn,{'azon':azon,'login':login_id},true, fn);
+	
 }
 
 OBeerk.prototype.folytKesobb=function(){
