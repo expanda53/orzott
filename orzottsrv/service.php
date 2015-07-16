@@ -41,7 +41,8 @@
 		CASE WHEN COALESCE(BFEJ.MSZAM3,'9999')='9999' AND BFEJ.MIBIZ NOT LIKE 'ELOSZ%' AND BFEJ.MIBIZ NOT LIKE 'TELEP%' THEN 'GYŰJTŐ' 
          WHEN BFEJ.MIBIZ LIKE 'ELOSZ%' OR BFEJ.MIBIZ LIKE 'TELEP%' THEN CEG.NEV 
          ELSE COALESCE(BFEJ.MSZAM3,'')||' '||COALESCE(MSZAM.NEV,'') END MSZAM3,
-    AKTSOR.TAPADO RENDSZAM, COALESCE(AKTSOR.GYSZAM,'')||' '||COALESCE(AKTSOR.LEIR,'') MERETMINTA, CAST(COALESCE(JARUL2,0) AS INTEGER)||'/'||CAST(COALESCE(JARUL1,0) AS INTEGER) FEGU
+    AKTSOR.TAPADO RENDSZAM, COALESCE(AKTSOR.GYSZAM,'')||' '||COALESCE(AKTSOR.LEIR,'') MERETMINTA, CAST(COALESCE(JARUL2,0) AS INTEGER)||'/'||CAST(COALESCE(JARUL1,0) AS INTEGER) FEGU,
+	AKTSOR.MJBEL RSZADATOK
     FROM BSOR AKTSOR 
     INNER JOIN BFEJ ON BFEJ.AZON=AKTSOR.BFEJ 
     LEFT JOIN CEG ON COALESCE(AKTSOR.PONTOZ, AKTSOR.CEG)=CEG.AZON
@@ -254,6 +255,38 @@
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
   }  
+  if ($func=='getMarka'){
+		$sql=" SELECT DISTINCT MARKA FROM AKHTORZS";
+		$stmt = Firebird::prepare($sql);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));	  
+  }
+  if ($func=='getMeret'){
+		$sql=" SELECT DISTINCT MERET FROM AKHTORZS";
+		$stmt = Firebird::prepare($sql);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));	  
+  }
+  if ($func=='getMinta'){
+		$sql=" SELECT DISTINCT MINTA FROM AKHTORZS";
+		$stmt = Firebird::prepare($sql);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));	  
+  }
+  if ($func=='getSI'){
+		$sql=" SELECT DISTINCT SI FROM AKHTORZS";
+		$stmt = Firebird::prepare($sql);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));	  
+  }
 
 
 ?>

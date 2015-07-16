@@ -5,6 +5,10 @@ var OBeerk = function(){
 	this.initMibizList();
 	this.currentItem = "";
 	this.currentPosition = '';
+	this.markaList=[];
+	this.meretList=[];
+	this.mintaList=[];
+	this.sebList=[];
 }
 /* feladat valasztas */
 OBeerk.prototype.initMibizList = function(){
@@ -82,6 +86,7 @@ OBeerk.prototype.rszAdatok = function (result){
 		$(".dataDrbVart").html(res.DRB);
 		$(".dataDrbKesz").html(res.CDRB);
 		$("#hSORSZ").val(res.SORSZ);
+		beerk.rszAdatok = res.RSZADATOK.split("\n");
 	}
 	$('.rszadatok').show();
 	$('.dcontrol').show();
@@ -291,7 +296,7 @@ OBeerk.prototype.selectPosition = function (obj) {
 
 	}
 	
-	if (drb2<drb) {
+	if (drb2>=drb) {
 		alert('A beérkezett mennyiség '+drb+' db!');
 	}
 	if (tip!='bGumiFelni') {
@@ -378,7 +383,9 @@ OBeerk.prototype.reviewRszGet = function(result) {
 	var hianydb = 0;
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
-		sor += '<tr id="'+res.RENDSZAM+'">';
+		tdclass='';
+		if (res.DRB==res.DRB2) tdclass=' rowhighlighted';
+		sor += '<tr class="'+tdclass+'" id="'+res.RENDSZAM+'">';
 		sor += '<td class="tdrsz">'+res.RENDSZAM+'</td>';
 		sor += '<td>'+res.DRB+'</td>'; 
 		sor +=  '<td class="tmibiz">'+res.DRB2+'</td>'; 
@@ -476,7 +483,7 @@ OBeerk.prototype.lezarStart = function(){
 		alert('hiany:'+hianydb+' stat:'+stat);
 		mibiz=$("#hMIBIZ").val();
 		fn = 'beerk.lezarUpdate';
-		r = ajaxCall(fn,{'mibiz':mibiz,'stat':stat,'login':login_id},true, fn);
+		ajaxCall(fn,{'mibiz':mibiz,'stat':stat,'login':login_id},true, fn);
 	}
 }
 
@@ -488,4 +495,119 @@ OBeerk.prototype.lezarUpdate =function(result){
 /* atnezo panel eddig */
 
 
+/* gumipanel */
+OBeerk.prototype.showGPanel =function(){
+	if (beerk.markaList.length==0) {
+		fn='getMarka';
+		ajaxCall(fn,{},true, fn);
+		fn='getMeret';
+		ajaxCall(fn,{},true, fn);
+		fn='getMinta';
+		ajaxCall(fn,{},true, fn);
+		fn='getSI';
+		ajaxCall(fn,{},true, fn);
+	}
+	else {
+		def = beerk.rszAdatok[9];
+		$('#gpMarkaA option[value='+def+']').prop('selected', 'selected');
+		def = beerk.rszAdatok[10];
+		$('#gpMeretA option[value='+def+']').prop('selected', 'selected');
+		def = beerk.rszAdatok[11];
+		$('#gpMintaA option[value='+def+']').prop('selected', 'selected');
+		def = beerk.rszAdatok[18];
+		$('#gpSIA option[value='+def+']').prop('selected', 'selected');
+
+		def = beerk.rszAdatok[12];
+		$('#gpMarkaB option[value='+def+']').prop('selected', 'selected');
+		def = beerk.rszAdatok[13];
+		$('#gpMeretB option[value='+def+']').prop('selected', 'selected');
+		def = beerk.rszAdatok[14];
+		$('#gpMintaB option[value='+def+']').prop('selected', 'selected');
+		def = beerk.rszAdatok[19];
+		$('#gpSIB option[value='+def+']').prop('selected', 'selected');
+
+		def = beerk.rszAdatok[15];
+		$('#gpMarkaP option[value='+def+']').prop('selected', 'selected');
+		def = beerk.rszAdatok[16];
+		$('#gpMeretP option[value='+def+']').prop('selected', 'selected');
+		def = beerk.rszAdatok[17];
+		$('#gpMintaP option[value='+def+']').prop('selected', 'selected');
+		def = beerk.rszAdatok[20];
+		$('#gpSIP option[value='+def+']').prop('selected', 'selected');
+	}
+	$('#divgpanel').show();
+	
+}
+/* gumipanel eddig */
+
+function getMarka(result){
+	beerk.MARKA=result;
+	$("#gpMarkaA").html('');
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		$("#gpMarkaA").append('<option value='+res.MARKA+'>'+res.MARKA+'</option>');
+		$("#gpMarkaB").append('<option value='+res.MARKA+'>'+res.MARKA+'</option>');		
+		$("#gpMarkaP").append('<option value='+res.MARKA+'>'+res.MARKA+'</option>');		
+	}
+	def = beerk.rszAdatok[9];
+	$('#gpMarkaA option[value='+def+']').prop('selected', 'selected');
+	def = beerk.rszAdatok[12];
+	$('#gpMarkaB option[value='+def+']').prop('selected', 'selected');
+	def = beerk.rszAdatok[15];
+	$('#gpMarkaP option[value='+def+']').prop('selected', 'selected');
+}
+function getMeret(result){
+	beerk.MERET = result;
+	$("#gpMeretA").html('');
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		optid = res.MERET.replace('/','');
+		$("#gpMeretA").append('<option value='+optid+'>'+res.MERET+'</option>');
+		$("#gpMeretB").append('<option value='+optid+'>'+res.MERET+'</option>');
+		$("#gpMeretP").append('<option value='+optid+'>'+res.MERET+'</option>');
+	}
+	def = beerk.rszAdatok[10];
+	optid = def.replace('/','');
+	$('#gpMeretA option[value='+optid+']').prop('selected', 'selected');
+	def = beerk.rszAdatok[13];
+	optid = def.replace('/','');
+	$('#gpMeretB option[value='+optid+']').prop('selected', 'selected');
+	def = beerk.rszAdatok[16];
+	optid = def.replace('/','');
+	$('#gpMeretP option[value='+optid+']').prop('selected', 'selected');
+	
+}
+function getMinta(result){
+	beerk.MINTA = result;
+	$("#gpMintaA").html('');
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		$("#gpMintaA").append('<option value='+res.MINTA+'>'+res.MINTA+'</option>');
+		$("#gpMintaB").append('<option value='+res.MINTA+'>'+res.MINTA+'</option>');
+		$("#gpMintaP").append('<option value='+res.MINTA+'>'+res.MINTA+'</option>');
+	}
+	def = beerk.rszAdatok[11];
+	$('#gpMintaA option[value='+def+']').prop('selected', 'selected');
+	def = beerk.rszAdatok[14];
+	$('#gpMintaB option[value='+def+']').prop('selected', 'selected');
+	def = beerk.rszAdatok[17];
+	$('#gpMintaP option[value='+def+']').prop('selected', 'selected');
+}
+function getSI(result){
+	beerk.SI = result;
+	$("#gpSIA").html('');
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		$("#gpSIA").append('<option value='+res.SI+'>'+res.SI+'</option>');
+		$("#gpSIB").append('<option value='+res.SI+'>'+res.SI+'</option>');
+		$("#gpSIP").append('<option value='+res.SI+'>'+res.SI+'</option>');
+	}
+	def = beerk.rszAdatok[18];
+	$('#gpSIA option[value='+def+']').prop('selected', 'selected');
+	def = beerk.rszAdatok[19];
+	$('#gpSIB option[value='+def+']').prop('selected', 'selected');
+	def = beerk.rszAdatok[20];
+	$('#gpSIP option[value='+def+']').prop('selected', 'selected');
+
+}
 /* beerkezes eddig */

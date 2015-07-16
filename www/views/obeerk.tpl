@@ -49,6 +49,9 @@
 	$('#bteszthide').bind('click',function () {
 		$('#divteszt').hide();
 	})	
+	$('#bGPanelClose').bind('click',function () {
+		$('#divgpanel').hide();
+	})	
 	
 	
 </script>
@@ -80,7 +83,7 @@
 			<div class='drendszam'>
 				<span id=srendszam onclick='beerk.showReview()'></span>
 			</div>
-			<div class='rszadatok'>
+			<div class='rszadatok' onclick='beerk.showGPanel()'>
 				<!--
 				<div class='dceg'>
 					<span class='labelCeg'>Cég:</span>
@@ -95,6 +98,24 @@
 					<span class='labelFelniGumi'>Felni/Gumi:</span>
 					<span class='dataFegu'></span>
 				</div>
+			</div>
+			<div id=divgpanel>
+				<select id=gpMarkaA></select>
+				<select id=gpMeretA></select>
+				<select id=gpMintaA></select>
+				<select id=gpSIA></select>
+				<br>
+				<select id=gpMarkaB></select>
+				<select id=gpMeretB></select>
+				<select id=gpMintaB></select>
+				<select id=gpSIB></select>
+				<br>
+				<select id=gpMarkaP></select>
+				<select id=gpMeretP></select>
+				<select id=gpMintaP></select>
+				<select id=gpSIP></select>
+				
+				<button id=bGPanelClose>Bezár</button>
 			</div>
 			<div class='dcontrol'>
 				<div class=divlabels>
