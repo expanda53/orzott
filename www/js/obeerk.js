@@ -5,10 +5,6 @@ var OBeerk = function(){
 	this.initMibizList();
 	this.currentItem = "";
 	this.currentPosition = '';
-	this.markaList=[];
-	this.meretList=[];
-	this.mintaList=[];
-	this.sebList=[];
 }
 /* feladat valasztas */
 OBeerk.prototype.initMibizList = function(){
@@ -76,47 +72,7 @@ OBeerk.prototype.panelInit = function (result) {
 /* fopanel */
 
 
-OBeerk.prototype.rszAdatok = function (result){
-	/* rendszam valasztas ajax eredmenye */
-	for (var i = 0;i < result.length;i++){
-		res = result[i];
-		//$(".dataCeg").html(res.CEGNEV);
-		$(".dataMeret").html(res.MERETMINTA);
-		$(".dataFegu").html(res.FEGU);
-		$(".dataDrbVart").html(res.DRB);
-		$(".dataDrbKesz").html(res.CDRB);
-		$("#hSORSZ").val(res.SORSZ);
-		beerk.rszAdatok = res.RSZADATOK.split("\n");
-	}
-	$('.rszadatok').show();
-	$('.dcontrol').show();
-	
 
-}
-
-OBeerk.prototype.rszChange = function (){
-	/* rendszam valasztas ajax indito */
-	rsz = $('#rendszam').val();
-
-	/*
-	$.get( "views/prn_rendszam_lerak.tpl", function( data ) {
-				tpl = data.replace('[LVKODRENDSZ]',rsz); 
-				tpl += '\r\n';
-				$('#tplprint').val(tpl);
-				
-		})
-	*/
-	if (rsz!='-') {
-		azon = $('#hAZON').val();
-		fn = 'beerk.rszAdatok';
-		r = ajaxCall(fn,{'rsz':rsz,'azon':azon},true, fn);
-	}
-	else {
-		$('.rszadatok').hide();
-		$('.dcontrol').hide();
-	}
-	
-}
 OBeerk.prototype.rszJav = function (result) {
 	/* mennyiseg javitas ajax eredmenye */
 	for (var i = 0;i < result.length;i++){
@@ -376,6 +332,48 @@ OBeerk.prototype.allapotMent=function(result){
 /* allapot panel eddig */
 
 /* atnezo panel */
+OBeerk.prototype.rszAdatokGet = function (result){
+	/* rendszam valasztas ajax eredmenye */
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		//$(".dataCeg").html(res.CEGNEV);
+		$(".dataMeret").html(res.MERETMINTA);
+		$(".dataFegu").html(res.FEGU);
+		$(".dataDrbVart").html(res.DRB);
+		$(".dataDrbKesz").html(res.CDRB);
+		$("#hSORSZ").val(res.SORSZ);
+		beerk.rszAdatok = res.RSZADATOK.split("\n");
+		beerk.rszAdatokTEMP = beerk.rszAdatok;
+	}
+	$('.rszadatok').show();
+	$('.dcontrol').show();
+	
+
+}
+
+OBeerk.prototype.rszChange = function (){
+	/* rendszam valasztas ajax indito */
+	rsz = $('#rendszam').val();
+	/*
+	$.get( "views/prn_rendszam_lerak.tpl", function( data ) {
+				tpl = data.replace('[LVKODRENDSZ]',rsz); 
+				tpl += '\r\n';
+				$('#tplprint').val(tpl);
+				
+		})
+	*/
+	if (rsz!='-') {
+		azon = $('#hAZON').val();
+		fn = 'beerk.rszAdatokGet';
+		ajaxCall(fn,{'rsz':rsz,'azon':azon},true, fn);
+	}
+	else {
+		$('.rszadatok').hide();
+		$('.dcontrol').hide();
+	}
+	
+}
+
 OBeerk.prototype.reviewRszGet = function(result) {
 	/* atnezo panel ajax eredenye */
 	sor = '';
@@ -496,118 +494,218 @@ OBeerk.prototype.lezarUpdate =function(result){
 
 
 /* gumipanel */
+function checkParam(str) {
+	var res = str;
+	if (str!=null) {
+		res = str.replace(/\//g,'');
+		res = res.replace(/\ /g,'');
+	}
+	return res;
+	
+}
 OBeerk.prototype.showGPanel =function(){
-	if (beerk.markaList.length==0) {
+	$('.drendszam, .rszadatok, .dcontrol').hide();
+		/* marka */
 		fn='getMarka';
-		ajaxCall(fn,{},true, fn);
+		obj='gpMarka';
+		tengely='A';
+		$('#'+obj+tengely).focus(function(){ 
+			fn='getMarka';
+			tengely='A';
+			ajaxCall(fn,{'marka':'mind','meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val()},false, fn+tengely);
+		});
+		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[9],'meret':beerk.rszAdatokTEMP[10],'minta':beerk.rszAdatokTEMP[11],'si':beerk.rszAdatokTEMP[18]},true, fn+tengely);
+
+		tengely='B';
+		$('#'+obj+tengely).focus(function(){ 
+			fn='getMarka';
+			tengely='B';
+			ajaxCall(fn,{'marka':'mind','meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val()},false, fn+tengely);
+		});
+
+		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[12],'meret':beerk.rszAdatokTEMP[13],'minta':beerk.rszAdatokTEMP[14],'si':beerk.rszAdatokTEMP[19]},true, fn+tengely);
+		tengely='P';
+		$('#'+obj+tengely).focus(function(){ 
+			fn='getMarka';
+			tengely='P';
+			ajaxCall(fn,{'marka':'mind','meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val()},false, fn+tengely);
+		});
+		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[15],'meret':beerk.rszAdatokTEMP[16],'minta':beerk.rszAdatokTEMP[17],'si':beerk.rszAdatokTEMP[20]},true, fn+tengely);
+
+		/* meret */
 		fn='getMeret';
-		ajaxCall(fn,{},true, fn);
+		obj='gpMeret';
+		tengely='A';
+		$('#'+obj+tengely).focus(function(){ 
+			fn='getMeret';
+			tengely='A';
+			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':'mind','minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val()},false, fn+tengely);
+		});
+		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[9],'meret':beerk.rszAdatokTEMP[10],'minta':beerk.rszAdatokTEMP[11],'si':beerk.rszAdatokTEMP[18]},true, fn+tengely);
+
+		tengely='B';
+		$('#'+obj+tengely).focus(function(){ 
+			fn='getMeret';
+			tengely='B';
+			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':'mind','minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val()},false, fn+tengely);
+		});
+		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[12],'meret':beerk.rszAdatokTEMP[13],'minta':beerk.rszAdatokTEMP[14],'si':beerk.rszAdatokTEMP[19]},true, fn+tengely);
+
+		tengely='P';
+		$('#'+obj+tengely).focus(function(){ 
+			fn='getMeret';
+			tengely='P';
+			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':'mind','minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val()},false, fn+tengely);
+		});
+		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[15],'meret':beerk.rszAdatokTEMP[16],'minta':beerk.rszAdatokTEMP[17],'si':beerk.rszAdatokTEMP[20]},true, fn+tengely);
+
+		/* minta */
 		fn='getMinta';
-		ajaxCall(fn,{},true, fn);
+		obj='gpMinta';
+		tengely='A';
+		$('#'+obj+tengely).focus(function(){ 
+			fn='getMinta';
+			tengely='A';
+			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':'mind','si':$('#gpSI'+tengely).val()},false, fn+tengely);
+		});
+		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[9],'meret':beerk.rszAdatokTEMP[10],'minta':beerk.rszAdatokTEMP[11],'si':beerk.rszAdatokTEMP[18]},true, fn+tengely);
+		
+		tengely='B';
+		$('#'+obj+tengely).focus(function(){ 
+			fn='getMinta';
+			tengely='B';
+			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':'mind','si':$('#gpSI'+tengely).val()},false, fn+tengely);
+		});
+		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[12],'meret':beerk.rszAdatokTEMP[13],'minta':beerk.rszAdatokTEMP[14],'si':beerk.rszAdatokTEMP[19]},true, fn+tengely);
+		
+		tengely='P';
+		$('#'+obj+tengely).focus(function(){ 
+			fn='getMinta';
+			tengely='P';
+			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':'mind','si':$('#gpSI'+tengely).val()},false, fn+tengely);
+		});
+		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[15],'meret':beerk.rszAdatokTEMP[16],'minta':beerk.rszAdatokTEMP[17],'si':beerk.rszAdatokTEMP[20]},true, fn+tengely);
+
+		/* si */
 		fn='getSI';
-		ajaxCall(fn,{},true, fn);
-	}
-	else {
-		def = beerk.rszAdatok[9];
-		$('#gpMarkaA option[value='+def+']').prop('selected', 'selected');
-		def = beerk.rszAdatok[10];
-		$('#gpMeretA option[value='+def+']').prop('selected', 'selected');
-		def = beerk.rszAdatok[11];
-		$('#gpMintaA option[value='+def+']').prop('selected', 'selected');
-		def = beerk.rszAdatok[18];
-		$('#gpSIA option[value='+def+']').prop('selected', 'selected');
+		obj='gpSI';
+		tengely='A';
+		$('#'+obj+tengely).focus(function(){ 
+			fn='getSI';
+			tengely='A';
+			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':'mind'},false, fn+tengely);
+		});
+		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[9],'meret':beerk.rszAdatokTEMP[10],'minta':beerk.rszAdatokTEMP[11],'si':beerk.rszAdatokTEMP[18]},true, fn+tengely);
+		
+		tengely='B';
+		$('#'+obj+tengely).focus(function(){ 
+			fn='getSI';
+			tengely='B';
+			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':'mind'},false, fn+tengely);
+		});
+		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[12],'meret':beerk.rszAdatokTEMP[13],'minta':beerk.rszAdatokTEMP[14],'si':beerk.rszAdatokTEMP[19]},true, fn+tengely);
+		
+		tengely='P';
+		$('#'+obj+tengely).focus(function(){ 
+			fn='getSI';
+			tengely='P';
+			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':'mind'},false, fn+tengely);
+		});
+		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[15],'meret':beerk.rszAdatokTEMP[16],'minta':beerk.rszAdatokTEMP[17],'si':beerk.rszAdatokTEMP[20]},true, fn+tengely);
 
-		def = beerk.rszAdatok[12];
-		$('#gpMarkaB option[value='+def+']').prop('selected', 'selected');
-		def = beerk.rszAdatok[13];
-		$('#gpMeretB option[value='+def+']').prop('selected', 'selected');
-		def = beerk.rszAdatok[14];
-		$('#gpMintaB option[value='+def+']').prop('selected', 'selected');
-		def = beerk.rszAdatok[19];
-		$('#gpSIB option[value='+def+']').prop('selected', 'selected');
 
-		def = beerk.rszAdatok[15];
-		$('#gpMarkaP option[value='+def+']').prop('selected', 'selected');
-		def = beerk.rszAdatok[16];
-		$('#gpMeretP option[value='+def+']').prop('selected', 'selected');
-		def = beerk.rszAdatok[17];
-		$('#gpMintaP option[value='+def+']').prop('selected', 'selected');
-		def = beerk.rszAdatok[20];
-		$('#gpSIP option[value='+def+']').prop('selected', 'selected');
-	}
 	$('#divgpanel').show();
 	
 }
-/* gumipanel eddig */
 
-function getMarka(result){
-	beerk.MARKA=result;
-	$("#gpMarkaA").html('');
+function getMarka(result,tengely){
+	def = $("#gpMarka"+tengely).val();
+	if (def=='' || def==null) {
+		if (tengely=='A') ix=9;
+		if (tengely=='B') ix=12;
+		if (tengely=='P') ix=15;
+		def = beerk.rszAdatokTEMP[ix].trim();
+	}
+	$("#gpMarka"+tengely).html('');
+	$("#gpMarka"+tengely).append('<option value=mind></option>');
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
-		$("#gpMarkaA").append('<option value='+res.MARKA+'>'+res.MARKA+'</option>');
-		$("#gpMarkaB").append('<option value='+res.MARKA+'>'+res.MARKA+'</option>');		
-		$("#gpMarkaP").append('<option value='+res.MARKA+'>'+res.MARKA+'</option>');		
+		$("#gpMarka"+tengely).append('<option value="'+res.MARKA+'">'+res.MARKA+'</option>');
 	}
-	def = beerk.rszAdatok[9];
-	$('#gpMarkaA option[value='+def+']').prop('selected', 'selected');
-	def = beerk.rszAdatok[12];
-	$('#gpMarkaB option[value='+def+']').prop('selected', 'selected');
-	def = beerk.rszAdatok[15];
-	$('#gpMarkaP option[value='+def+']').prop('selected', 'selected');
+	if (def!='') $('#gpMarka'+tengely+' option[value='+def+']').prop('selected', 'selected');
 }
-function getMeret(result){
-	beerk.MERET = result;
-	$("#gpMeretA").html('');
-	for (var i = 0;i < result.length;i++){
-		res = result[i];
-		optid = res.MERET.replace('/','');
-		$("#gpMeretA").append('<option value='+optid+'>'+res.MERET+'</option>');
-		$("#gpMeretB").append('<option value='+optid+'>'+res.MERET+'</option>');
-		$("#gpMeretP").append('<option value='+optid+'>'+res.MERET+'</option>');
+function getMarkaA(result){	getMarka(result,'A');}
+function getMarkaB(result){	getMarka(result,'B');}
+function getMarkaP(result){	getMarka(result,'P');}
+
+function getMeret(result,tengely){
+	def = $("#gpMeret"+tengely).val();
+	optid = '';
+	if (def=='' || def==null) {
+		if (tengely=='A') ix=10;
+		if (tengely=='B') ix=13;
+		if (tengely=='P') ix=16;
+		def = beerk.rszAdatokTEMP[ix].trim();
 	}
-	def = beerk.rszAdatok[10];
-	optid = def.replace('/','');
-	$('#gpMeretA option[value='+optid+']').prop('selected', 'selected');
-	def = beerk.rszAdatok[13];
-	optid = def.replace('/','');
-	$('#gpMeretB option[value='+optid+']').prop('selected', 'selected');
-	def = beerk.rszAdatok[16];
-	optid = def.replace('/','');
-	$('#gpMeretP option[value='+optid+']').prop('selected', 'selected');
 	
-}
-function getMinta(result){
-	beerk.MINTA = result;
-	$("#gpMintaA").html('');
+	$("#gpMeret"+tengely).html('');
+	$("#gpMeret"+tengely).append('<option value=mind></option>');
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
-		$("#gpMintaA").append('<option value='+res.MINTA+'>'+res.MINTA+'</option>');
-		$("#gpMintaB").append('<option value='+res.MINTA+'>'+res.MINTA+'</option>');
-		$("#gpMintaP").append('<option value='+res.MINTA+'>'+res.MINTA+'</option>');
+		optid = checkParam(res.MERET);
+		$("#gpMeret"+tengely).append('<option value="'+optid+'">'+res.MERET+'</option>');
 	}
-	def = beerk.rszAdatok[11];
-	$('#gpMintaA option[value='+def+']').prop('selected', 'selected');
-	def = beerk.rszAdatok[14];
-	$('#gpMintaB option[value='+def+']').prop('selected', 'selected');
-	def = beerk.rszAdatok[17];
-	$('#gpMintaP option[value='+def+']').prop('selected', 'selected');
+	if (def!=null)optid = checkParam(def);
+	if (optid!='') $('#gpMeret'+tengely+' option[value='+optid+']').prop('selected', 'selected');
 }
-function getSI(result){
-	beerk.SI = result;
-	$("#gpSIA").html('');
-	for (var i = 0;i < result.length;i++){
-		res = result[i];
-		$("#gpSIA").append('<option value='+res.SI+'>'+res.SI+'</option>');
-		$("#gpSIB").append('<option value='+res.SI+'>'+res.SI+'</option>');
-		$("#gpSIP").append('<option value='+res.SI+'>'+res.SI+'</option>');
-	}
-	def = beerk.rszAdatok[18];
-	$('#gpSIA option[value='+def+']').prop('selected', 'selected');
-	def = beerk.rszAdatok[19];
-	$('#gpSIB option[value='+def+']').prop('selected', 'selected');
-	def = beerk.rszAdatok[20];
-	$('#gpSIP option[value='+def+']').prop('selected', 'selected');
+function getMeretA(result) {getMeret(result,'A')}
+function getMeretB(result) {getMeret(result,'B')}
+function getMeretP(result) {getMeret(result,'P')}
 
+function getMinta(result,tengely){
+	def = $("#gpMinta"+tengely).val();
+	optid='';
+	if (def=='' || def==null) {
+		if (tengely=='A') ix = 11;
+		if (tengely=='B') ix = 14;	
+		if (tengely=='P') ix = 17;	
+		def = beerk.rszAdatokTEMP[ix].trim();
+	}
+	
+	$("#gpMinta"+tengely).html('');
+	$("#gpMinta"+tengely).append('<option value=mind></option>');
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		optid = checkParam(res.MINTA);
+		$("#gpMinta"+tengely).append('<option value="'+optid+'">'+res.MINTA+'</option>');
+	}
+	if (def!=null)optid = checkParam(def);
+	if (optid!='') $('#gpMinta'+tengely+' option[value='+optid+']').prop('selected', 'selected');
 }
+function getMintaA(result) {getMinta(result,'A')}
+function getMintaB(result) {getMinta(result,'B')}
+function getMintaP(result) {getMinta(result,'P')}
+
+function getSI(result,tengely){
+	def = $("#gpSI"+tengely).val();
+	if (def=='' || def==null) {
+		if (tengely=='A') ix = 18;
+		if (tengely=='B') ix = 19;	
+		if (tengely=='P') ix = 20;	
+
+		def = beerk.rszAdatokTEMP[ix].trim();
+	}
+
+	$("#gpSI"+tengely).html('');
+	$("#gpSI"+tengely).append('<option value=mind></option>');
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		$("#gpSI"+tengely).append('<option value="'+res.SI+'">'+res.SI+'</option>');
+	}
+	if (def!='') $('#gpSI'+tengely+' option[value='+def+']').prop('selected', 'selected');
+}
+function getSIA(result) {getSI(result,'A')}
+function getSIB(result) {getSI(result,'B')}
+function getSIP(result) {getSI(result,'P')}
+/* gumipanel eddig */
 /* beerkezes eddig */

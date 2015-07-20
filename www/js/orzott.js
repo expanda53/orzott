@@ -6,13 +6,13 @@ function ajaxCall( func, d,asyn,fn) {
   console.debug('ajax:'+func+' data:'+JSON.stringify(d));
   $.ajax({
         type: "POST",
-		url: "http://192.168.22.212/orzottsrv/service.php/" + func, /* akh eles */
-		//url: "http://192.168.1.68:82/orzottsrv/service.php/" + func, /* otthoni eles */
+		//url: "http://192.168.22.212/orzottsrv/service.php/" + func, /* akh eles */
+		url: "http://192.168.1.68:82/orzottsrv/service.php/" + func, /* otthoni eles */
         data: d,
 		async: asyn,
         dataType: "json",
         success: function(data) {
-			console.debug('ajax success:'+fn+' data:'+JSON.stringify(data));
+			//console.debug('ajax success:'+fn+' data:'+JSON.stringify(data));
 			res=data; 
 			if (fn) {
 				f=fn.split(".");
@@ -23,7 +23,7 @@ function ajaxCall( func, d,asyn,fn) {
 					var myFunc = window[fn];
 				}
 				if(typeof myFunc === 'function') {
-					console.debug('ajax success,start func:'+fn+' data:'+JSON.stringify(data));
+					//console.debug('ajax success,start func:'+fn+' data:'+JSON.stringify(data));
 					myFunc(data);
 				}
 			  

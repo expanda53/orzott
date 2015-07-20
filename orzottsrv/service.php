@@ -34,7 +34,7 @@
 		echo json_encode(Converter::win2utf_array($res));
 
   }
-  if ($func==='beerk.rszAdatok'){
+  if ($func==='beerk.rszAdatokGet'){
 		$azon = $r['azon'];
 		$rsz = $r['rsz'];
 		$sql=" SELECT FIRST 1  SORSZ, CAST(ABS(DRB) AS INTEGER) AS DRB ,CEG.NEV CEGNEV ,CAST(DRB2 AS INTEGER) AS CDRB,AKTSOR.DEVEAR AS PDAKEZ, AKTSOR.STAT3 AS ROWSTAT,
@@ -256,7 +256,25 @@
 		echo json_encode(Converter::win2utf_array($res));
   }  
   if ($func=='getMarka'){
-		$sql=" SELECT DISTINCT MARKA FROM AKHTORZS";
+		$marka = trim($r['marka']);
+		$meret = trim($r['meret']);
+		$minta = trim($r['minta']);
+		$si = trim($r['si']);
+		if (strtoupper($marka)=='MIND') $marka='';
+		if (strtoupper($meret)=='MIND') $meret='';
+		if (strtoupper($minta)=='MIND') $minta='';
+		if (strtoupper($si)=='MIND') $si='';
+		$marka=str_replace('\\r','',$marka);
+		$meret=str_replace('\\r','',$meret);		
+		$minta=str_replace('\\r','',$minta);		
+		$si=str_replace('\\r','',$si);
+		$where='';
+		if (trim($marka)!='') $where = " MARKA = '$marka' ";
+		if (trim($meret)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MERET,'/',''),' ','') = replace(replace('$meret','/',''),' ','') ";}
+		if (trim($minta)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MINTA,'/',''),' ','') = replace(replace('$minta','/',''),' ','')";}
+		if (trim($si)!='') 	  {if ($where!='') $where.=' AND ';$where .= " SI = '$si' ";}
+		if ($where!='') $where = ' WHERE ' .$where;
+		$sql=" SELECT DISTINCT MARKA FROM AKHTORZS $where";
 		$stmt = Firebird::prepare($sql);
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -264,7 +282,25 @@
 		echo json_encode(Converter::win2utf_array($res));	  
   }
   if ($func=='getMeret'){
-		$sql=" SELECT DISTINCT MERET FROM AKHTORZS";
+		$marka = trim($r['marka']);
+		$meret = trim($r['meret']);
+		$minta = trim($r['minta']);
+		$si = trim($r['si']);
+		if (strtoupper($marka)=='MIND') $marka='';
+		if (strtoupper($meret)=='MIND') $meret='';
+		if (strtoupper($minta)=='MIND') $minta='';
+		if (strtoupper($si)=='MIND') $si='';
+		$marka=str_replace('\\r','',$marka);
+		$meret=str_replace('\\r','',$meret);		
+		$minta=str_replace('\\r','',$minta);		
+		$si=str_replace('\\r','',$si);
+		$where='';
+		if (trim($marka)!='') $where = " MARKA = '$marka' ";
+		if (trim($meret)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MERET,'/',''),' ','') = replace(replace('$meret','/',''),' ','') ";}
+		if (trim($minta)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MINTA,'/',''),' ','') = replace(replace('$minta','/',''),' ','')";}
+		if (trim($si)!='') 	  {if ($where!='') $where.=' AND ';$where .= " SI = '$si' ";}
+		if ($where!='') $where = ' WHERE ' .$where;
+		$sql=" SELECT DISTINCT MERET FROM AKHTORZS $where";
 		$stmt = Firebird::prepare($sql);
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -272,7 +308,26 @@
 		echo json_encode(Converter::win2utf_array($res));	  
   }
   if ($func=='getMinta'){
-		$sql=" SELECT DISTINCT MINTA FROM AKHTORZS";
+		$marka = trim($r['marka']);
+		$meret = trim($r['meret']);
+		$minta = trim($r['minta']);
+		$si = trim($r['si']);
+		if (strtoupper($marka)=='MIND') $marka='';
+		if (strtoupper($meret)=='MIND') $meret='';
+		if (strtoupper($minta)=='MIND') $minta='';
+		if (strtoupper($si)=='MIND') $si='';
+		$marka=str_replace('\\r','',$marka);
+		$meret=str_replace('\\r','',$meret);		
+		$minta=str_replace('\\r','',$minta);		
+		$si=str_replace('\\r','',$si);
+		$where='';
+		if (trim($marka)!='') $where = " MARKA = '$marka' ";
+		if (trim($meret)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MERET,'/',''),' ','') = replace(replace('$meret','/',''),' ','') ";}
+		if (trim($minta)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MINTA,'/',''),' ','') = replace(replace('$minta','/',''),' ','')";}
+		if (trim($si)!='') 	  {if ($where!='') $where.=' AND ';$where .= " SI = '$si' ";}
+		if ($where!='') $where = ' WHERE ' .$where;
+
+		$sql=" SELECT DISTINCT MINTA FROM AKHTORZS $where";
 		$stmt = Firebird::prepare($sql);
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -280,7 +335,26 @@
 		echo json_encode(Converter::win2utf_array($res));	  
   }
   if ($func=='getSI'){
-		$sql=" SELECT DISTINCT SI FROM AKHTORZS";
+		$marka = trim($r['marka']);
+		$meret = trim($r['meret']);
+		$minta = trim($r['minta']);
+		$si = trim($r['si']);
+		if (strtoupper($marka)=='MIND') $marka='';
+		if (strtoupper($meret)=='MIND') $meret='';
+		if (strtoupper($minta)=='MIND') $minta='';
+		if (strtoupper($si)=='MIND') $si='';
+		$marka=str_replace('\\r','',$marka);
+		$meret=str_replace('\\r','',$meret);		
+		$minta=str_replace('\\r','',$minta);		
+		$si=str_replace('\\r','',$si);
+		$where='';
+		if (trim($marka)!='') $where = " MARKA = '$marka' ";
+		if (trim($meret)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MERET,'/',''),' ','') = replace(replace('$meret','/',''),' ','') ";}
+		if (trim($minta)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MINTA,'/',''),' ','') = replace(replace('$minta','/',''),' ','')";}
+		if (trim($si)!='') 	  {if ($where!='') $where.=' AND ';$where .= " SI = '$si' ";}
+		if ($where!='') $where = ' WHERE ' .$where;
+
+		$sql=" SELECT DISTINCT SI FROM AKHTORZS $where";
 		$stmt = Firebird::prepare($sql);
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -12,15 +12,8 @@
 		beerk.showReview();
 	})
 */	
-	$('#rendszam').bind('change',function () {
-		beerk.rszChange();
-	})	
 	$('#bGumi, #bGumiFelni, #bFelni').bind('click',function () {
 		beerk.showPozPanel($(this));
-	})
-	$('#bPlus').bind('click',function () {
-		beerk.showPozPanel($(this));
-		
 	})
 	$('#bJavitas').bind('click',function () {
 		beerk.rszJavitas();
@@ -51,6 +44,7 @@
 	})	
 	$('#bGPanelClose').bind('click',function () {
 		$('#divgpanel').hide();
+		$('.drendszam, .rszadatok, .dcontrol').show();
 	})	
 	
 	
