@@ -19,6 +19,7 @@
 var app = {
 	printerId:"",
 	printerName:"",
+	printerConnected:false,
 	
     // Application Constructor
     initialize: function() {
@@ -53,7 +54,7 @@ var app = {
 			var btAssign = function() {
 				bluetoothSerial.list(function(devices) {
 					devices.forEach(function(device) {
-						if (device.class=='1664') {app.printerId = device.id;app.printerName=device.name;app.manageConnection(true);}
+						if (device.class=='1664') {app.printerId = device.id;app.printerName=device.name;app.manageConnection(true)}
 					})
 				},
                 function(error) {
@@ -68,6 +69,9 @@ var app = {
 			); 
 
 		}
+		else {
+			alert('bt serial undefined');
+		}
 	},
 	BTDisabled:function(){
 		app.manageConnection(false);
@@ -78,8 +82,6 @@ var app = {
 			// connect() will get called only if isConnected() (below)
 			// returns failure. In other words, if not connected, then connect:
 			var connect = function () {
-				// if not connected, do this:
-				// clear the screen and display an attempt to connect
 				// attempt to connect:
 				bluetoothSerial.connect(
 					app.printerId,  // device to connect to
@@ -88,10 +90,8 @@ var app = {
 				);
 			};
 
-			// disconnect() will get called only if isConnected() (below)
-			// returns success  In other words, if  connected, then disconnect:
+			// disconnect() 
 			var disconnect = function () {
-				// if connected, do this:
 				bluetoothSerial.disconnect(
 					app.closePort,     // stop listening to the port
 					app.showError      // show the error if you fail
@@ -110,6 +110,7 @@ var app = {
     openPort: function() {
         // if you get a good Bluetooth serial connection:
         console.log("Connected to: " + app.printerId);
+		app.printerConnected=true;
         // set up a listener to listen for newlines
         // and display any new data that's come in since
         // the last newline:
@@ -125,6 +126,7 @@ var app = {
     closePort: function() {
         // if you get a good Bluetooth serial connection:
         // unsubscribe from listening:
+		app.printerConnected=false;
         bluetoothSerial.unsubscribe(
                 function (data) {
                     //alert(data);
@@ -137,7 +139,8 @@ var app = {
     appends @error to the message div:
 */
     showError: function(error) {
-        alert(error);
+		console.log("bluetooth error:"+error);
+        //alert(error);
     }
 	
 	
