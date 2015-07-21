@@ -12,18 +12,50 @@
 		beerk.showReview();
 	})
 */	
-	$('#bGumi, #bGumiFelni, #bFelni').bind('click',function () {
-		beerk.showPozPanel($(this));
-	})
+
+
+	
+	$('#bGumi, #bGumiFelni, #bFelni').on('touchstart click', function(event){
+		event.stopPropagation();
+        event.preventDefault();
+        if(event.handled !== true) {
+
+            beerk.showPozPanel($(this));
+
+            event.handled = true;
+        } else {
+            return false;
+        }
+		
+
+	});
+	
 	$('#bJavitas').bind('click',function () {
 		beerk.rszJavitas();
 	})
-	$('#bFolytMost').bind('click',function () {
-		$('#divreview').hide();
-		$('#divpanel').show();
+	$('#bFolytMost').bind('touchstart click',function (event) {
+		event.stopPropagation();
+        event.preventDefault();
+        if(event.handled !== true) {
+			$('#divreview').hide();
+			$('#divpanel').show();
+            event.handled = true;
+        } else {
+            return false;
+        }
 	})
-	$('#bFolytKesobb').bind('click',function () {
-		beerk.folytKesobb();
+	$('#bFolytKesobb').bind('touchstart click',function (event) {
+		event.stopPropagation();
+        event.preventDefault();
+        if(event.handled !== true) {
+
+            beerk.folytKesobb();
+
+            event.handled = true;
+        } else {
+            return false;
+        }
+		
 	})	
 	$('#bLezar').bind('click',function () {
 		beerk.lezarStart();
@@ -45,6 +77,31 @@
 	$('#bGPanelClose').bind('click',function () {
 		$('#divgpanel').hide();
 		$('.drendszam, .rszadatok, .dcontrol').show();
+	})	
+	$('#srendszam').bind('touchstart click',function (event) {
+		event.stopPropagation();
+        event.preventDefault();
+        if(event.handled !== true) {
+            beerk.showReview()	
+            event.handled = true;
+        } else {
+            return false;
+        }
+
+
+	})	
+	$('.rszadatok').bind('touchstart click',function (event) {
+			event.stopPropagation();
+        event.preventDefault();
+        if(event.handled !== true) {
+
+			beerk.showGPanel();
+
+            event.handled = true;
+        } else {
+            return false;
+        }
+
 	})	
 	
 	
@@ -75,9 +132,9 @@
 		<!-- panel -->
 		<div id=divpanel>
 			<div class='drendszam'>
-				<span id=srendszam onclick='beerk.showReview()'></span>
+				<span id=srendszam></span>
 			</div>
-			<div class='rszadatok' onclick='beerk.showGPanel()'>
+			<div class='rszadatok'>
 				<!--
 				<div class='dceg'>
 					<span class='labelCeg'>Cég:</span>
