@@ -2,10 +2,14 @@ body {
 	background-color:black;
 } 
 #divclick {
-	height:500px;
-	width:500px;
+	position:fixed;
+	top:0px;
+	left:0px;
+	height:1000px;
+	width:1000px;
 	display:none;
 	z-index:999;
+	opacity:0;
 }
 #divheader{
 	background-color:yellow;
@@ -76,7 +80,7 @@ select {
 	line-height:20px;
 	background-color:aliceblue;
 	padding:2px;
-	width:460px;
+	width:420px;
 	border:1px solid black;
 	font-size:15px;
 }
@@ -88,19 +92,23 @@ select {
 	top:12px;
 	clear:both;
 	margin:0px auto;
-	width:100%;
+	width:600px;
 }
 .dButtons button {
 	margin:3px auto;
 } 
 
 .dButtons  .bprint{
-	width:33%;
+	width:30%;
 } 
 .dButtons  .bnoprint{
 	width:19%;
 } 
-
+.dButtons #bElteres {
+	background-color:orange;
+	color:black;
+	width:150px;
+}
 #divreview {
 	display:none;
 	width:301px;
@@ -116,8 +124,9 @@ select {
 	position:relative;
 	top:0px;
 	left:10px;
-	background-color:white;
+	background-color:#f1f1f1;
 	width:70px;
+	border-right:1px dashed black;
 	
 }
 
@@ -126,18 +135,19 @@ select {
 	top:32px;
 	left:90px;
 	background-color:white;
-	
 }
 #divreview table{
 	display:block;
-	background-color:white;
 	height: 170px;
 	overflow-y: scroll;
 	font-size:17px;
+	position:relative;
+	left:10px;
 }
-
+.tableReview {
+	width:340px;
+}
 #divreview  table tbody {
-	background-color:white;
 	overflow:auto;
 }
 
@@ -156,13 +166,17 @@ select {
 }
 
 .tableReviewFilter {
-	width:70px;
+	background-color:#f1f1f1;
 }
-#divteszt {
-	display:none;
-	position:fixed;
-	top:0px;
-	left:0px;
+
+
+.divReviewFilter {
+    position: absolute;
+    left: 370px;
+    top: 10px;
+    color: white;
+    width: 75px;
+    font-size: 15px;	
 }
 #divmeres {
 	display:none;
@@ -172,7 +186,7 @@ select {
 }
 #divgpanel {
 	display:none;
-	border:1px solid white;
+	z-index:100;
 }
 
 button {

@@ -33,6 +33,18 @@
 	$('#bJavitas').bind('click',function () {
 		beerk.rszJavitas();
 	})
+	$('#bElteres').bind('click',function (event) {
+		event.stopPropagation();
+        event.preventDefault();
+        if(event.handled !== true) {
+			clickHelp();
+			beerk.reviewFilter();
+            event.handled = true;
+        } else {
+            return false;
+        }
+	})
+	
 	$('#bFolytMost').bind('click',function (event) {
 		event.stopPropagation();
         event.preventDefault();
@@ -62,19 +74,8 @@
 	$('#bLezar').bind('click',function () {
 		beerk.lezarStart();
 	})	
-	/*
-	$('#bNincsMeg').bind('click',function () {
-		beerk.nincsMegStart();
-	})
-*/	
 	$('#bMenu').bind('click',function () {
 		showMenu();
-	})	
-	$('#bteszt').bind('click',function () {
-		$('#divteszt').show();
-	})	
-	$('#bteszthide').bind('click',function () {
-		$('#divteszt').hide();
 	})	
 	$('#bGPanelClose').bind('click',function () {
 		beerk.closeGPanel(true);
@@ -86,7 +87,7 @@
 		clickHelp();
         beerk.showReview()	
 	})	
-	$('.rszadatok').bind('touchend click',function (event) {
+	$('.rszadatok').bind('click',function (event) {
 		event.stopPropagation();
         event.preventDefault();
         if(event.handled !== true) {
@@ -138,7 +139,6 @@
 				</div>
 				-->
 				<div class='dmeretminta'>
-					<span class='labelMeret'>Méret,minta:</span>
 					<span class='dataMeret'></span>
 				</div>
 				<div class='dfegu'>
@@ -208,6 +208,7 @@
 				
 			</div>
 			<div class=divreviewRight>
+			<div class=divTableReview>
 			<table class=tableReview>
 				<thead>
 				<tr>
@@ -226,6 +227,7 @@
 				<span class=dataHiany></span>
 			</div>
 			<div class=dButtons>
+				<button id=bElteres>Eltérések</button>
 				<button id=bFolytMost>Folyt. most</button>
 				<button id=bFolytKesobb>Folyt. később</button>
 				<button id=bLezar>Lezárás</button>

@@ -1,5 +1,9 @@
 /* beerkezes */
 login_id = '100';
+markaUpdate = false;
+meretUpdate = false;
+mintaUpdate = false;
+siUpdate = false;
 function clickHelp(){
 	$('#divclick').show();
 	window.setTimeout(function(){$('#divclick').hide();},20);
@@ -366,6 +370,7 @@ OBeerk.prototype.reviewRszGet = function(result) {
 	sor = '';
 	$('.tableReview tbody').html('');
 	var hianydb = 0;
+	beerk.reviewSet = result;
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		tdclass='';
@@ -440,6 +445,42 @@ OBeerk.prototype.showReview = function() {
 	fn = 'beerk.reviewRszFilter';
 	r = ajaxCall(fn,{'azon':azon,'login':login_id},true, fn);
 	
+}
+
+OBeerk.prototype.reviewFilter = function() {
+	val = $('#bElteres').html();
+	showAll = (val!='Eltérések');
+	if (val=='Eltérések') val='Összes sor';
+	else val='Eltérések';
+	$('#bElteres').html(val);
+	
+	sor = '';
+	$('.tableReview tbody').html('');
+	var hianydb = 0;
+	result = beerk.reviewSet;
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		tdclass='';
+		if (showAll || res.DRB!=res.DRB2) {
+			if (res.DRB==res.DRB2) tdclass=' rowhighlighted';
+			sor += '<tr class="'+tdclass+'" id="'+res.RENDSZAM+'">';
+			sor += '<td class="tdrsz">'+res.RENDSZAM+'</td>';
+			sor += '<td>'+res.DRB+'</td>'; 
+			sor +=  '<td class="tmibiz">'+res.DRB2+'</td>'; 
+			sor += '</tr>';
+		}
+		
+	}
+	$('.tableReview tbody').append(sor);
+	$('.tableReview tbody tr').bind('click',function(){
+		tr = $(this);
+		rsz = tr.find(".tdrsz").html();
+		$('#rendszam').val(rsz);
+		$('#srendszam').html(rsz);
+		beerk.rszChange();
+		$('#bFolytMost').trigger('click');
+
+	})
 }
 
 OBeerk.prototype.folytKesobb=function(){
@@ -531,7 +572,7 @@ OBeerk.prototype.closeGPanel = function (saveData){
 			$('.dataMeret').html(newContent);
 	}
 	
-	$('#gpMarkaA, #gpMarkaB, #gpMarkaP, #gpMeretA, #gpMeretB, #gpMeretP, #gpMintaA, #gpMintaB, #gpMintaP, #gpSIA, #gpSIB, #gpSIP').val('');	
+	$('#gpMarkaA, #gpMarkaB, #gpMarkaP, #gpMeretA, #gpMeretB, #gpMeretP, #gpMintaA, #gpMintaB, #gpMintaP, #gpSIA, #gpSIB, #gpSIP').html('');	
 	$('#divgpanel').hide();
 	$('.drendszam, .rszadatok, .dcontrol').show();
 	
@@ -547,7 +588,9 @@ OBeerk.prototype.showGPanel =function(){
 			tengely='A';
 			ajaxCall(fn,{'marka':'mind','meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val()},false, fn+tengely);
 		});
-		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[9],'meret':beerk.rszAdatokTEMP[10],'minta':beerk.rszAdatokTEMP[11],'si':beerk.rszAdatokTEMP[18]},true, fn+tengely);
+		if (checkParam(beerk.rszAdatokTEMP[9])!='') {
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[9],'meret':beerk.rszAdatokTEMP[10],'minta':beerk.rszAdatokTEMP[11],'si':beerk.rszAdatokTEMP[18]},true, fn+tengely);
+		}
 
 		tengely='B';
 		$('#'+obj+tengely).focus(function(){ 
@@ -555,15 +598,18 @@ OBeerk.prototype.showGPanel =function(){
 			tengely='B';
 			ajaxCall(fn,{'marka':'mind','meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val()},false, fn+tengely);
 		});
-
-		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[12],'meret':beerk.rszAdatokTEMP[13],'minta':beerk.rszAdatokTEMP[14],'si':beerk.rszAdatokTEMP[19]},true, fn+tengely);
+		if (checkParam(beerk.rszAdatokTEMP[12])!='') {
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[12],'meret':beerk.rszAdatokTEMP[13],'minta':beerk.rszAdatokTEMP[14],'si':beerk.rszAdatokTEMP[19]},true, fn+tengely);
+		}
 		tengely='P';
 		$('#'+obj+tengely).focus(function(){ 
 			fn='getMarka';
 			tengely='P';
 			ajaxCall(fn,{'marka':'mind','meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val()},false, fn+tengely);
 		});
-		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[15],'meret':beerk.rszAdatokTEMP[16],'minta':beerk.rszAdatokTEMP[17],'si':beerk.rszAdatokTEMP[20]},true, fn+tengely);
+		if (checkParam(beerk.rszAdatokTEMP[15])!='') {
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[15],'meret':beerk.rszAdatokTEMP[16],'minta':beerk.rszAdatokTEMP[17],'si':beerk.rszAdatokTEMP[20]},true, fn+tengely);
+		}
 
 		/* meret */
 		fn='getMeret';
@@ -574,7 +620,9 @@ OBeerk.prototype.showGPanel =function(){
 			tengely='A';
 			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':'mind','minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val()},false, fn+tengely);
 		});
-		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[9],'meret':beerk.rszAdatokTEMP[10],'minta':beerk.rszAdatokTEMP[11],'si':beerk.rszAdatokTEMP[18]},true, fn+tengely);
+		if (checkParam(beerk.rszAdatokTEMP[9])!='') {
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[9],'meret':beerk.rszAdatokTEMP[10],'minta':beerk.rszAdatokTEMP[11],'si':beerk.rszAdatokTEMP[18]},true, fn+tengely);
+		}
 
 		tengely='B';
 		$('#'+obj+tengely).focus(function(){ 
@@ -582,7 +630,9 @@ OBeerk.prototype.showGPanel =function(){
 			tengely='B';
 			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':'mind','minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val()},false, fn+tengely);
 		});
-		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[12],'meret':beerk.rszAdatokTEMP[13],'minta':beerk.rszAdatokTEMP[14],'si':beerk.rszAdatokTEMP[19]},true, fn+tengely);
+		if (checkParam(beerk.rszAdatokTEMP[12])!='') {
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[12],'meret':beerk.rszAdatokTEMP[13],'minta':beerk.rszAdatokTEMP[14],'si':beerk.rszAdatokTEMP[19]},true, fn+tengely);
+		}
 
 		tengely='P';
 		$('#'+obj+tengely).focus(function(){ 
@@ -590,7 +640,9 @@ OBeerk.prototype.showGPanel =function(){
 			tengely='P';
 			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':'mind','minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val()},false, fn+tengely);
 		});
-		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[15],'meret':beerk.rszAdatokTEMP[16],'minta':beerk.rszAdatokTEMP[17],'si':beerk.rszAdatokTEMP[20]},true, fn+tengely);
+		if (checkParam(beerk.rszAdatokTEMP[15])!='') {
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[15],'meret':beerk.rszAdatokTEMP[16],'minta':beerk.rszAdatokTEMP[17],'si':beerk.rszAdatokTEMP[20]},true, fn+tengely);
+		}
 
 		/* minta */
 		fn='getMinta';
@@ -601,7 +653,9 @@ OBeerk.prototype.showGPanel =function(){
 			tengely='A';
 			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':'mind','si':$('#gpSI'+tengely).val()},false, fn+tengely);
 		});
-		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[9],'meret':beerk.rszAdatokTEMP[10],'minta':beerk.rszAdatokTEMP[11],'si':beerk.rszAdatokTEMP[18]},true, fn+tengely);
+		if (checkParam(beerk.rszAdatokTEMP[9])!='') {
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[9],'meret':beerk.rszAdatokTEMP[10],'minta':beerk.rszAdatokTEMP[11],'si':beerk.rszAdatokTEMP[18]},true, fn+tengely);
+		}
 		
 		tengely='B';
 		$('#'+obj+tengely).focus(function(){ 
@@ -609,7 +663,9 @@ OBeerk.prototype.showGPanel =function(){
 			tengely='B';
 			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':'mind','si':$('#gpSI'+tengely).val()},false, fn+tengely);
 		});
-		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[12],'meret':beerk.rszAdatokTEMP[13],'minta':beerk.rszAdatokTEMP[14],'si':beerk.rszAdatokTEMP[19]},true, fn+tengely);
+		if (checkParam(beerk.rszAdatokTEMP[12])!='') {
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[12],'meret':beerk.rszAdatokTEMP[13],'minta':beerk.rszAdatokTEMP[14],'si':beerk.rszAdatokTEMP[19]},true, fn+tengely);
+		}
 		
 		tengely='P';
 		$('#'+obj+tengely).focus(function(){ 
@@ -617,7 +673,9 @@ OBeerk.prototype.showGPanel =function(){
 			tengely='P';
 			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':'mind','si':$('#gpSI'+tengely).val()},false, fn+tengely);
 		});
-		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[15],'meret':beerk.rszAdatokTEMP[16],'minta':beerk.rszAdatokTEMP[17],'si':beerk.rszAdatokTEMP[20]},true, fn+tengely);
+		if (checkParam(beerk.rszAdatokTEMP[15])!='') {
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[15],'meret':beerk.rszAdatokTEMP[16],'minta':beerk.rszAdatokTEMP[17],'si':beerk.rszAdatokTEMP[20]},true, fn+tengely);
+		}
 
 		/* si */
 		fn='getSI';
@@ -628,7 +686,9 @@ OBeerk.prototype.showGPanel =function(){
 			tengely='A';
 			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':'mind'},false, fn+tengely);
 		});
-		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[9],'meret':beerk.rszAdatokTEMP[10],'minta':beerk.rszAdatokTEMP[11],'si':beerk.rszAdatokTEMP[18]},true, fn+tengely);
+		if (checkParam(beerk.rszAdatokTEMP[9])!='') {
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[9],'meret':beerk.rszAdatokTEMP[10],'minta':beerk.rszAdatokTEMP[11],'si':beerk.rszAdatokTEMP[18]},true, fn+tengely);
+		}
 		
 		tengely='B';
 		$('#'+obj+tengely).focus(function(){ 
@@ -636,7 +696,9 @@ OBeerk.prototype.showGPanel =function(){
 			tengely='B';
 			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':'mind'},false, fn+tengely);
 		});
-		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[12],'meret':beerk.rszAdatokTEMP[13],'minta':beerk.rszAdatokTEMP[14],'si':beerk.rszAdatokTEMP[19]},true, fn+tengely);
+		if (checkParam(beerk.rszAdatokTEMP[12])!='') {
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[12],'meret':beerk.rszAdatokTEMP[13],'minta':beerk.rszAdatokTEMP[14],'si':beerk.rszAdatokTEMP[19]},true, fn+tengely);
+		}
 		
 		tengely='P';
 		$('#'+obj+tengely).focus(function(){ 
@@ -644,7 +706,9 @@ OBeerk.prototype.showGPanel =function(){
 			tengely='P';
 			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':'mind'},false, fn+tengely);
 		});
-		ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[15],'meret':beerk.rszAdatokTEMP[16],'minta':beerk.rszAdatokTEMP[17],'si':beerk.rszAdatokTEMP[20]},true, fn+tengely);
+		if (checkParam(beerk.rszAdatokTEMP[15])!='') {
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[15],'meret':beerk.rszAdatokTEMP[16],'minta':beerk.rszAdatokTEMP[17],'si':beerk.rszAdatokTEMP[20]},true, fn+tengely);
+		}
 
 
 	$('#divgpanel').show();
@@ -652,7 +716,9 @@ OBeerk.prototype.showGPanel =function(){
 }
 
 function getMarka(result,tengely){
-	def = $("#gpMarka"+tengely).val();
+	if (markaUpdate==false) {
+	markaUpdate=true;
+	def = $("#gpMarka"+tengely+' option:selected').val();
 	if (def=='mind') def='';
 	if (def=='' || def==null) {
 		if (tengely=='A') ix=9;
@@ -667,13 +733,18 @@ function getMarka(result,tengely){
 		$("#gpMarka"+tengely).append('<option value="'+res.MARKA+'">'+res.MARKA+'</option>');
 	}
 	if (def!='') $('#gpMarka'+tengely+' option[value='+def+']').prop('selected', 'selected');
+	
+	}
+	markaUpdate=false;
 }
 function getMarkaA(result){	getMarka(result,'A');}
 function getMarkaB(result){	getMarka(result,'B');}
 function getMarkaP(result){	getMarka(result,'P');}
 
 function getMeret(result,tengely){
-	def = $("#gpMeret"+tengely).val();
+	if (meretUpdate==false) {
+	meretUpdate=true;
+	def = $("#gpMeret"+tengely+' option:selected').val();
 	if (def=='mind') def='';
 	optid = '';
 	if (def=='' || def==null) {
@@ -692,13 +763,17 @@ function getMeret(result,tengely){
 	}
 	if (def!=null)optid = checkParam(def);
 	if (optid!='') $('#gpMeret'+tengely+' option[value='+optid+']').prop('selected', 'selected');
+	}
+	meretUpdate=false;
 }
 function getMeretA(result) {getMeret(result,'A')}
 function getMeretB(result) {getMeret(result,'B')}
 function getMeretP(result) {getMeret(result,'P')}
 
 function getMinta(result,tengely){
-	def = $("#gpMinta"+tengely).val();
+	if (mintaUpdate==false) {
+	mintaUpdate=true;
+	def = $("#gpMinta"+tengely+' option:selected').val();
 	if (def=='mind') def='';
 	optid='';
 	if (def=='' || def==null) {
@@ -717,13 +792,17 @@ function getMinta(result,tengely){
 	}
 	if (def!=null)optid = checkParam(def);
 	if (optid!='') $('#gpMinta'+tengely+' option[value='+optid+']').prop('selected', 'selected');
+	}
+	mintaUpdate=false;
 }
 function getMintaA(result) {getMinta(result,'A')}
 function getMintaB(result) {getMinta(result,'B')}
 function getMintaP(result) {getMinta(result,'P')}
 
 function getSI(result,tengely){
-	def = $("#gpSI"+tengely).val();
+	if (siUpdate==false) {
+	siUpdate=true;
+	def = $("#gpSI"+tengely+' option:selected').val();
 	if (def=='mind') def='';
 	if (def=='' || def==null) {
 		if (tengely=='A') ix = 18;
@@ -740,6 +819,8 @@ function getSI(result,tengely){
 		$("#gpSI"+tengely).append('<option value="'+res.SI+'">'+res.SI+'</option>');
 	}
 	if (def!='') $('#gpSI'+tengely+' option[value='+def+']').prop('selected', 'selected');
+	}
+	siUpdate=false;
 }
 function getSIA(result) {getSI(result,'A')}
 function getSIB(result) {getSI(result,'B')}

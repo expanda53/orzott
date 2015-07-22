@@ -273,8 +273,8 @@
 		if (trim($meret)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MERET,'/',''),' ','') = replace(replace('$meret','/',''),' ','') ";}
 		if (trim($minta)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MINTA,'/',''),' ','') = replace(replace('$minta','/',''),' ','')";}
 		if (trim($si)!='') 	  {if ($where!='') $where.=' AND ';$where .= " SI = '$si' ";}
-		if ($where!='') $where = ' WHERE ' .$where;
-		$sql=" SELECT DISTINCT MARKA FROM AKHTORZS $where";
+		if ($where!='') $where = ' AND ' .$where;
+		$sql=" SELECT DISTINCT MARKA FROM AKHTORZS WHERE CICSOP STARTING WITH 'A' $where";
 		$stmt = Firebird::prepare($sql);
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -299,8 +299,8 @@
 		if (trim($meret)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MERET,'/',''),' ','') = replace(replace('$meret','/',''),' ','') ";}
 		if (trim($minta)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MINTA,'/',''),' ','') = replace(replace('$minta','/',''),' ','')";}
 		if (trim($si)!='') 	  {if ($where!='') $where.=' AND ';$where .= " SI = '$si' ";}
-		if ($where!='') $where = ' WHERE ' .$where;
-		$sql=" SELECT DISTINCT MERET FROM AKHTORZS $where";
+		if ($where!='') $where = ' AND ' .$where;
+		$sql=" SELECT DISTINCT MERET FROM AKHTORZS  WHERE CICSOP STARTING WITH 'A' $where";
 		$stmt = Firebird::prepare($sql);
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -325,9 +325,9 @@
 		if (trim($meret)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MERET,'/',''),' ','') = replace(replace('$meret','/',''),' ','') ";}
 		if (trim($minta)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MINTA,'/',''),' ','') = replace(replace('$minta','/',''),' ','')";}
 		if (trim($si)!='') 	  {if ($where!='') $where.=' AND ';$where .= " SI = '$si' ";}
-		if ($where!='') $where = ' WHERE ' .$where;
+		if ($where!='') $where = ' AND ' .$where;
 
-		$sql=" SELECT DISTINCT MINTA FROM AKHTORZS $where";
+		$sql=" SELECT DISTINCT MINTA FROM AKHTORZS  WHERE CICSOP STARTING WITH 'A' $where";
 		$stmt = Firebird::prepare($sql);
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -352,9 +352,9 @@
 		if (trim($meret)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MERET,'/',''),' ','') = replace(replace('$meret','/',''),' ','') ";}
 		if (trim($minta)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MINTA,'/',''),' ','') = replace(replace('$minta','/',''),' ','')";}
 		if (trim($si)!='') 	  {if ($where!='') $where.=' AND ';$where .= " SI = '$si' ";}
-		if ($where!='') $where = ' WHERE ' .$where;
+		if ($where!='') $where = ' AND ' .$where;
 
-		$sql=" SELECT DISTINCT SI FROM AKHTORZS $where";
+		$sql=" SELECT DISTINCT SI FROM AKHTORZS  WHERE CICSOP STARTING WITH 'A' $where";
 		$stmt = Firebird::prepare($sql);
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
