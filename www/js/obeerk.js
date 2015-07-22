@@ -1,5 +1,9 @@
 /* beerkezes */
 login_id = '100';
+function clickHelp(){
+	$('#divclick').show();
+	window.setTimeout(function(){$('#divclick').hide();},20);
+}
 var OBeerk = function(){
 	this.meresKell=false;
 	this.initMibizList();
@@ -101,24 +105,7 @@ OBeerk.prototype.rszJavitas = function () {
 }
 
 
-/*
-OBeerk.prototype.nincsMegStart = function(){
-	//nincs meg gomb ajax inditas
-	mibiz = $('#hMIBIZ').val();
-	sorsz = $('#hSORSZ').val();	
-	rsz = $('#rendszam').val();
-	fn = 'beerk.nincsMeg';
-	ajaxCall(fn,{'mibiz':mibiz,'sorsz':sorsz,'rsz':rsz,'login':login_id},true, fn);
-}
-OBeerk.prototype.nincsMeg = function (result) {
-	nincs meg gomb ajax eredmenye
-	for (var i = 0;i < result.length;i++){
-		res = result[i];
-		if (res.RESULT!=-1)	$('.dataDrbKesz').html('0');
-		else alert('Hiba');
-	}
-}
-*/
+
 
 OBeerk.prototype.showPozPanel = function(obj) {
 	this.showAllapotPanel(obj);
@@ -499,8 +486,54 @@ function checkParam(str) {
 	if (str!=null) {
 		res = str.replace(/\//g,'');
 		res = res.replace(/\ /g,'');
+		res = res.replace(/\./g,'');
+		res = res.replace(/\*/g,'');
+		
 	}
 	return res;
+	
+}
+OBeerk.prototype.closeGPanel = function (saveData){
+	if (saveData) {
+			beerk.rszAdatok[9]=$('#gpMarkaA option:selected').text();
+			beerk.rszAdatok[10]=$('#gpMeretA option:selected').text();
+			beerk.rszAdatok[11]=$('#gpMintaA option:selected').text()
+			beerk.rszAdatok[18]=$('#gpSIA option:selected').text();
+			
+			beerk.rszAdatok[12]=$('#gpMarkaB option:selected').text();
+			beerk.rszAdatok[13]=$('#gpMeretB option:selected').text();
+			beerk.rszAdatok[14]=$('#gpMintaB option:selected').text();
+			beerk.rszAdatok[19]=$('#gpSIB option:selected').text();
+			
+			beerk.rszAdatok[15]=$('#gpMarkaP option:selected').text();
+			beerk.rszAdatok[16]=$('#gpMeretP option:selected').text();
+			beerk.rszAdatok[17]=$('#gpMintaP option:selected').text();
+			beerk.rszAdatok[20]=$('#gpSIP option:selected').text();
+			newContent=beerk.rszAdatok[9]+' '+beerk.rszAdatok[10]+' '+beerk.rszAdatok[11]+' '+beerk.rszAdatok[18];
+			if (beerk.rszAdatok[12]!='' && beerk.rszAdatok[12]!=beerk.rszAdatok[9]) {
+				newContent=beerk.rszAdatok[9]+' '+beerk.rszAdatok[10]+' '+beerk.rszAdatok[11]+' '+beerk.rszAdatok[18] + ' + ' + beerk.rszAdatok[12]+' '+beerk.rszAdatok[13]+' '+beerk.rszAdatok[14]+' '+beerk.rszAdatok[19];
+			}
+			else
+			if (beerk.rszAdatok[12]!='' && beerk.rszAdatok[12]==beerk.rszAdatok[9]) {
+				if (beerk.rszAdatok[13]!='' && beerk.rszAdatok[13]==beerk.rszAdatok[10]) {
+					if (beerk.rszAdatok[14]!='' && beerk.rszAdatok[14]==beerk.rszAdatok[11]) {
+						if (beerk.rszAdatok[19]!='' && beerk.rszAdatok[19]==beerk.rszAdatok[18]) {
+							newContent=beerk.rszAdatok[9]+' '+beerk.rszAdatok[10]+' '+beerk.rszAdatok[11]+' '+beerk.rszAdatok[18]; //egyezik minden
+						}
+						else newContent=beerk.rszAdatok[9]+' '+beerk.rszAdatok[10]+' '+beerk.rszAdatok[11]+' '+beerk.rszAdatok[18]+'+'+beerk.rszAdatok[19]; //csak SI eltérés
+						
+					}
+					else newContent=beerk.rszAdatok[9]+' '+beerk.rszAdatok[10]+' '+beerk.rszAdatok[11]+' '+beerk.rszAdatok[18] + ' + ' + beerk.rszAdatok[14]+' '+beerk.rszAdatok[19];//minta,si eltérés
+				}
+				else newContent=beerk.rszAdatok[9]+' '+beerk.rszAdatok[10]+' '+beerk.rszAdatok[11]+' '+beerk.rszAdatok[18] + ' + ' + beerk.rszAdatok[13]+' '+beerk.rszAdatok[14]+' '+beerk.rszAdatok[19]; //meret,minta,si eltérés
+			}
+			else newContent=beerk.rszAdatok[9]+' '+beerk.rszAdatok[10]+' '+beerk.rszAdatok[11]+' '+beerk.rszAdatok[18] + ' + ' + beerk.rszAdatok[12]+' '+beerk.rszAdatok[13]+' '+beerk.rszAdatok[14]+' '+beerk.rszAdatok[19]; //marka,meret,minta,si eltérés
+			$('.dataMeret').html(newContent);
+	}
+	
+	$('#gpMarkaA, #gpMarkaB, #gpMarkaP, #gpMeretA, #gpMeretB, #gpMeretP, #gpMintaA, #gpMintaB, #gpMintaP, #gpSIA, #gpSIB, #gpSIP').val('');	
+	$('#divgpanel').hide();
+	$('.drendszam, .rszadatok, .dcontrol').show();
 	
 }
 OBeerk.prototype.showGPanel =function(){
@@ -620,6 +653,7 @@ OBeerk.prototype.showGPanel =function(){
 
 function getMarka(result,tengely){
 	def = $("#gpMarka"+tengely).val();
+	if (def=='mind') def='';
 	if (def=='' || def==null) {
 		if (tengely=='A') ix=9;
 		if (tengely=='B') ix=12;
@@ -640,6 +674,7 @@ function getMarkaP(result){	getMarka(result,'P');}
 
 function getMeret(result,tengely){
 	def = $("#gpMeret"+tengely).val();
+	if (def=='mind') def='';
 	optid = '';
 	if (def=='' || def==null) {
 		if (tengely=='A') ix=10;
@@ -664,6 +699,7 @@ function getMeretP(result) {getMeret(result,'P')}
 
 function getMinta(result,tengely){
 	def = $("#gpMinta"+tengely).val();
+	if (def=='mind') def='';
 	optid='';
 	if (def=='' || def==null) {
 		if (tengely=='A') ix = 11;
@@ -688,6 +724,7 @@ function getMintaP(result) {getMinta(result,'P')}
 
 function getSI(result,tengely){
 	def = $("#gpSI"+tengely).val();
+	if (def=='mind') def='';
 	if (def=='' || def==null) {
 		if (tengely=='A') ix = 18;
 		if (tengely=='B') ix = 19;	
@@ -707,5 +744,7 @@ function getSI(result,tengely){
 function getSIA(result) {getSI(result,'A')}
 function getSIB(result) {getSI(result,'B')}
 function getSIP(result) {getSI(result,'P')}
+
+
 /* gumipanel eddig */
 /* beerkezes eddig */

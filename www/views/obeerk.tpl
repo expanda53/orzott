@@ -15,13 +15,13 @@
 
 
 	
-	$('#bGumi, #bGumiFelni, #bFelni').on('touchstart click', function(event){
+	$('#bGumi, #bGumiFelni, #bFelni').on('touchend', function(event){
+
 		event.stopPropagation();
         event.preventDefault();
         if(event.handled !== true) {
-
+			clickHelp();
             beerk.showPozPanel($(this));
-
             event.handled = true;
         } else {
             return false;
@@ -33,10 +33,11 @@
 	$('#bJavitas').bind('click',function () {
 		beerk.rszJavitas();
 	})
-	$('#bFolytMost').bind('touchstart click',function (event) {
+	$('#bFolytMost').bind('click',function (event) {
 		event.stopPropagation();
         event.preventDefault();
         if(event.handled !== true) {
+			clickHelp();
 			$('#divreview').hide();
 			$('#divpanel').show();
             event.handled = true;
@@ -44,9 +45,10 @@
             return false;
         }
 	})
-	$('#bFolytKesobb').bind('touchstart click',function (event) {
+	$('#bFolytKesobb').bind('click',function (event) {
 		event.stopPropagation();
         event.preventDefault();
+		clickHelp();
         if(event.handled !== true) {
 
             beerk.folytKesobb();
@@ -75,28 +77,21 @@
 		$('#divteszt').hide();
 	})	
 	$('#bGPanelClose').bind('click',function () {
-		$('#divgpanel').hide();
-		$('.drendszam, .rszadatok, .dcontrol').show();
+		beerk.closeGPanel(true);
 	})	
-	$('#srendszam').bind('touchstart click',function (event) {
+	$('#bGPanelCancel').bind('click',function () {
+		beerk.closeGPanel(false);
+	})	
+	$('#srendszam').bind('click',function (event) {
+		clickHelp();
+        beerk.showReview()	
+	})	
+	$('.rszadatok').bind('touchend click',function (event) {
 		event.stopPropagation();
         event.preventDefault();
         if(event.handled !== true) {
-            beerk.showReview()	
-            event.handled = true;
-        } else {
-            return false;
-        }
-
-
-	})	
-	$('.rszadatok').bind('touchstart click',function (event) {
-			event.stopPropagation();
-        event.preventDefault();
-        if(event.handled !== true) {
-
+			clickHelp();
 			beerk.showGPanel();
-
             event.handled = true;
         } else {
             return false;
@@ -107,6 +102,7 @@
 	
 </script>
 <body>
+<div id=divclick></div>
 <input type=hidden id=hAZON>
 <input type=hidden id=hMIBIZ>
 <input type=hidden id=hSORSZ>
@@ -166,7 +162,8 @@
 				<select id=gpMintaP></select>
 				<select id=gpSIP></select>
 				
-				<button id=bGPanelClose>Bezár</button>
+				<button id=bGPanelClose>Mentés</button>
+				<button id=bGPanelCancel>Mégsem</button>
 			</div>
 			<div class='dcontrol'>
 				<div class=divlabels>
@@ -180,22 +177,10 @@
 					</div>
 				</div>
 				<div class=dButtons>
-					<div class='labelPrint'>Címke nyomtatás</div>
 					<button class='bprint' id=bGumi>Gumi</button>
 					<button class='bprint' id=bGumiFelni>Gumi+Felni</button>
 					<button class='bprint' id=bFelni>Felni</button>
-					<div class='labelPrint'>Nyomtatás nélkül</div>
-					<!--<button class='bnoprint' id=bPlus>+1</button>-->
 					<button class='bnoprint' id=bJavitas>Javítás</button>
-					<!-- <button class='bnoprint' id=bNincsMeg>Nincs meg</button> -->
-					<!--<button class='bnoprint' id=bOBeerkMenu>Átnézés</button>-->
-					<!--<button class='bnoprint' id=bMelyseg>Mérés</button>-->
-					<!-- <button class='bteszt' id=bteszt>Teszt</button>					-->
-				</div>
-				<div id=divteszt>
-					<textarea id=tplprint rows="10" cols="50">
-					</textarea>
-					<button id=bteszthide>bezár</button>					
 				</div>
 			</div>
 		</div>
