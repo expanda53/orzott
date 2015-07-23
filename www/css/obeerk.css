@@ -1,6 +1,38 @@
 body {
 	background-color:black;
 } 
+
+button {
+	background-color:#77b55a;
+	-moz-border-radius:7px;
+	-webkit-border-radius:7px;
+	border-radius:7px;
+	border:1px solid #77b55a;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:17px;
+	padding:16px 31px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #5b8a3c;
+}
+button:active {
+	position:relative;
+	top:1px;
+}
+button:disabled {
+	background-color:#dfdfdf;
+	color:#000000;
+	border:1px solid #dfdfdf;
+}
+select {
+	margin:2px 0px;
+	padding:10px 15px;
+	font-size: 20px;
+	-webkit-appearance: menulist-text;
+}
+
 #divclick {
 	position:fixed;
 	top:0px;
@@ -35,12 +67,6 @@ body {
 } 
 #divpanel {
 	display:none;
-}
-select {
-	margin:2px 0px;
-	padding:10px 15px;
-	font-size: 20px;
-	-webkit-appearance: menulist-text;
 }
 #srendszam {
 	margin:2px 0px;
@@ -88,13 +114,13 @@ select {
 	display:none;
 }
 .dButtons {
-	position:relative;
-	top:12px;
-	clear:both;
-	margin:0px auto;
-	width:600px;
+    position: absolute;
+    top: 130px;
+    clear: both;
+    margin: 0px auto;
+    width: 600px;
 }
-.dButtons button {
+.dButtons button, .dButtonsReview button {
 	margin:3px auto;
 } 
 
@@ -104,8 +130,17 @@ select {
 .dButtons  .bnoprint{
 	width:19%;
 } 
-.dButtons #bElteres {
+.dButtonsReview {
+    position: absolute;
+    top: 233px;
+    clear: both;
+    margin: 0px auto;
+    width: 600px;
+}
+
+.dButtonsReview #bElteres {
 	background-color:orange;
+	border:1px solid orange;
 	color:black;
 	width:150px;
 }
@@ -114,11 +149,24 @@ select {
 	width:301px;
 }
 #divhiany {
-	margin:10px 0px;
+	position: relative;
+    left: 283px;
+    width: 170px;
+    top: 5px;
 }
-#divhiany span{
-	background-color:yellow;
-	padding:5px;
+.labelHiany{
+	background-color: yellow;
+    padding: 5px;
+    width: 121px;
+    position: absolute;
+}
+.dataHiany {
+	background-color: yellow;
+    padding: 5px;
+    width: 20px;
+    position: absolute;
+    left: 134px;
+    text-align: center;
 }
 .divreviewLeft{
 	position:relative;
@@ -135,6 +183,7 @@ select {
 	top:32px;
 	left:90px;
 	background-color:white;
+	width:366px;
 }
 #divreview table{
 	display:block;
@@ -144,9 +193,7 @@ select {
 	position:relative;
 	left:10px;
 }
-.tableReview {
-	width:340px;
-}
+
 #divreview  table tbody {
 	overflow:auto;
 }
@@ -159,6 +206,16 @@ select {
 	padding:10px;
 	text-align:center;
 }
+.tableReview {
+	/*width:367px;*/
+}
+.tableReview th{
+	font-size:14px;
+}
+.tdrsz {
+	width:115px;
+}
+
 .rowhighlighted {
 	padding:10px;
 	text-align:center;
@@ -189,33 +246,11 @@ select {
 	z-index:100;
 }
 
-button {
-	background-color:#77b55a;
-	-moz-border-radius:7px;
-	-webkit-border-radius:7px;
-	border-radius:7px;
-	border:1px solid #77b55a;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
-	font-size:17px;
-	padding:16px 31px;
-	text-decoration:none;
-	text-shadow:0px 1px 0px #5b8a3c;
-}
-button:active {
-	position:relative;
-	top:1px;
-}
-button:disabled {
-	background-color:#dfdfdf;
-	color:#000000;
-	border:1px solid #dfdfdf;
-}
+
 #gpMarkaA,#gpMeretA,
 #gpMarkaB,#gpMeretB,
-#gpMarkaP,#gpMeretP {
+#gpMarkaP,#gpMeretP,
+#gpFelnitip {
 	width:120px;
 }
 #gpMintaA,#gpMintaB,#gpMintaP{
@@ -229,6 +264,15 @@ button:disabled {
 	padding:10px 3px;
 	font-size: 15px;
 	-webkit-appearance: menulist-text;
+}
+.labelGP {
+    float: left;
+    padding: 10px;
+    background-color: #f1f1f1;
+    width: 25px;
+    text-align: center;
+    margin-top: 2px;
+    height: 20px;
 }
 
 

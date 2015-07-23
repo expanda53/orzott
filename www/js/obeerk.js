@@ -143,8 +143,6 @@ OBeerk.prototype.showAllapotPanel = function(obj){
 				$('#muvelet').html(muvelet);
 				fn='beerk.getPositions';
 				ajaxCall(fn,{'rsz':rsz,'mibiz':mibiz,'login':login_id},true, fn);
-				fn='beerk.getFelniTip';
-				ajaxCall(fn,{'rsz':rsz,'login':login_id},true, fn);
 				
 			});
 			
@@ -167,15 +165,6 @@ OBeerk.prototype.getPositions=function(result){
 			id='b' + p[0];
 			$('#'+id).attr('disabled','disabled');
 		}
-	}
-}
-
-OBeerk.prototype.getFelniTip=function(result){
-	$("#felnitip").html('');
-	$("#felnitip").append('<option value="-">Válasszon</option>');
-	for (var i = 0;i < result.length;i++){
-		res = result[i];
-		$("#felnitip").append('<option value='+res.KOD+'>'+res.KOD+'</option>');
 	}
 }
 
@@ -366,26 +355,34 @@ OBeerk.prototype.rszChange = function (){
 }
 
 OBeerk.prototype.reviewRszGet = function(result) {
-	/* atnezo panel ajax eredenye */
-	sor = '';
-	$('.tableReview tbody').html('');
+	/* atnezo panel filter ajax eredenye (rendszamok)*/
+	sorok = '';
+	fej="<thead>"
+				+"<tr>"
+					+"<th class='tdrsz'>Rendszám</th>"
+					+"<th>Lerakodandó</th>"
+					+"<th>Lerakodott</th>"
+				+"</tr>"
+		+"</thead>";
+	
+	$('.tableReview').empty();
 	var hianydb = 0;
 	beerk.reviewSet = result;
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		tdclass='';
 		if (res.DRB==res.DRB2) tdclass=' rowhighlighted';
-		sor += '<tr class="'+tdclass+'" id="'+res.RENDSZAM+'">';
-		sor += '<td class="tdrsz">'+res.RENDSZAM+'</td>';
-		sor += '<td>'+res.DRB+'</td>'; 
-		sor +=  '<td class="tmibiz">'+res.DRB2+'</td>'; 
-		sor += '</tr>';
+		sorok += '<tr class="'+tdclass+'" id="'+res.RENDSZAM+'">';
+		sorok += '<td class="tdrsz">'+res.RENDSZAM+'</td>';
+		sorok += '<td>'+res.DRB+'</td>'; 
+		sorok +=  '<td class="tmibiz">'+res.DRB2+'</td>'; 
+		sorok += '</tr>';
 		if (res.DRB2<res.DRB) {
 			hianydb = parseInt(hianydb) + parseInt(res.DRB) - parseInt(res.DRB2);
 		}
 		
 	}
-	$('.tableReview tbody').append(sor);
+	$('.tableReview').html(fej+sorok);
 	$('.tableReview tbody tr').bind('click',function(){
 		tr = $(this);
 		rsz = tr.find(".tdrsz").html();
@@ -400,26 +397,28 @@ OBeerk.prototype.reviewRszGet = function(result) {
 		$('.labelHiany').html('Hiányzó mennyiség:');
 		$('.dataHiany').html(hianydb);
 	}
-	$('#divreview').show();
+
 }
 
 OBeerk.prototype.reviewRszFilter = function(result) {
-	/* atnezo panel filter ajax eredenye */
-	sor = '';
-	$('.tableReviewFilter tbody').html('');
+	/* atnezo panel filter ajax eredenye (rsz szures)*/
+	sorok = '';
+	$('.tableReviewFilter tbody').empty();
+	sorok='<tbody>'
 	var hianydb = 0;
-	sor += '<tr >';
-	sor += '<td id="rszall">*</td>';
-	sor += '</tr>';
+	sorok += '<tr >';
+	sorok += '<td id="rszall">*</td>';
+	sorok += '</tr>';
 
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
-		sor += '<tr >';
-		sor += '<td id="'+res.RENDSZAM+'">'+res.RENDSZAM+'</td>';
-		sor += '</tr>';
+		sorok += '<tr >';
+		sorok += '<td id="'+res.RENDSZAM+'">'+res.RENDSZAM+'</td>';
+		sorok += '</tr>';
 		
 	}
-	$('.tableReviewFilter tbody').append(sor);
+	sorok+='</tbody>'
+	$('.tableReviewFilter tbody').append(sorok);
 	
 	$('.tableReviewFilter tbody td').bind('click',function(){
 		curTD = $(this);
@@ -428,12 +427,8 @@ OBeerk.prototype.reviewRszFilter = function(result) {
 		fn = 'beerk.reviewRszGet';
 		r = ajaxCall(fn,{'filter':filter,'azon':azon,'login':login_id},true, fn);
 	})
-	
-	
-	filter='*';
-	azon = $('#hAZON').val();
-	fn = 'beerk.reviewRszGet';
-	r = ajaxCall(fn,{'filter':filter,'azon':azon,'login':login_id},true, fn);
+
+	$('#rszall').trigger('click');
 }
 
 
@@ -444,10 +439,12 @@ OBeerk.prototype.showReview = function() {
 	$('#divpanel').hide();
 	fn = 'beerk.reviewRszFilter';
 	r = ajaxCall(fn,{'azon':azon,'login':login_id},true, fn);
+	$('#divreview').show();
 	
 }
 
 OBeerk.prototype.reviewFilter = function() {
+	/* eltérés/összes sor mutatása*/
 	val = $('#bElteres').html();
 	showAll = (val!='Eltérések');
 	if (val=='Eltérések') val='Összes sor';
@@ -455,7 +452,7 @@ OBeerk.prototype.reviewFilter = function() {
 	$('#bElteres').html(val);
 	
 	sor = '';
-	$('.tableReview tbody').html('');
+	$('.tableReview tbody tr').remove();
 	var hianydb = 0;
 	result = beerk.reviewSet;
 	for (var i = 0;i < result.length;i++){
@@ -536,6 +533,7 @@ function checkParam(str) {
 }
 OBeerk.prototype.closeGPanel = function (saveData){
 	if (saveData) {
+			beerk.rszAdatok[7]=$('#gpFelnitip option:selected').val();
 			beerk.rszAdatok[9]=$('#gpMarkaA option:selected').text();
 			beerk.rszAdatok[10]=$('#gpMeretA option:selected').text();
 			beerk.rszAdatok[11]=$('#gpMintaA option:selected').text()
@@ -709,9 +707,11 @@ OBeerk.prototype.showGPanel =function(){
 		if (checkParam(beerk.rszAdatokTEMP[15])!='') {
 			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[15],'meret':beerk.rszAdatokTEMP[16],'minta':beerk.rszAdatokTEMP[17],'si':beerk.rszAdatokTEMP[20]},true, fn+tengely);
 		}
-
-
-	$('#divgpanel').show();
+		
+		//felni:
+		felnidef = checkParam(beerk.rszAdatokTEMP[7]);
+		$('#gpFelnitip option[value='+felnidef+']').prop('selected', 'selected');
+		$('#divgpanel').show();
 	
 }
 

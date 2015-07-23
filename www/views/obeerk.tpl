@@ -15,7 +15,7 @@
 
 
 	
-	$('#bGumi, #bGumiFelni, #bFelni').on('touchend', function(event){
+	$('#bGumi, #bGumiFelni, #bFelni').on('click', function(event){
 
 		event.stopPropagation();
         event.preventDefault();
@@ -147,20 +147,32 @@
 				</div>
 			</div>
 			<div id=divgpanel>
+				<div class='labelGP'>A</div>
 				<select id=gpMarkaA></select>
 				<select id=gpMeretA></select>
 				<select id=gpMintaA></select>
 				<select id=gpSIA></select>
 				<br>
+				<div class='labelGP'>B</div>
 				<select id=gpMarkaB></select>
 				<select id=gpMeretB></select>
 				<select id=gpMintaB></select>
 				<select id=gpSIB></select>
 				<br>
+				<div class='labelGP'>P</div>
 				<select id=gpMarkaP></select>
 				<select id=gpMeretP></select>
 				<select id=gpMintaP></select>
 				<select id=gpSIP></select>
+				<br>
+				
+				<div class='labelGP'>felni</div>
+				<select id=gpFelnitip>
+						<option value='-'>nincs</option>
+						<option value='A'>Alu</option>
+						<option value='L'>Lemez</option>
+				</select>
+				<br>
 				
 				<button id=bGPanelClose>Mentés</button>
 				<button id=bGPanelCancel>Mégsem</button>
@@ -209,24 +221,14 @@
 			</div>
 			<div class=divreviewRight>
 			<div class=divTableReview>
-			<table class=tableReview>
-				<thead>
-				<tr>
-					<th>Rendszám</th>
-					<th>Lerakodandó</th>
-					<th>Lerakodott</th>
-				</tr>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>
+			<table class=tableReview></table>
 			</div>
 			</div>
 			<div id=divhiany>
-				<span class=labelHiany></span>
-				<span class=dataHiany></span>
+				<div class=labelHiany></div>
+				<div class=dataHiany></div>
 			</div>
-			<div class=dButtons>
+			<div class=dButtonsReview>
 				<button id=bElteres>Eltérések</button>
 				<button id=bFolytMost>Folyt. most</button>
 				<button id=bFolytKesobb>Folyt. később</button>

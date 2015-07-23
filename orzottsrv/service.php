@@ -185,21 +185,6 @@
 		echo json_encode(Converter::win2utf_array($res));
 	  
   }
-  if ($func==='beerk.nincsMeg') {
-		$mibiz = $r['mibiz'];
-		$sorsz = $r['sorsz'];
-		$login = $r['login'];
-		$sql=" SELECT RESULT FROM PDA_ORZOTTLERAK_NINCSMEG(:mibiz, :sorsz, :login) ";
-		$stmt = Firebird::prepare($sql);
-		$stmt->bindParam(':mibiz', $mibiz, PDO::PARAM_STR);
-		$stmt->bindParam(':sorsz', $sorsz, PDO::PARAM_STR);
-		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		Firebird::commit();
-		echo json_encode(Converter::win2utf_array($res));
-	  
-  }
   if ($func==='beerk.getPositions') {
 		$rsz = $r['rsz'];
 		$mibiz = $r['mibiz'];
@@ -212,18 +197,6 @@
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
-  }  
-  if ($func==='beerk.getFelniTip') {
-		$rsz = $r['rsz'];
-		$login = $r['login'];
-		$sql=" SELECT KOD FROM PDA_FELNITIPUSOK(:rsz) ";
-		$stmt = Firebird::prepare($sql);
-		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		Firebird::commit();
-		echo json_encode(Converter::win2utf_array($res));
-	  
   }  
   if ($func==='beerk.getMelyseg') {
 		$login = $r['login'];

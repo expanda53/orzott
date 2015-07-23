@@ -25,12 +25,6 @@
 	
 	
 </div>
-<div id=dfelnitipus>
-	<span>felni típus</span>
-	<select id=felnitip>
-		<{felnik}>
-	</select>
-</div>
 <div id=divallapot>
 	<div id=divgstat>
 		<span>Állapot</span>
