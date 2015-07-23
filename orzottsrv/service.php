@@ -42,7 +42,7 @@
          WHEN BFEJ.MIBIZ LIKE 'ELOSZ%' OR BFEJ.MIBIZ LIKE 'TELEP%' THEN CEG.NEV 
          ELSE COALESCE(BFEJ.MSZAM3,'')||' '||COALESCE(MSZAM.NEV,'') END MSZAM3,
     AKTSOR.TAPADO RENDSZAM, COALESCE(AKTSOR.GYSZAM,'')||' '||COALESCE(AKTSOR.LEIR,'') MERETMINTA, CAST(COALESCE(JARUL2,0) AS INTEGER)||'/'||CAST(COALESCE(JARUL1,0) AS INTEGER) FEGU,
-	AKTSOR.MJBEL RSZADATOK
+	AKTSOR.MJBEL RSZADATOK,CAST(COALESCE(JARUL2,0) AS INTEGER) FEDB
     FROM BSOR AKTSOR 
     INNER JOIN BFEJ ON BFEJ.AZON=AKTSOR.BFEJ 
     LEFT JOIN CEG ON COALESCE(AKTSOR.PONTOZ, AKTSOR.CEG)=CEG.AZON
@@ -244,7 +244,7 @@
 		$where='';
 		if (trim($marka)!='') $where = " MARKA = '$marka' ";
 		if (trim($meret)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MERET,'/',''),' ','') = replace(replace('$meret','/',''),' ','') ";}
-		if (trim($minta)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MINTA,'/',''),' ','') = replace(replace('$minta','/',''),' ','')";}
+		if (trim($minta)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(replace(replace(MINTA,'/',''),' ',''),'.',''),'*','') = replace(replace(replace(replace('$minta','/',''),' ',''),'.',''),'*','') ";}
 		if (trim($si)!='') 	  {if ($where!='') $where.=' AND ';$where .= " SI = '$si' ";}
 		if ($where!='') $where = ' AND ' .$where;
 		$sql=" SELECT DISTINCT MARKA FROM AKHTORZS WHERE CICSOP STARTING WITH 'A' $where";
@@ -270,7 +270,7 @@
 		$where='';
 		if (trim($marka)!='') $where = " MARKA = '$marka' ";
 		if (trim($meret)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MERET,'/',''),' ','') = replace(replace('$meret','/',''),' ','') ";}
-		if (trim($minta)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MINTA,'/',''),' ','') = replace(replace('$minta','/',''),' ','')";}
+		if (trim($minta)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(replace(replace(MINTA,'/',''),' ',''),'.',''),'*','') = replace(replace(replace(replace('$minta','/',''),' ',''),'.',''),'*','') ";}
 		if (trim($si)!='') 	  {if ($where!='') $where.=' AND ';$where .= " SI = '$si' ";}
 		if ($where!='') $where = ' AND ' .$where;
 		$sql=" SELECT DISTINCT MERET FROM AKHTORZS  WHERE CICSOP STARTING WITH 'A' $where";
@@ -296,7 +296,7 @@
 		$where='';
 		if (trim($marka)!='') $where = " MARKA = '$marka' ";
 		if (trim($meret)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MERET,'/',''),' ','') = replace(replace('$meret','/',''),' ','') ";}
-		if (trim($minta)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MINTA,'/',''),' ','') = replace(replace('$minta','/',''),' ','')";}
+		if (trim($minta)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(replace(replace(MINTA,'/',''),' ',''),'.',''),'*','') = replace(replace(replace(replace('$minta','/',''),' ',''),'.',''),'*','') ";}
 		if (trim($si)!='') 	  {if ($where!='') $where.=' AND ';$where .= " SI = '$si' ";}
 		if ($where!='') $where = ' AND ' .$where;
 
@@ -323,7 +323,7 @@
 		$where='';
 		if (trim($marka)!='') $where = " MARKA = '$marka' ";
 		if (trim($meret)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MERET,'/',''),' ','') = replace(replace('$meret','/',''),' ','') ";}
-		if (trim($minta)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MINTA,'/',''),' ','') = replace(replace('$minta','/',''),' ','')";}
+		if (trim($minta)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(replace(replace(MINTA,'/',''),' ',''),'.',''),'*','') = replace(replace(replace(replace('$minta','/',''),' ',''),'.',''),'*','') ";}
 		if (trim($si)!='') 	  {if ($where!='') $where.=' AND ';$where .= " SI = '$si' ";}
 		if ($where!='') $where = ' AND ' .$where;
 

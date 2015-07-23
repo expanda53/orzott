@@ -2,7 +2,7 @@
 	padding:10px 20px;
 	margin:5px;
 	font-size:15px;
-
+	width:90px;
 }
 .bpozicio {
 	padding:10px 20px;
@@ -14,10 +14,20 @@
 } 
 
 .meres span {
-	background-color:yellow;
-	padding:5px;
-	margin:5px;
+    position: relative;
+    background-color: yellow;
+    padding: 5px;
+    margin: 5px;
+    top: -5px;
 }
 #divallapot,#divgstat,#bAllapotMent {
 	display:none;
+}
+#bAllapotClose {
+    position: absolute;
+    top: 160px;
+    left: 143px;
+    background-color: orange;
+    border: solid orange 1px;
+    width: 160px;
 }

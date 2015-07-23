@@ -83,11 +83,11 @@ select {
 	margin:0 auto;
 	text-align:center;
 }
-.ddrbvart, .ddrbkesz{
+.ddrbvart, .ddrbkesz {
 	padding:5px;
 	width:40%;
 	margin:5px 2px;
-	
+	vertical-align:middle;
 }
 .ddrbvart{
 	background-color:yellow;
@@ -95,8 +95,13 @@ select {
 }
 .ddrbkesz {
 	background-color:lightgreen;
-	font-weight:bold;
+	/*font-weight:bold;*/
 		float:right;
+}
+.dataDrbVart, .dataDrbKesz{
+	font-size:17px;
+	font-weight:bold;
+	padding:0px 10px;
 }
 .rszadatok {
 	display:none;
@@ -273,6 +278,26 @@ select {
     text-align: center;
     margin-top: 2px;
     height: 20px;
+}
+.labelGPdb {
+    position: absolute;
+    padding: 10px;
+    background-color: #f1f1f1;
+    width: 25px;
+    text-align: center;
+    margin-top: 2px;
+    height: 20px;
+    top: 164px;
+    left: 178px;
+}
+#gpFelnidb {
+	position: absolute;
+    width: 75px;
+    text-align: center;
+    margin-top: 2px;
+    top: 164px;
+    left: 223px;
+
 }
 
 

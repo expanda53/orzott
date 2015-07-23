@@ -322,6 +322,7 @@ OBeerk.prototype.rszAdatokGet = function (result){
 		$(".dataDrbVart").html(res.DRB);
 		$(".dataDrbKesz").html(res.CDRB);
 		$("#hSORSZ").val(res.SORSZ);
+		beerk.fedb = res.FEDB;
 		beerk.rszAdatok = res.RSZADATOK.split("\n");
 		beerk.rszAdatokTEMP = beerk.rszAdatok;
 	}
@@ -526,6 +527,7 @@ function checkParam(str) {
 		res = res.replace(/\ /g,'');
 		res = res.replace(/\./g,'');
 		res = res.replace(/\*/g,'');
+		res = res.replace(/(?:\r\n|\r|\n)+/g, '');
 		
 	}
 	return res;
@@ -533,6 +535,7 @@ function checkParam(str) {
 }
 OBeerk.prototype.closeGPanel = function (saveData){
 	if (saveData) {
+			beerk.fedb = $('#gpFelnidb option:selected').val();
 			beerk.rszAdatok[7]=$('#gpFelnitip option:selected').val();
 			beerk.rszAdatok[9]=$('#gpMarkaA option:selected').text();
 			beerk.rszAdatok[10]=$('#gpMeretA option:selected').text();
@@ -567,6 +570,10 @@ OBeerk.prototype.closeGPanel = function (saveData){
 				else newContent=beerk.rszAdatok[9]+' '+beerk.rszAdatok[10]+' '+beerk.rszAdatok[11]+' '+beerk.rszAdatok[18] + ' + ' + beerk.rszAdatok[13]+' '+beerk.rszAdatok[14]+' '+beerk.rszAdatok[19]; //meret,minta,si eltérés
 			}
 			else newContent=beerk.rszAdatok[9]+' '+beerk.rszAdatok[10]+' '+beerk.rszAdatok[11]+' '+beerk.rszAdatok[18] + ' + ' + beerk.rszAdatok[12]+' '+beerk.rszAdatok[13]+' '+beerk.rszAdatok[14]+' '+beerk.rszAdatok[19]; //marka,meret,minta,si eltérés
+			newContent = newContent.trim();
+			if (newContent.indexOf('+')==0) {
+				newContent = newContent.replace('+','').trim();
+			}
 			$('.dataMeret').html(newContent);
 	}
 	
@@ -710,7 +717,9 @@ OBeerk.prototype.showGPanel =function(){
 		
 		//felni:
 		felnidef = checkParam(beerk.rszAdatokTEMP[7]);
+		if (felnidef=='') felnidef='-';
 		$('#gpFelnitip option[value='+felnidef+']').prop('selected', 'selected');
+		$('#gpFelnidb option[value='+beerk.fedb+']').prop('selected', 'selected');
 		$('#divgpanel').show();
 	
 }
