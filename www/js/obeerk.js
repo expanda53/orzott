@@ -1,5 +1,4 @@
 /* beerkezes */
-login_id = '100';
 markaUpdate = false;
 meretUpdate = false;
 mintaUpdate = false;
@@ -323,6 +322,7 @@ OBeerk.prototype.rszAdatokGet = function (result){
 		$(".dataDrbKesz").html(res.CDRB);
 		$("#hSORSZ").val(res.SORSZ);
 		beerk.fedb = res.FEDB;
+		beerk.gudb = res.GUDB;
 		beerk.rszAdatok = res.RSZADATOK.split("\n");
 		beerk.rszAdatokTEMP = beerk.rszAdatok;
 	}
@@ -533,6 +533,10 @@ function checkParam(str) {
 	return res;
 	
 }
+OBeerk.prototype.rszAdatokSet = function (result){
+	//alert(JSON.stringify(result));
+}
+
 OBeerk.prototype.closeGPanel = function (saveData){
 	if (saveData) {
 			beerk.fedb = $('#gpFelnidb option:selected').val();
@@ -574,7 +578,12 @@ OBeerk.prototype.closeGPanel = function (saveData){
 			if (newContent.indexOf('+')==0) {
 				newContent = newContent.replace('+','').trim();
 			}
+			fn='beerk.rszAdatokSet';
+			rsz = $('#rendszam').val();
+			azon = $('#hAZON').val();				
+			ajaxCall(fn,{'rsz':rsz,'azon':azon,'fedb':beerk.fedb,'data':JSON.stringify(beerk.rszAdatok),'login':login_id},true, fn);
 			$('.dataMeret').html(newContent);
+			$(".dataFegu").html(beerk.fedb+'/'+beerk.gudb);
 	}
 	
 	$('#gpMarkaA, #gpMarkaB, #gpMarkaP, #gpMeretA, #gpMeretB, #gpMeretP, #gpMintaA, #gpMintaB, #gpMintaP, #gpSIA, #gpSIB, #gpSIP').html('');	

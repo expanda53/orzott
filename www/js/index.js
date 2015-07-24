@@ -42,7 +42,7 @@ var app = {
     // Update DOM on a Received Event
     receivedEvent: function(id) {
 		document.addEventListener("backbutton", this.onBackKeyDown, false);
-		showMenu();
+		showLogin();
         console.log('Received Event: ' + id);
 		
     },

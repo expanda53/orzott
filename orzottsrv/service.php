@@ -6,6 +6,16 @@
   $p     = explode("/", $request);
   $func = $p[1];
   $r = $_REQUEST;
+  if ($func==='checkLogin'){
+		$sql="select count(1) RCOUNT from pda_kezelok where kezelo=:login";
+		$stmt = Firebird::prepare($sql);
+		$login=trim($r['user']);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode(Converter::win2utf_array($res));
+  }
+  
   if ($func==='beerk.mibizList'){
 		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTLERAK (:biztip, :login)";
 		$stmt = Firebird::prepare($sql);
@@ -42,7 +52,7 @@
          WHEN BFEJ.MIBIZ LIKE 'ELOSZ%' OR BFEJ.MIBIZ LIKE 'TELEP%' THEN CEG.NEV 
          ELSE COALESCE(BFEJ.MSZAM3,'')||' '||COALESCE(MSZAM.NEV,'') END MSZAM3,
     AKTSOR.TAPADO RENDSZAM, COALESCE(AKTSOR.GYSZAM,'')||' '||COALESCE(AKTSOR.LEIR,'') MERETMINTA, CAST(COALESCE(JARUL2,0) AS INTEGER)||'/'||CAST(COALESCE(JARUL1,0) AS INTEGER) FEGU,
-	AKTSOR.MJBEL RSZADATOK,CAST(COALESCE(JARUL2,0) AS INTEGER) FEDB
+	AKTSOR.MJBEL RSZADATOK,CAST(COALESCE(JARUL2,0) AS INTEGER) FEDB,CAST(COALESCE(JARUL1,0) AS INTEGER) GUDB
     FROM BSOR AKTSOR 
     INNER JOIN BFEJ ON BFEJ.AZON=AKTSOR.BFEJ 
     LEFT JOIN CEG ON COALESCE(AKTSOR.PONTOZ, AKTSOR.CEG)=CEG.AZON
@@ -58,7 +68,30 @@
 		echo json_encode(Converter::win2utf_array($res));
 
   }
-  
+  if ($func==='beerk.rszAdatokSet'){
+		$azon = $r['azon'];
+		$rsz = $r['rsz'];
+		$fedb = $r['fedb'];
+		$login = $r['login'];
+		$rszadatok = implode("\r\n", str_replace("\r",'',json_decode($r['data'])));
+		$sql=" SELECT RESULT FROM PDA_ORZOTTLERAK_RSZUPDATE(:azon, :rsz, '$rszadatok', :fedb, :login) ";
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->bindParam(':fedb', $fedb, PDO::PARAM_STR);
+		try { 
+			$stmt->execute();
+			$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			Firebird::commit();
+		} catch (PDOException $e) { 
+			Firebird::rollback();
+			$res=array('errorcode'=>$e->getCode(),'errorinfo'=>$e->getMessage());
+		} 
+
+		echo json_encode($res);
+
+  }  
   if ($func==='taskReg'){
 		$mibiz = $r['mibiz'];
 		$login = $r['login'];

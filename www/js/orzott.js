@@ -60,8 +60,38 @@ function showMenu() {
 	})
 }
 
+function showLogin() {
+	panelName = 'login';
+	$.get( "css/"+panelName+".css", function( data ) {
+		css = '<head><style>' + data + '</style></head>';
+		$.get( "views/"+panelName+".tpl", function( data ) { 
+			tpl = data; 
+			$('#divContent').html(css + tpl);
+			$('#divContent').show();
+
+		});
+		
+	})
+}
+
+function orzottLogin(){
+		user = $('.divinput').text();
+		fn='checkLogin'
+		ajaxCall(fn,{'user':user},true, fn);
+}
+function checkLogin(result){
+	if (result[0].RCOUNT==0) {
+		alert('Nem megfelelõ felhasználói kód!');
+	}
+	else {
+		login_id=$('.divinput').text();
+		login_id = login_id.replace(/(?:\r\n|\r|\n|\t)+/g, '');
+		showMenu();
+	}
+}
 
 $(document).ready(function () {
-		showMenu();	
+	showLogin();
+	//showMenu();	
 })
 

@@ -1,20 +1,75 @@
+button {
+/*	background-color:#77b55a;*/
+	-moz-border-radius:7px;
+	-webkit-border-radius:7px;
+	border-radius:7px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:17px;
+	padding:16px 31px;
+	text-decoration:none;
+}
+
 #divheader{
 	background-color:yellow;
-	height:20px;
+	height:12px;
 	padding:5px;
  }
  
  #divcontent{
-	background-color:orange;
-	height:100px;
+	background-color:black;
+	height:270px;
 	padding:5px;
  }
-#tplLogin {
-	padding:10px;
+#tploBeerk {
+	padding:5px;
 	position:fixed;
-	top:40px;
-	left:20px;
-	right:20px;
-
+	top:5px;
+	left:5px;
+	right:5px;
 }
+
+.divinput {
+	width:300px;
+	height:40px;
+	padding:10px;
+	font-size:30px;
+	font-weight:bold;
+	color:black;
+	background-color:white;
+	margin:10px auto;
+}
+.divnumbuttons{
+	margin:0px auto;
+	width:320px;
+	height:100px;
+}
+.bnum,.bbacksp,.blogin {
+	padding: 15px;
+	background-color:orange;
+	color:black;
+	font-size:17px;
+	font-weight:bold;
+	width:60px;
+	margin-bottom:5px;
+	border:1px solid orange;
+}
+.divfnbuttons {
+	margin:0px auto;
+	width:380px;
+	height:100px;
+	margin-top:10px;
+}
+
+.bbacksp,.blogin {
+	padding: 15px;
+	background-color:yellow;
+	font-weight:bold;
+	width:180px;
+	margin-top:10px;
+	border:1px solid yellow;
+}
+ 
  
