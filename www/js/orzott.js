@@ -86,12 +86,11 @@ function checkLogin(result){
 	else {
 		login_id=$('.divinput').text();
 		login_id = login_id.replace(/(?:\r\n|\r|\n|\t)+/g, '');
-		showMenu();
+		app.getPrinters();
 	}
 }
 
 $(document).ready(function () {
 	showLogin();
-	//showMenu();	
 })
 

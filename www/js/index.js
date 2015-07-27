@@ -16,11 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+function printer (pid,pname) {
+	this.id =pid;
+	name.name = pname;
+	}
+
 var app = {
 	printerId:"",
 	printerName:"",
 	printerConnected:false,
-	
+	printers : [],
     // Application Constructor
     initialize: function() {
         this.bindEvents();
@@ -49,19 +54,34 @@ var app = {
 	onBackKeyDown:function() {
     },	
 	/* bt */
+	getPrinters:function(){
+		if(typeof bluetoothSerial != 'undefined'){ 
+				bluetoothSerial.list(function(devices) {
+					app.printers.length=0;
+					devices.forEach(function(device) {
+						if (device.class=='1664') {
+							p = new printer(device.id,device.name); 
+							app.printers.push(p);
+							//app.printerId = device.id;app.printerName=device.name;app.manageConnection(true)
+						}
+					})
+					printerDialog.show();
+				})
+				
+			
+		}
+		else {
+			alert('bt serial undefined');
+			printerDialog.show();
+		}	
+		
+	},
 	BTEnabled:function(){
+	
+	
 		if(typeof bluetoothSerial != 'undefined'){ 
 			var btAssign = function() {
-				bluetoothSerial.list(function(devices) {
-					devices.forEach(function(device) {
-						if (device.class=='1664') {app.printerId = device.id;app.printerName=device.name;app.manageConnection(true)}
-					})
-				},
-                function(error) {
-					console.log('bt list error');
-                    //$('#mac').val(JSON.stringify(error));
-                }
-				)
+				app.manageConnection(true);
 			}
 			bluetoothSerial.isEnabled(
 				btAssign,

@@ -46,7 +46,7 @@ OBeerk.prototype.mibizList = function(result) {
 }
 OBeerk.prototype.selectTask = function(mibiz,mszam3) {
 	/* feladat valaszto ajax inditas */
-	//app.BTEnabled();						
+	app.BTEnabled();						
 	this.meresKell = confirm("Állapotfelméréssel együtt?");
 	if (this.meresKell) {
 		$('#divheader').html('Õrzött beérkezés - állapot felméréssel - Sofõr:'+mszam3);
@@ -62,7 +62,7 @@ OBeerk.prototype.selectTask = function(mibiz,mszam3) {
 }
 OBeerk.prototype.panelInit = function (result) {
 	/* feladat indítás ajax eredménye*/
-	app.BTEnabled();
+	//app.BTEnabled();
 	sor = '';
 	for (var i = 0;i < result.length;i++){
 		res = result[i];

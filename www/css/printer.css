@@ -1,0 +1,55 @@
+
+#divheader{
+	background-color:yellow;
+	height:12px;
+	padding:5px;
+ }
+ 
+ #divcontent{
+	background-color:black;
+	height:270px;
+	padding:5px;
+ }
+
+#tplPrinter {
+	padding:5px;
+	position:fixed;
+	top:5px;
+	left:5px;
+	right:5px;
+}
+#tableprinter {
+	background-color:white;
+	display:block;
+	height: 170px;
+	overflow-y: scroll;
+	font-size:17px;
+	position:relative;
+	left:10px;
+}
+
+
+#tableprinter   tbody {
+	overflow:auto;
+}
+
+#tableprinter  th {
+	border-bottom:1px solid orange;
+	font-size:14px;
+}
+
+#tableprinter td {
+	padding:10px;
+	text-align:center;
+}
+
+.bnum,.bbacksp,.blogin {
+	padding: 15px;
+	background-color:orange;
+	color:black;
+	font-size:17px;
+	font-weight:bold;
+	width:60px;
+	margin-bottom:5px;
+	border:1px solid orange;
+}
