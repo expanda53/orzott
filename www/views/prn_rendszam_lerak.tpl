@@ -1,3 +1,4 @@
+! U1 setvar "power.inactivity_timeout" "0"
 ! UTILITIES
 GAP-SENSE
 SET-TOF 0

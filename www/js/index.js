@@ -167,12 +167,7 @@ var app = {
 	/* bt eddig*/
 };
 if(!window.cordova){
-	//alert('teszt');
-	// var parentElement = document.getElementById('deviceready');
-	// var receivedElement = parentElement.querySelector('.received');
-	// var listeningElement = parentElement.querySelector('.listening');
- 	// listeningElement.setAttribute('style', 'display:none;');
-	// receivedElement.setAttribute('style', 'display:block;');	
+	//alert('cordova not found');
 } 
 else {
 	//alert('cordova ok');

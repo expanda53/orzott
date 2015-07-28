@@ -106,7 +106,7 @@ select {
 .rszadatok {
 	display:none;
 	position:fixed;
-	top:37px;
+	top:38px;
 	left:135px;
 	line-height:20px;
 	background-color:aliceblue;
@@ -120,7 +120,7 @@ select {
 }
 .dButtons {
     position: absolute;
-    top: 130px;
+    top: 132px;
     clear: both;
     margin: 0px auto;
     width: 600px;
@@ -259,7 +259,7 @@ select {
 	width:120px;
 }
 #gpMintaA,#gpMintaB,#gpMintaP{
-	width:170px;
+	width:160px;
 }
 #gpSIA,#gpSIB,#gpSIP {
 	width:50px;
@@ -277,7 +277,7 @@ select {
     width: 25px;
     text-align: center;
     margin-top: 2px;
-    height: 20px;
+    height: 23px;
 }
 .labelGPdb {
     position: absolute;
@@ -286,8 +286,8 @@ select {
     width: 25px;
     text-align: center;
     margin-top: 2px;
-    height: 20px;
-    top: 164px;
+    height: 23px;
+    top: 173px;
     left: 178px;
 }
 #gpFelnidb {
@@ -295,7 +295,7 @@ select {
     width: 75px;
     text-align: center;
     margin-top: 2px;
-    top: 164px;
+    top: 173px;
     left: 223px;
 
 }

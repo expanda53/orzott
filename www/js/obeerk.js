@@ -3,9 +3,45 @@ markaUpdate = false;
 meretUpdate = false;
 mintaUpdate = false;
 siUpdate = false;
+printing = false;
+
 function clickHelp(){
 	$('#divclick').show();
 	window.setTimeout(function(){$('#divclick').hide();},20);
+}
+function pingPrinter(){
+	//nem kell, a nyomtatót be lehet konfigolni, hogy ne kapcsoljon ki.
+	//! U1 setvar "power.inactivity_timeout" "0"
+	/*window.setTimeout(function(){
+		if (!printing) {
+			alert('ping start');
+			var btPrint = function() {
+						var tpl = '\r\n';
+						var writeOk = function(){
+						}
+						var writeError = function(){
+							console.log('btprint ping write error');
+						}
+						bluetoothSerial.write(tpl,writeOk,writeError);
+			}
+			var printError = function(){
+				//console.log('btprint error:'+beerk.currentItem+':'+beerk.currentPosition);
+			}
+			if(typeof bluetoothSerial != 'undefined') {
+				try {
+					printing=true;
+					bluetoothSerial.isConnected(btPrint, printError);
+				}
+				finally {
+					printing=false;
+				}
+			}
+			alert('ping finish');
+			
+		}
+		pingPrinter();
+	},30*1000);
+	*/
 }
 var OBeerk = function(){
 	this.meresKell=false;
@@ -178,6 +214,7 @@ OBeerk.prototype.selectPosition = function (obj) {
 	}
 	else poz=obj.attr('id');
 	this.currentPosition = poz;
+	
 	var btPrint = function() {
 		//tip = beerk.currentItem;
 		rsz = $('#rendszam').val();
@@ -237,7 +274,13 @@ OBeerk.prototype.selectPosition = function (obj) {
 	if (tip!='bGumiFelni') {
 		/* print */
 		if(typeof bluetoothSerial != 'undefined') {
-			bluetoothSerial.isConnected(btPrint, printError);
+			try {
+				printing=true;
+				bluetoothSerial.isConnected(btPrint, printError);
+			}
+			finally {
+				printing=false;
+			}
 		}
 		else {
 			alert('printer not found');
@@ -847,3 +890,6 @@ function getSIP(result) {getSI(result,'P')}
 
 /* gumipanel eddig */
 /* beerkezes eddig */
+
+
+//pingPrinter();
