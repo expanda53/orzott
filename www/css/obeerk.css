@@ -77,13 +77,13 @@ select {
 
 }
 .divlabels {
-	position:relative;
-	top:15px;
-	width:300px;
-	margin:0 auto;
-	text-align:center;
+    top: 86px;
+    left: 86px;
+    width: 300px;
+    text-align: center;
+    position: absolute;
 }
-.ddrbvart, .ddrbkesz {
+.ddrbvart, .ddrbkesz, .ddrbfegu {
 	padding:5px;
 	width:40%;
 	margin:5px 2px;
@@ -91,14 +91,20 @@ select {
 }
 .ddrbvart{
 	background-color:yellow;
-		float:left;
+	left:0px;
+    position: absolute;	
 }
 .ddrbkesz {
 	background-color:lightgreen;
-	/*font-weight:bold;*/
-		float:right;
+	left:136px;
+    position: absolute;	
 }
-.dataDrbVart, .dataDrbKesz{
+.ddrbfegu{
+	background-color:white;
+	left:272px;
+    position: absolute;	
+}
+.dataDrbVart, .dataDrbKesz,.dataDrbFEGU{
 	font-size:17px;
 	font-weight:bold;
 	padding:0px 10px;

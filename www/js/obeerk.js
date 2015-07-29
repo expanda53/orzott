@@ -61,9 +61,11 @@ OBeerk.prototype.mibizList = function(result) {
 	sor = '';
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
+		//alert(JSON.stringify(res));
 		sor += '<tr id="'+res.MIBIZ+'">';
 		sor += '<td  class="tmszam3">'+res.FUVAR+'</td>'; 
-		sor +=  '<td class="tmibiz">'+res.MIBIZ+'</td>'; 
+		sor +=  '<td>'+res.KEZELOK+'</td>'; 
+		sor +=  '<td>'+res.STATUSZ+'</td>'; 
 		sor += '</tr>';
 	}
 	
@@ -74,6 +76,14 @@ OBeerk.prototype.mibizList = function(result) {
 		$.get( "views/"+panelName+".tpl", function( data ) { 
 			tpl = data.replace('<{sorok}>',sor); 
 			$('#divContent').html(css + tpl);
+			//feladat valasztas inditasa
+			$('.tmibizlist tr').bind('click',function(){
+				tr = $(this);
+				id = tr.attr('id');
+				mszam3 = tr.find(".tmszam3").html();
+				beerk.selectTask(id,mszam3);
+			})
+			
 			$('#divContent').show();
 		});
 		
@@ -90,7 +100,7 @@ OBeerk.prototype.selectTask = function(mibiz,mszam3) {
 	else {
 		$('#divheader').html('Õrzött beérkezés - állapot felmérés nélkül - Sofõr:'+mszam3);
 	}
-	ajaxCall('taskReg',{'mibiz':mibiz, 'login':login_id},true, '');
+	ajaxCall('beerk.taskReg',{'mibiz':mibiz, 'login':login_id},true, '');
 	$('#divmibizlist').hide();
 	fn = 'beerk.panelInit'; 
 	r = ajaxCall(fn,{'mibiz':mibiz, 'login':login_id},true, fn);
@@ -120,7 +130,10 @@ OBeerk.prototype.rszJav = function (result) {
 	/* mennyiseg javitas ajax eredmenye */
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
-		if (res.RESULT!=-1)	$('.dataDrbKesz').html(res.RESULT);
+		if (res.RESULT!=-1)	{
+			$('.dataDrbKesz').html(res.RESULT);
+			$('.dataDrbFEGU').html(res.FEGU);
+		}
 		else alert('Hiba');
 	}
 }
@@ -302,6 +315,8 @@ OBeerk.prototype.rszMent = function(result) {
 		res = result[i];
 		if (res.RESULT!=-1)	{
 			$('.dataDrbKesz').html(res.RESULT);
+			$('.dataDrbFEGU').html(res.FE+'/'+res.GU);
+			
 			id=beerk.currentPosition;
 			$('.bpozicio').attr('disabled','disabled');
 			$( '#'+id).addClass( "bpozicioSelected" );
@@ -363,11 +378,16 @@ OBeerk.prototype.rszAdatokGet = function (result){
 		$(".dataFegu").html(res.FEGU);
 		$(".dataDrbVart").html(res.DRB);
 		$(".dataDrbKesz").html(res.CDRB);
+		$(".dataDrbFEGU").html(res.FEGUKESZ);
 		$("#hSORSZ").val(res.SORSZ);
 		beerk.fedb = res.FEDB;
 		beerk.gudb = res.GUDB;
 		beerk.rszAdatok = res.RSZADATOK.split("\n");
 		beerk.rszAdatokTEMP = beerk.rszAdatok;
+		feall='';
+		if (checkParam(beerk.rszAdatok[7])=='L' && beerk.fedb>0) feall='Lemez';
+		if (checkParam(beerk.rszAdatok[7])=='A' && beerk.fedb>0) feall='Alu';
+		$(".dataFeall").html(feall);
 	}
 	$('.rszadatok').show();
 	$('.dcontrol').show();
@@ -441,6 +461,7 @@ OBeerk.prototype.reviewRszGet = function(result) {
 		$('.labelHiany').html('Hiányzó mennyiség:');
 		$('.dataHiany').html(hianydb);
 	}
+	beerk.reviewFilter();
 
 }
 
@@ -463,7 +484,6 @@ OBeerk.prototype.reviewRszFilter = function(result) {
 	}
 	sorok+='</tbody>'
 	$('.tableReviewFilter tbody').append(sorok);
-	
 	$('.tableReviewFilter tbody td').bind('click',function(){
 		curTD = $(this);
 		filter = curTD.html();
@@ -473,6 +493,7 @@ OBeerk.prototype.reviewRszFilter = function(result) {
 	})
 
 	$('#rszall').trigger('click');
+	
 }
 
 
@@ -627,6 +648,11 @@ OBeerk.prototype.closeGPanel = function (saveData){
 			ajaxCall(fn,{'rsz':rsz,'azon':azon,'fedb':beerk.fedb,'data':JSON.stringify(beerk.rszAdatok),'login':login_id},true, fn);
 			$('.dataMeret').html(newContent);
 			$(".dataFegu").html(beerk.fedb+'/'+beerk.gudb);
+			feall='';
+			if (checkParam(beerk.rszAdatok[7])=='L' && beerk.fedb>0) feall='Lemez';
+			if (checkParam(beerk.rszAdatok[7])=='A' && beerk.fedb>0) feall='Alu';
+			$(".dataFeall").html(feall);
+			
 	}
 	
 	$('#gpMarkaA, #gpMarkaB, #gpMarkaP, #gpMeretA, #gpMeretB, #gpMeretP, #gpMintaA, #gpMintaB, #gpMintaP, #gpSIA, #gpSIB, #gpSIP').html('');	

@@ -48,11 +48,11 @@
 		$azon = $r['azon'];
 		$rsz = $r['rsz'];
 		$sql=" SELECT FIRST 1  SORSZ, CAST(ABS(DRB) AS INTEGER) AS DRB ,CEG.NEV CEGNEV ,CAST(DRB2 AS INTEGER) AS CDRB,AKTSOR.DEVEAR AS PDAKEZ, AKTSOR.STAT3 AS ROWSTAT,
-		CASE WHEN COALESCE(BFEJ.MSZAM3,'9999')='9999' AND BFEJ.MIBIZ NOT LIKE 'ELOSZ%' AND BFEJ.MIBIZ NOT LIKE 'TELEP%' THEN 'GYÅ°JTÅ' 
+		CASE WHEN COALESCE(BFEJ.MSZAM3,'9999')='9999' AND BFEJ.MIBIZ NOT LIKE 'ELOSZ%' AND BFEJ.MIBIZ NOT LIKE 'TELEP%' THEN 'GYÛJTÕ' 
          WHEN BFEJ.MIBIZ LIKE 'ELOSZ%' OR BFEJ.MIBIZ LIKE 'TELEP%' THEN CEG.NEV 
          ELSE COALESCE(BFEJ.MSZAM3,'')||' '||COALESCE(MSZAM.NEV,'') END MSZAM3,
     AKTSOR.TAPADO RENDSZAM, COALESCE(AKTSOR.GYSZAM,'')||' '||COALESCE(AKTSOR.LEIR,'') MERETMINTA, CAST(COALESCE(JARUL2,0) AS INTEGER)||'/'||CAST(COALESCE(JARUL1,0) AS INTEGER) FEGU,
-	AKTSOR.MJBEL RSZADATOK,CAST(COALESCE(JARUL2,0) AS INTEGER) FEDB,CAST(COALESCE(JARUL1,0) AS INTEGER) GUDB
+	AKTSOR.MJBEL RSZADATOK,CAST(COALESCE(JARUL2,0) AS INTEGER) FEDB,CAST(COALESCE(JARUL1,0) AS INTEGER) GUDB,(SELECT FEGU FROM PDA_ORZOTTLERAK_FEGU(CAST(AKTSOR.MJSOR2 AS VARCHAR(500)))) FEGUKESZ
     FROM BSOR AKTSOR 
     INNER JOIN BFEJ ON BFEJ.AZON=AKTSOR.BFEJ 
     LEFT JOIN CEG ON COALESCE(AKTSOR.PONTOZ, AKTSOR.CEG)=CEG.AZON
@@ -92,16 +92,17 @@
 		echo json_encode($res);
 
   }  
-  if ($func==='taskReg'){
+  if ($func==='beerk.taskReg'){
 		$mibiz = $r['mibiz'];
 		$login = $r['login'];
-		$sql=" EXECUTE PROCEDURE PDA_TASKREG(:mibiz,:login) ";
-
+		$sql=" EXECUTE PROCEDURE PDA_ORZOTTLERAK_TASKREG ( :mibiz, :login ) ";
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':mibiz', $mibiz, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
 		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		Firebird::commit();
+		$res=null;
+		//$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
 
   }
@@ -115,7 +116,7 @@
 		$poz = $r['poz'];
 		$tip = $r['tip'];
 		$rowstat='R';
-		$sql=" SELECT RESULT FROM PDA_ORZOTTLERAK_SORUPDATE(:azon, :sorsz, :drb2, :poz, :tip, :rowstat, :login) ";
+		$sql=" SELECT RESULT,FE,GU FROM PDA_ORZOTTLERAK_SORUPDATE(:azon, :sorsz, :drb2, :poz, :tip, :rowstat, :login) ";
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
 		$stmt->bindParam(':sorsz', $sorsz, PDO::PARAM_STR);
@@ -136,7 +137,7 @@
 		$sorsz = $r['sorsz'];
 		$rsz = $r['rsz'];
 		$login = $r['login'];
-		$sql=" SELECT RESULT FROM PDA_ORZOTTLERAK_JAVITAS(:azon, :sorsz, :rsz, :login) ";
+		$sql=" SELECT RESULT,FEGU FROM PDA_ORZOTTLERAK_JAVITAS(:azon, :sorsz, :rsz, :login) ";
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
 		$stmt->bindParam(':sorsz', $sorsz, PDO::PARAM_STR);
@@ -191,10 +192,18 @@
   if ($func==='beerk.folytUpdate') {
 		$azon = $r['azon'];
 		$login = $r['login'];
+		/*
 		$sql=" UPDATE BSOR SET STAT3='U' WHERE COALESCE(BSOR.STAT3,'')='N' AND BSOR.BFEJ = :azon  ";
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
 		$stmt->execute();
+		*/
+
+		$sql=" UPDATE BFEJ SET STAT3='R',KONTI1=NULL WHERE BFEJ.AZON = :azon  ";
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->execute();
+
 		//$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		$res=array();
 		$res[0]['STATUS']='OK';

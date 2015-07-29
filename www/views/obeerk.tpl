@@ -1,10 +1,4 @@
 <script>
-	$('.tmibizlist tr').bind('click',function(){
-		tr = $(this);
-		id = tr.find(".tmibiz").html();
-		mszam3 = tr.find(".tmszam3").html();
-		beerk.selectTask(id,mszam3);
-	})
 	
 /*
 	$('#bOBeerkMenu').bind('click',function () {
@@ -119,7 +113,8 @@
 			<table class=tmibizlist>
 				<tr>
 				<th>Sofőr</th>
-				<th>Bizonylatszám</th>
+				<th>Raktáros</th>
+				<th>Státusz</th>
 				</tr>
 				
 				<{sorok}>
@@ -144,6 +139,7 @@
 				<div class='dfegu'>
 					<span class='labelFelniGumi'>Felni/Gumi:</span>
 					<span class='dataFegu'></span>
+					<span class='dataFeall'></span>
 				</div>
 			</div>
 			<div id=divgpanel>
@@ -197,6 +193,10 @@
 					<div class=ddrbkesz>
 						<span class='labelDrbKesz'>lepakolva</span>
 						<span class='dataDrbKesz'>0</span>
+					</div>
+					<div class=ddrbfegu>
+						<span class='labelDrbFEGU'>fe/gu</span>
+						<span class='dataDrbFEGU'>0/0</span>
 					</div>
 				</div>
 				<div class=dButtons>
