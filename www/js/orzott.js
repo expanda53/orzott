@@ -6,8 +6,10 @@ function ajaxCall( func, d,asyn,fn) {
   console.debug('ajax:'+func+' data:'+JSON.stringify(d));
   $.ajax({
         type: "POST",
-		url: "http://192.168.22.200/orzottsrv/service.php/" + func, /* akh eles */
+		//url: "http://192.168.22.200/orzottsrv/service.php/" + func, /* akh local teszt */
 		//url: "http://192.168.1.68:82/orzottsrv/service.php/" + func, /* otthoni eles */
+		url: "http://redmine.akh.hu/orzott_api/service.php/" + func, /* akh eles */
+		
         data: d,
 		async: asyn,
         dataType: "json",
@@ -52,6 +54,9 @@ function showMenu() {
 			$('#bbeerk').bind('click',function () {
 				beerk = new OBeerk();
 			}) 
+			$('#blogout').bind('click',function () {
+				showLogin();
+			}) 
 
 			$('#divContent').show();
 
@@ -80,7 +85,7 @@ function orzottLogin(){
 		ajaxCall(fn,{'user':user},true, fn);
 }
 function checkLogin(result){
-	if (result[0].RCOUNT==0) {
+	if (result!='undefined' && result[0].RCOUNT==0) {
 		alert('Nem megfelelõ felhasználói kód!');
 	}
 	else {

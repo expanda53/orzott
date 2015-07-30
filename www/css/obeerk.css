@@ -10,12 +10,12 @@ button {
 	border:1px solid #77b55a;
 	display:inline-block;
 	cursor:pointer;
-	color:#ffffff;
+	color:black;
 	font-family:Arial;
 	font-size:17px;
 	padding:16px 31px;
 	text-decoration:none;
-	text-shadow:0px 1px 0px #5b8a3c;
+	font-weight:bold;
 }
 button:active {
 	position:relative;
@@ -61,9 +61,45 @@ select {
 	left:5px;
 	right:5px;
 }
+.tmibizlist {
+	border-collapse:collapse;
+	margin:10px 0px;
+}
+.tmibizlist tr { 
+	margin:5px 0px;
+}
 .tmibizlist td { 
 	padding:20px;
 	background-color:white;
+	font-size:15px;
+	font-weight:bold;
+}
+.tmibizlist tr:first-child td:first-child { 
+    -moz-border-top-left-radius:7px;
+	-webkit-border-top-left-radius:7px;
+	border-top-left-radius:7px;
+}
+.tmibizlist tr:first-child td:last-child { 
+    -moz-border-top-right-radius:7px;
+	-webkit-border-top-right-radius:7px;
+	border-top-right-radius:7px;
+}
+.tmibizlist tr:last-child td:first-child { 
+    -moz-border-bottom-left-radius:7px;
+	-webkit-border-bottom-left-radius:7px;
+	border-bottom-left-radius:7px;
+	
+}
+
+.tmibizlist tr:last-child td:last-child { 
+    -moz-border-bottom-right-radius:7px;
+	-webkit-border-bottom-right-radius:7px;
+	border-bottom-right-radius:7px;
+	
+}
+
+.tmibizlist .tmszam3, .tmibizlist .tkezelo {
+	width:160px;
 } 
 #divpanel {
 	display:none;
@@ -154,6 +190,7 @@ select {
 	border:1px solid orange;
 	color:black;
 	width:150px;
+	font-size:16px;
 }
 #divreview {
 	display:none;
@@ -256,7 +293,17 @@ select {
 	display:none;
 	z-index:100;
 }
-
+#divGPOptions {
+	display:none;
+	position: absolute;
+    height: 300px;
+    width: 550px;
+    background-color: black;
+    z-index: 1;	
+}
+#divGPOptions button{
+	margin-bottom:5px;
+}
 
 #gpMarkaA,#gpMeretA,
 #gpMarkaB,#gpMeretB,

@@ -17,7 +17,7 @@ var printerDialog = {
 				app.printers.forEach(function(printer){
 					sorok+="<tr>";
 					sorok+="<td class=printerid>"+printer.id+"</td>";
-					if (printer.name!='undefined')	printer.name="";
+					if (printer.name=='undefined')	printer.name="";
 					sorok+="<td class=printername>"+printer.name+"</td>";
 					sorok+="</tr>";
 					

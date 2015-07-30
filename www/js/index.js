@@ -18,7 +18,7 @@
  */
 function printer (pid,pname) {
 	this.id =pid;
-	name.name = pname;
+	this.name = pname;
 	}
 
 var app = {

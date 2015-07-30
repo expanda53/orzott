@@ -1,5 +1,5 @@
 .meres button {
-	padding:10px 20px;
+	padding:16px 20px;
 	margin:5px;
 	font-size:15px;
 	width:90px;
@@ -25,9 +25,25 @@
 }
 #bAllapotClose {
     position: absolute;
-    top: 160px;
-    left: 143px;
+    top: 184px;
+    left: 184px;
     background-color: orange;
     border: solid orange 1px;
+    width: 160px;
+	color:black;
+}
+#bAllapotJavitas {
+    position: absolute;
+    top: 184px;
+    left: 357px;
+    background-color: yellow;
+    border: solid yellow 1px;
+    width: 160px;
+    color: black;
+}
+#bAllapotMent {
+    position: absolute;
+    top: 123px;
+    left: 357px;
     width: 160px;
 }

@@ -9,6 +9,10 @@
 	$('#bAllapotMent').bind('click',function () {
 		beerk.allapotMentes();
 	})
+	$('#bAllapotJavitas').bind('click',function () {
+		beerk.rszJavitas();	
+	})
+
 	
 </script>
 <div class=meres>
@@ -34,4 +38,5 @@
 </div>
 <button id=bAllapotMent>Mentés</button>
 <button id=bAllapotClose>Bezár</button>
+<button id=bAllapotJavitas>Javítás</button>
 </div>

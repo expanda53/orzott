@@ -64,8 +64,8 @@ OBeerk.prototype.mibizList = function(result) {
 		//alert(JSON.stringify(res));
 		sor += '<tr id="'+res.MIBIZ+'">';
 		sor += '<td  class="tmszam3">'+res.FUVAR+'</td>'; 
-		sor +=  '<td>'+res.KEZELOK+'</td>'; 
-		sor +=  '<td>'+res.STATUSZ+'</td>'; 
+		sor +=  '<td class="tkezelo">'+res.KEZELOK+'</td>'; 
+		sor +=  '<td class="tstat">'+res.STATUSZ+'</td>'; 
 		sor += '</tr>';
 	}
 	
@@ -93,7 +93,7 @@ OBeerk.prototype.mibizList = function(result) {
 OBeerk.prototype.selectTask = function(mibiz,mszam3) {
 	/* feladat valaszto ajax inditas */
 	app.BTEnabled();						
-	this.meresKell = confirm("Állapotfelméréssel együtt?");
+	this.meresKell = confirm("Állapot felméréssel?");
 	if (this.meresKell) {
 		$('#divheader').html('Õrzött beérkezés - állapot felméréssel - Sofõr:'+mszam3);
 	}
@@ -135,6 +135,10 @@ OBeerk.prototype.rszJav = function (result) {
 			$('.dataDrbFEGU').html(res.FEGU);
 		}
 		else alert('Hiba');
+	}
+	if ( $('#divmeres').is(":visible") ){
+		$('#divmeres').hide();
+		$('#divpanel').show();	
 	}
 }
 
@@ -244,8 +248,7 @@ OBeerk.prototype.selectPosition = function (obj) {
 					if (beerk.currentItem=="bFelni") ptip = "F";
 					if (beerk.currentItem=="bGumiFelni") ptip = "K";
 				
-				
-				tpl = data.replace('[RENDSZPOZ]',rsz+"_"+ppoz+ptip); 
+				tpl = data.replace(/\[RENDSZPOZ\]/g,rsz+"_"+ppoz+ptip); 
 				tpl += '\r\n';
 				var writeOk = function(){
 					fn = 'beerk.rszMent';
@@ -601,7 +604,72 @@ OBeerk.prototype.rszAdatokSet = function (result){
 	//alert(JSON.stringify(result));
 }
 
-OBeerk.prototype.closeGPanel = function (saveData){
+OBeerk.prototype.GPanelOptions = function (saveData){
+  /* tengelyek adatainak masolasa, torlese  */
+  $('#divGPOptions').show();
+  $('#boptclose').bind('click',function(){
+		$('#divGPOptions').hide();
+  })
+  $('#bcopyAB').bind('click',function(){
+		beerk.GPanelFunctions('copy','A','B');
+  })
+  $('#bcopyAP').bind('click',function(){
+		beerk.GPanelFunctions('copy','A','P');
+  })
+  $('#bcopyBA').bind('click',function(){
+		beerk.GPanelFunctions('copy','B','A');
+  })
+  $('#bcopyBP').bind('click',function(){
+		beerk.GPanelFunctions('copy','B','P');
+  })
+  $('#bdelA').bind('click',function(){
+		beerk.GPanelFunctions('del','A','');
+  })
+  $('#bdelB').bind('click',function(){
+		beerk.GPanelFunctions('del','B','');
+  })
+  $('#bdelP').bind('click',function(){
+		beerk.GPanelFunctions('del','P','');
+  })
+  
+  
+}
+OBeerk.prototype.GPanelFunctions = function(func,src,trg){
+	if (func=='copy') {
+		fn='getMarka';
+		ajaxCall(fn,{'marka':$('#gpMarka'+src).val(),'meret':$('#gpMeret'+src).val(),'minta':'mind','si':$('#gpSI'+src).val()},false, fn+trg);
+		def = $('#gpMarka'+src).val();
+		$('#gpMarka'+trg+' option[value='+def+']').prop('selected', 'selected');
+		
+		fn='getMinta';
+		ajaxCall(fn,{'marka':$('#gpMarka'+src).val(),'meret':$('#gpMeret'+src).val(),'minta':'mind','si':$('#gpSI'+src).val()},false, fn+trg);
+		def = $('#gpMinta'+src).val();
+		$('#gpMinta'+trg+' option[value='+def+']').prop('selected', 'selected');
+		
+		fn='getMeret';
+		ajaxCall(fn,{'marka':$('#gpMarka'+src).val(),'meret':$('#gpMeret'+src).val(),'minta':'mind','si':$('#gpSI'+src).val()},false, fn+trg);
+		def = $('#gpMeret'+src).val();
+		$('#gpMeret'+trg+' option[value='+def+']').prop('selected', 'selected');
+
+	
+		fn='getSI';
+		ajaxCall(fn,{'marka':$('#gpMarka'+src).val(),'meret':$('#gpMeret'+src).val(),'minta':'mind','si':$('#gpSI'+src).val()},false, fn+trg);
+		def = $('#gpSI'+src).val();
+		$('#gpSI'+trg+' option[value='+def+']').prop('selected', 'selected');
+		
+	}
+	else
+	if (func=='del') {
+		$('#gpMarka'+src).empty();
+		$('#gpMeret'+src).empty();
+		$('#gpMinta'+src).empty();
+		$('#gpSI'+src).empty();
+	}
+	$('#divGPOptions').hide();
+		
+}
+
+OBeerk.prototype.GPanelClose = function (saveData){
 	if (saveData) {
 			beerk.fedb = $('#gpFelnidb option:selected').val();
 			beerk.rszAdatok[7]=$('#gpFelnitip option:selected').val();

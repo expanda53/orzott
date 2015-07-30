@@ -72,10 +72,13 @@
 		showMenu();
 	})	
 	$('#bGPanelClose').bind('click',function () {
-		beerk.closeGPanel(true);
+		beerk.GPanelClose(true);
 	})	
 	$('#bGPanelCancel').bind('click',function () {
-		beerk.closeGPanel(false);
+		beerk.GPanelClose(false);
+	})	
+	$('#bGPanelOptions').bind('click',function () {
+		beerk.GPanelOptions();
 	})	
 	$('#srendszam').bind('click',function (event) {
 		clickHelp();
@@ -111,11 +114,6 @@
 		<div id=divmibizlist>
 			<button id=bMenu>Menü</button>
 			<table class=tmibizlist>
-				<tr>
-				<th>Sofőr</th>
-				<th>Raktáros</th>
-				<th>Státusz</th>
-				</tr>
 				
 				<{sorok}>
 			</table>
@@ -143,6 +141,18 @@
 				</div>
 			</div>
 			<div id=divgpanel>
+				<div id='divGPOptions'>
+					
+						<button id=bcopyAB>A->B</button>
+						<button id=bcopyAP>A->P</button>
+						<button id=bcopyBA>B->A</button>
+						<button id=bcopyBP>B->P</button><br>
+						<button id=bdelA>A törlése</button>
+						<button id=bdelB>B törlése</button>
+						<button id=bdelP>P törlése</button><br>
+						<button id=boptclose>Bezár</button>
+					
+				</div>
 				<div class='labelGP'>A</div>
 				<select id=gpMarkaA></select>
 				<select id=gpMeretA></select>
@@ -183,6 +193,7 @@
 				
 				<button id=bGPanelClose>Mentés</button>
 				<button id=bGPanelCancel>Mégsem</button>
+				<button id=bGPanelOptions>Műveletek</button>
 			</div>
 			<div class='dcontrol'>
 				<div class=divlabels>
