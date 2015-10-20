@@ -9,6 +9,7 @@ $('#divheader').append(' - Felhasználó:'+login_id);
 	</div>
 	<div id=divmenu>
 		<button id=bbeerk>Beérkezés</button>
+		<button id=bhkod>Elpakolás</button>
 		<button id=blogout>Kijelentkezés</button>
 	</div>
 </div>

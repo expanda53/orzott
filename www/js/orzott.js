@@ -7,8 +7,9 @@ function ajaxCall( func, d,asyn,fn) {
   $.ajax({
         type: "POST",
 		//url: "http://192.168.22.200/orzottsrv/service.php/" + func, /* akh local teszt */
-		//url: "http://192.168.1.68:82/orzottsrv/service.php/" + func, /* otthoni eles */
+		//url: "http://192.168.1.105:82/orzottsrv/service.php/" + func, /* otthoni eles */
 		url: "http://redmine.akh.hu/orzott_api/service.php/" + func, /* akh eles */
+		//url: "http://192.168.22.144/orzott_api/service.php/" + func, /* akh eles */
 		
         data: d,
 		async: asyn,
@@ -54,6 +55,10 @@ function showMenu() {
 			$('#bbeerk').bind('click',function () {
 				beerk = new OBeerk();
 			}) 
+			$('#bhkod').bind('click',function () {
+				elrak = new OElrak();
+			}) 
+
 			$('#blogout').bind('click',function () {
 				showLogin();
 			}) 
