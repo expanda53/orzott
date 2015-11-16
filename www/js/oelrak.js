@@ -6,7 +6,7 @@
 	3b, ha nincs kiszedve teljesen, akkor hibaüzenet. Aztán 1.
 	4a, ha nem, akkor mélység mérés. Utána 4b
 	4b, ha volt mélységmérés, akkor helykódra lõhet
-
+5
 
 */
 
