@@ -2,8 +2,8 @@
 /*
 	1. nincs feladat választás, rögtön a rendszámra lõhet.
 	2. rendszámra lövés után megnézni, hogy ki van-e szedve teljesen.
-	3a, ha ki van szedve, meg kell nézni hogy a mélységmérés el lett-e rajta végezve
-	3b, ha nincs kiszedve teljesen, akkor hibaüzenet. Aztán 1.
+	3a, ha nincs kiszedve teljesen, akkor hibaüzenet. Aztán 1.
+	3b ha ki van szedve teljesem, meg kell nézni hogy a mélységmérés el lett-e rajta végezve
 	4a, ha nem, akkor mélység mérés. Utána 4b
 	4b, ha volt mélységmérés, akkor helykódra lõhet
 5
@@ -72,6 +72,9 @@ OElrak.prototype.panelInit = function () {
 			$('#dataRendszam').bind('change',function (event) {
 				elrak.rszChange();
 			})	
+			$('#dataHkod').bind('change',function (event) {
+				elrak.hkodChange();
+			})	
 			
 		})
 	})
@@ -129,172 +132,6 @@ OElrak.prototype.showPozPanel = function(obj) {
 
 
 /* allapot panel */
-OElrak.prototype.showAllapotPanel = function(obj){
-	this.currentItem = obj.attr('id'); 
-	$('#bAllapotClose').show();
-	if (this.meresKell || beerk.currentItem=="bGumi") {
-		/* ha meressel kerte, vagy meres nelkul de gumit valasztott */
-		panelName='meres';
-		$.get( "css/"+panelName+".css", function( data ) {
-			css = '<head><style>' + data + '</style></head>';
-			$.get( "views/"+panelName+".tpl", function( data ) { 
-				rsz = $('#rendszam').val();
-				mibiz = $('#hMIBIZ').val();
-				$('#divmeres').html(css + data);
-				$('#divpanel').hide();
-				$('#divmeres').show();
-				var muvelet = "";
-				if (beerk.currentItem=="bGumi") muvelet = "beérkezés: gumi";
-				if (beerk.currentItem=="bFelni") muvelet = "beérkezés: felni";
-				if (beerk.currentItem=="bGumiFelni") muvelet = "beérkezés: kerék";
-				beerk.currentPosition = '';
-				$('#muvelet').html(muvelet);
-				fn='beerk.getPositions';
-				ajaxCall(fn,{'rsz':rsz,'mibiz':mibiz,'login':login_id},true, fn);
-				
-			});
-			
-		})
-	}
-	else {
-		/* ha meres nelkul kerte (kiveve gumi eseten, ott ilyenkor is van allapot panel) */
-		/* felni eseten automatikus nyomtatas erkezesi sorrendben, nincs jelentosege, hogy melyik felni melyik pozicio*/
-		/* kerek eseten csak mennyiseg noveles van, mivel nem merunk es nyomtatni sem kell, mert mossak oket */
-		this.selectPosition(null);
-	}
-}
-			
-OElrak.prototype.getPositions=function(result){
-	/* mar kivalasztott poziciok: JE:A:13  (pozicio:tipus:melyseg)*/
-	if (result[0].RESULT!='') {
-		res = result[0].RESULT.split(',');
-		for (var i = 0;i < res.length;i++){
-			p = res[i].split(':');
-			id='b' + p[0];
-			$('#'+id).attr('disabled','disabled');
-		}
-	}
-}
-
-
-OElrak.prototype.selectPosition = function (obj) {
-	/* nyomtatas inditas + mentes ajax*/
-	tip = this.currentItem;
-	var poz = "";
-	if (obj == null) {
-		/* felni vagy kerek meres nelkul*/
-		poz='auto';
-	}
-	else poz=obj.attr('id');
-	this.currentPosition = poz;
-	
-	var btPrint = function() {
-		//tip = beerk.currentItem;
-		rsz = $('#rendszam').val();
-		$.get( "views/prn_rendszam_lerak.tpl", function( data ) {
-				//data = $('#tplprint').val();
-					if (beerk.currentPosition=='bJE') ppoz = 1;
-					if (beerk.currentPosition=='bBE') ppoz = 2;
-					if (beerk.currentPosition=='bJH') ppoz = 3;
-					if (beerk.currentPosition=='bBH') ppoz = 4;
-					if (beerk.currentPosition=='bPOT') ppoz = 5;
-					if (beerk.currentPosition=='bJHI') ppoz = 6;
-					if (beerk.currentPosition=='bBHI') ppoz = 7;
-					if (beerk.currentItem=="bGumi") ptip = "A";
-					if (beerk.currentItem=="bFelni") ptip = "F";
-					if (beerk.currentItem=="bGumiFelni") ptip = "K";
-				
-				tpl = data.replace(/\[RENDSZPOZ\]/g,rsz+"_"+ppoz+ptip); 
-				tpl += '\r\n';
-				var writeOk = function(){
-					fn = 'beerk.rszMent';
-					r = ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'tip':beerk.currentItem, 'poz':beerk.currentPosition, 'login':login_id},true, fn);
-				}
-				var writeError = function(){
-					console.log('btprint write error:'+beerk.currentItem+':'+beerk.currentPosition);
-				}
-				if (!teszt && beerk.currentItem!='bGumiFelni') bluetoothSerial.write(tpl,writeOk,writeError);
-				if (teszt || beerk.currentItem=='bGumiFelni') writeOk();
-				
-		})
-		
-		
-	}
-	var printError = function(){
-		console.log('btprint error:'+beerk.currentItem+':'+beerk.currentPosition);
-		alert('Nyomtatási hiba');
-	}
-	azon = $('#hAZON').val();
-	sorsz = $('#hSORSZ').val();	
-	drb = $('.dataDrbVart').html();
-	drb2 = $('.dataDrbKesz').html();
-	if (beerk.currentPosition=='auto') {
-					if (drb2==0) beerk.currentPosition='bJE';
-					if (drb2==1) beerk.currentPosition='bBE';
-					if (drb2==2) beerk.currentPosition='bJH';
-					if (drb2==3) beerk.currentPosition='bBH';
-					if (drb2==4) beerk.currentPosition='bPOT';
-					if (drb2==5) beerk.currentPosition='bJHI';
-					if (drb2==6) beerk.currentPosition='bBHI';
-					poz=beerk.currentPosition;
-
-	}
-	
-	if (drb2>=drb) {
-		alert('A beérkezett mennyiség '+drb+' db!');
-	}
-	if (tip!='bGumiFelni') {
-		/* print */
-		if(typeof bluetoothSerial != 'undefined') {
-			try {
-				printing=true;
-				bluetoothSerial.isConnected(btPrint, printError);
-			}
-			finally {
-				printing=false;
-			}
-		}
-		else {
-			alert('printer not found');
-			if (teszt) btPrint();
-		}
-	}
-	else {
-		/* kerek valasztasnal nincs nyomtatas (mivel mossak oket, es kesobb nyomtatjak)*/
-		fn = 'beerk.rszMent';
-		ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'tip':tip,'poz':poz,'login':login_id},true, fn);
-	}
-
-
-}
-
-OElrak.prototype.rszMent = function(result) {
-	/* mentes ajax eredmenye */
-	for (var i = 0;i < result.length;i++){
-		res = result[i];
-		if (res.RESULT!=-1)	{
-			$('.dataDrbKesz').html(res.RESULT);
-			$('.dataDrbFEGU').html(res.FE+'/'+res.GU);
-			
-			id=beerk.currentPosition;
-			$('.bpozicio').attr('disabled','disabled');
-			$( '#'+id).addClass( "bpozicioSelected" );
-			if (beerk.meresKell) {
-				//meres panel betoltese
-				$('#divallapot').show();
-				$('#bAllapotMent').show();
-				$('#bAllapotClose').hide();
-				if (beerk.currentItem=='bGumi' || beerk.currentItem=='bGumiFelni') {
-					fn = 'beerk.getMelyseg';
-					ajaxCall(fn,{'poz':beerk.currentPosition, 'login':login_id},true, fn);
-				}
-			}
-			
-			
-		}
-		else alert('Hiba');
-	}
-}
 
 
 
@@ -313,27 +150,89 @@ OElrak.prototype.getMelyseg=function(result){
 OElrak.prototype.allapotMentes=function(){
 	poz = this.currentPosition;
 	melyseg = $('#gstat').val();
-	if (this.meresKell && melyseg=='-' ) alert('Mentés elõtt mérd meg a mélységet!');
-	else {
-		rsz = $('#rendszam').val();
-		mibiz = $('#hMIBIZ').val();
-		tip=beerk.currentItem;
-		fn='beerk.allapotMent';
-		ajaxCall(fn,{'rsz':rsz,'mibiz':mibiz,'poz':poz,'melyseg':melyseg,'login':login_id,'tip':tip},true, fn);
-	}
+	
+	rsz = $('#rendszam').val();
+	mibiz = $('#hMIBIZ').val();
+	tip=elrak.currentItem;
+	fn='elrak.allapotMent';
+	ajaxCall(fn,{'rsz':rsz,'mibiz':mibiz,'poz':poz,'melyseg':melyseg,'login':login_id,'tip':tip},true, fn);
+
 }
 OElrak.prototype.allapotMent=function(result){
 	$('#bAllapotClose').trigger( "click" );
+	elrak.showHkod();
 }
 /* allapot panel eddig */
 
+OElrak.prototype.showHkod=function(){
+	$('.dhkod').show();
+}
+OElrak.prototype.hkodChange=function(){
+	alert('change');
+}
+
+
 /* atnezo panel */
 OElrak.prototype.rszAdatokGet = function (result){
-	/* rendszam valasztas ajax eredmenye */
-	/*for (var i = 0;i < result.length;i++){
+	/* rendszam valasztas ajax eredmenye, rszChange indítja */
+	for (var i = 0;i < result.length;i++){
 		res = result[i];
+		if (res.RESULT=='OK') {
+				elrak.showHkod();
+		}
+		else {
+			errormsg='';
+			var meresKell=false;
+			switch (res.RESULTTEXT) {
+				case 'TYPE': 
+					errormsg='Nem megfelelõ típus a pozíción!';
+					break;
+				case 'NOT_FOUND': 
+					errormsg='Nem található ilyen rendszám a lerakodott abroncsok között!';
+					break;
+				case 'DEEP': 
+					errormsg='Mélységmérés nem lett elvégezve!';
+					meresKell=true;
+					break;
+				case 'POSITION_NOT_FOUND': 
+					errormsg='Lelõtt pozíción nem található abroncs a rendszámhoz!';
+					break;
+				case 'EMPTY_POSITION': 
+					errormsg='A rendszámhoz tartozó pozíciók üresek!';
+					break;
+				default:
+					errormsg = res.RESULTTEXT;
+					
+			}
+			$('#hAZON').val(res.FEJAZON);
+			$('#hSORSZ').val(res.SORSZ);	
+			$('#rendszam').val(res.RENDSZAM);
+			$('#hMIBIZ').val(res.MIBIZ);	
+			elrak.currentItem=res.RSZTIP;
+			elrak.currentPosition='b'+res.RSZPOZ;
+			alert(errormsg);
+			if (meresKell) {
+				/* ha merni kell */
+				panelName='elrak_meres';
+				$.get( "css/"+panelName+".css", function( data ) {
+					css = '<head><style>' + data + '</style></head>';
+					$.get( "views/"+panelName+".tpl", function( data ) { 
+						rsz = $('#rendszam').val();
+						mibiz = $('#hMIBIZ').val();
+						$('#divmeres').html(css + data);
+						$('#divpanel').hide();
+						$('#divmeres').show();
+						
+						fn = 'elrak.getMelyseg';
+						ajaxCall(fn,{'poz':elrak.currentPosition, 'login':login_id},true, fn);
+					});
+					
+				})
+			}
+			
+		}
 		//$(".dataCeg").html(res.CEGNEV);
-		$(".dataMeret").html(res.MERETMINTA);
+		/*$(".dataMeret").html(res.MERETMINTA);
 		$(".dataFegu").html(res.FEGU);
 		$(".dataDrbVart").html(res.DRB);
 		$(".dataDrbKesz").html(res.CDRB);
@@ -347,11 +246,12 @@ OElrak.prototype.rszAdatokGet = function (result){
 		if (checkParam(beerk.rszAdatok[7])=='L' && beerk.fedb>0) feall='Lemez';
 		if (checkParam(beerk.rszAdatok[7])=='A' && beerk.fedb>0) feall='Alu';
 		$(".dataFeall").html(feall);
+		*/
 	}
-	$('.rszadatok').show();
-	$('.dcontrol').show();
-	*/
-	alert('teszt');
+	//$('.rszadatok').show();
+	//$('.dcontrol').show();
+	
+	
 
 }
 

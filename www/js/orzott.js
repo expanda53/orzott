@@ -1,4 +1,5 @@
 var beerk = null;
+var elrak = null;
 var teszt = false;
 $.ajaxSetup({ cache: false });
 function ajaxCall( func, d,asyn,fn) {

@@ -310,7 +310,73 @@ select {
 
 }
 
+.drendszam {
+    position: absolute;
+    width: 400px;
+    text-align: center;
+    margin-top: 2px;
+    top: 90px;
+    left: 2px;
 
+}
+#labelRendszam {
+    position: absolute;
+    padding: 10px;
+    background-color: #f1f1f1;
+    width: 62px;
+    text-align: center;
+    margin-top: 2px;
+    height: 16px;
+    top: 10px;
+    left: 31px;
+    font-size: 13px;
+}
+#dataRendszam {
+    position: absolute;
+    padding: 10px;
+    background-color: white;
+    width: 125px;
+    text-align: center;
+    margin-top: 1px;
+    height: 14px;
+    top: 10px;
+    left: 114px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.dhkod {
+    display: none;
+    position: absolute;
+    width: 100px;
+    text-align: center;
+    margin-top: 2px;
+
+}
+#labelHkod {
+    position: absolute;
+    padding: 10px;
+    background-color: #f1f1f1;
+    width: 62px;
+    text-align: center;
+    margin-top: 2px;
+    height: 16px;
+    top: 69px;
+    left: 23px;
+}
+#dataHkod {
+    position: absolute;
+    padding: 10px;
+    background-color: white;
+    width: 125px;
+    text-align: center;
+    margin-top: 1px;
+    height: 14px;
+    top: 69px;
+    left: 106px;
+    font-size: 20px;
+    font-weight: bold;
+}
 /*
 ::-webkit-scrollbar {
     width: 32px;
