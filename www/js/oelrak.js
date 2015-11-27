@@ -72,6 +72,11 @@ OElrak.prototype.panelInit = function () {
 			$('#dataRendszam').bind('change',function (event) {
 				elrak.rszChange();
 			})	
+			$('#dataRendszam').bind('focus',function (event) {
+				elrak.hideHkod();
+				$('#dataHkod').val('');
+			})	
+			
 			$('#dataHkod').bind('change',function (event) {
 				elrak.hkodChange();
 			})	
@@ -133,9 +138,6 @@ OElrak.prototype.showPozPanel = function(obj) {
 
 /* allapot panel */
 
-
-
-
 OElrak.prototype.getMelyseg=function(result){
 	$("#gstat").html('');
 	$("#gstat").append('<option value="-">Válasszon</option>');
@@ -164,13 +166,80 @@ OElrak.prototype.allapotMent=function(result){
 }
 /* allapot panel eddig */
 
+/* hkod innen */
 OElrak.prototype.showHkod=function(){
 	$('.dhkod').show();
 }
+OElrak.prototype.hideHkod=function(){
+	$('.dhkod').hide();
+}
 OElrak.prototype.hkodChange=function(){
-	alert('change');
+	this.hkodSaveInit();
 }
 
+OElrak.prototype.hkodSaveInit=function(){
+	/* helykod mentes */
+	rsz = $('#dataRendszam').val();
+	hkod = $('#dataHkod').val();
+	fn = 'elrak.hkodSaveCheck';
+	ajaxCall(fn,{'rsz':rsz,'hkod':hkod,'login':login_id},true, fn);
+}
+
+OElrak.prototype.hkodSaveCheck = function (result){
+	/* hkod ellenõrzés, majd mentés (ha a visszaadott result=ok) */
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		if (res.RESULT=='OK') {
+			rsz = $('#dataRendszam').val();
+			hkod = $('#dataHkod').val();
+			azon = res.FEJAZON;
+			sorsz = res.SORSZ;	
+
+			fn = 'elrak.hkodSave';
+			ajaxCall(fn,{'azon':azon, 'sorsz':sorsz,'rsz':rsz,'hkod':hkod,'login':login_id},true, fn);
+		}
+		else {
+			errormsg='';
+			switch (res.RESULTTEXT) {
+				case 'DIFFERENT_HKOD': 
+					errormsg='A korábban elrakodott termékek más helykódon vannak!';
+					break;
+				case 'NOT_FOUND': 
+					errormsg='Nem található ilyen rendszám a lerakodott abroncsok között!';
+					break;
+				case 'ALREADY_DONE': 
+					errormsg='Ez a gumi már el lett pakolva erre a helykódra!';
+					break;
+				case 'EMPTY_POSITION': 
+					errormsg='A rendszámhoz tartozó pozíciók üresek!';
+					break;
+				case 'HKOD_EXISTS': 
+					errormsg='Más helykódon is van ez a rendszám!';
+					break;					
+				default:
+					errormsg = res.RESULTTEXT;
+					
+			}
+			/*
+			$('#hAZON').val(res.FEJAZON);
+			$('#hSORSZ').val(res.SORSZ);	
+			$('#rendszam').val(res.RENDSZAM);
+			$('#hMIBIZ').val(res.MIBIZ);	
+			elrak.currentItem=res.RSZTIP;
+			elrak.currentPosition='b'+res.RSZPOZ;
+			*/
+			alert(errormsg);
+			
+		}
+	}
+		
+	
+}
+
+OElrak.prototype.hkodSave = function (result){
+	alert(JSON.stringify(result));
+}
+/* hkod eddig */
 
 /* atnezo panel */
 OElrak.prototype.rszAdatokGet = function (result){
@@ -178,7 +247,10 @@ OElrak.prototype.rszAdatokGet = function (result){
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		if (res.RESULT=='OK') {
+				$('#dataHkod').val('');
 				elrak.showHkod();
+				$('#dataHkod').focus();
+				
 		}
 		else {
 			errormsg='';

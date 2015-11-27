@@ -240,7 +240,7 @@
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
   }  
-  if ($func==='beerk.getMelyseg') {
+  if ($func==='beerk.getMelyseg' || $func==='elrak.getMelyseg') {
 		$login = $r['login'];
 		$sql=" SELECT KOD FROM AKHSTAT WHERE TIPUS='G' ORDER BY KOD3,KOD2,KOD";
 		$stmt = Firebird::prepare($sql);
@@ -250,7 +250,7 @@
 		echo json_encode(Converter::win2utf_array($res));
 	  
   } 
-  if ($func==='beerk.allapotMent') {
+  if ($func==='beerk.allapotMent' || $func==='elrak.allapotMent') {
 		$rsz = $r['rsz'];
 		$mibiz = $r['mibiz'];
 		$login = $r['login'];
@@ -376,6 +376,53 @@
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));	  
   }
+  
+  if ($func=='elrak.rszAdatokGet') {
+	/* elrakodasnal rendszam adatok + adott rendszambol mennyi van kiszedve*/
+	$rsz = $r['rsz'];
+	$sql=" SELECT * FROM PDA_ORZOTTHKOD_GETRSZ(:rsz) ";
+	$stmt = Firebird::prepare($sql);
+	$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
+	$stmt->execute();
+	$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	Firebird::commit();
+	echo json_encode(Converter::win2utf_array($res));
+  }
 
+  if ($func=='elrak.hkodSaveCheck') {
+	/* elrakodasnal hkod mentes elotti ellenorzesek*/
+	$rsz = $r['rsz'];
+	$hkod = $r['hkod'];
+	$login = $r['login'];
+	$sql=" SELECT * FROM PDA_ORZOTTHKOD_HKODCHECK(:rsz,:hkod, :login) ";
+	$stmt = Firebird::prepare($sql);
+	$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
+	$stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);
+	$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+	$stmt->execute();
+	$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	Firebird::commit();
+	echo json_encode(Converter::win2utf_array($res));
+  }
+
+  if ($func=='elrak.hkodSave') {
+	/* elrakodasnal hkod mentes (elotte ellenorzes volt, ide csak akkor kerul, ha azon tuljutott)*/
+	$azon = $r['azon'];
+	$sorsz = $r['sorsz'];
+	$rsz = $r['rsz'];
+	$hkod = $r['hkod'];
+	$login = $r['login'];
+	$sql=" SELECT * FROM PDA_ORZOTTHKOD_HKODSAVE(:azon, :sorsz, :rsz,:hkod, :login) ";
+	$stmt = Firebird::prepare($sql);
+	$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+	$stmt->bindParam(':sorsz', $sorsz, PDO::PARAM_STR);
+	$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
+	$stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);
+	$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+	$stmt->execute();
+	$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	Firebird::commit();
+	echo json_encode(Converter::win2utf_array($res));
+  }
 
 ?>
