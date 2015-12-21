@@ -10,6 +10,7 @@ $('#divheader').append(' - Felhasználó:'+login_id);
 	<div id=divmenu>
 		<button id=bbeerk>Beérkezés</button>
 		<button id=bhkod>Elpakolás</button>
+		<button id=bleltar>Leltár</button>
 		<button id=blogout>Kijelentkezés</button>
 	</div>
 </div>

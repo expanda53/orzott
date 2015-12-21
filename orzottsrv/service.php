@@ -424,5 +424,36 @@
 	Firebird::commit();
 	echo json_encode(Converter::win2utf_array($res));
   }
+  /* orzott leltar */
+  if ($func==='leltar.mibizList'){
+		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTLELTAR (:biztip, :login)";
+		$stmt = Firebird::prepare($sql);
+		$login=$r['login'];
+		$biztip=$r['biztip'];
+		$stmt->bindParam(':biztip', $biztip, PDO::PARAM_STR);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+  }
+  if ($func==='leltar.rszSave'){
+		$sql="SELECT * FROM PDA_ORZOTTLELTAR_SORUPDATE (:login,:fejazon, :hkod, :rendszam)";
+		$stmt = Firebird::prepare($sql);
+		$login=$r['login'];
+		$fejazon=$r['fejazon'];
+		$hkod=$r['hkod'];
+		$rendszam=$r['rendszam'];
+		$stmt->bindParam(':fejazon', $fejazon, PDO::PARAM_STR);
+		$stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);
+		$stmt->bindParam(':rendszam', $rendszam, PDO::PARAM_STR);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+  }
 
 ?>

@@ -59,6 +59,9 @@ function showMenu() {
 			$('#bhkod').bind('click',function () {
 				elrak = new OElrak();
 			}) 
+			$('#bleltar').bind('click',function () {
+				leltar = new OLeltar();
+			}) 
 
 			$('#blogout').bind('click',function () {
 				showLogin();
