@@ -217,6 +217,10 @@ select {
 .tableReview th{
 	font-size:14px;
 }
+.tableReview button {
+	padding:10px;
+	background-color:orange;
+}
 .tdrsz {
 	width:115px;
 }

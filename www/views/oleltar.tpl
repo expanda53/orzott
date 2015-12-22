@@ -19,9 +19,7 @@
         event.preventDefault();
 		clickHelp();
         if(event.handled !== true) {
-
-            beerk.folytKesobb();
-
+            leltar.folytKesobb();
             event.handled = true;
         } else {
             return false;
@@ -29,19 +27,11 @@
 		
 	})	
 	$('#bLezar').bind('click',function () {
-		beerk.lezarStart();
+		leltar.lezarStart();
 	})	
-	$('#bMenu').bind('click',function () {
-		showMenu();
-	})	
-	$('#bGPanelClose').bind('click',function () {
-		beerk.GPanelClose(true);
-	})	
-	$('#bGPanelCancel').bind('click',function () {
-		beerk.GPanelClose(false);
-	})	
-	$('#bGPanelOptions').bind('click',function () {
-		beerk.GPanelOptions();
+	$('#bAtnez').bind('click',function () {
+		//showMenu();
+		leltar.showReview();
 	})	
 
 	
@@ -60,7 +50,7 @@
 	<div id=divcontent>
 		<!-- panel -->
 		<div id=divpanel>
-			<button id=bMenu>Menü</button>
+			<button id=bAtnez>Átnézés</button>
 			<div class='dhkod'>
 				<span id=labelHkod>Helykód</span>
 				<input id=dataHkod>
@@ -90,49 +80,22 @@
 					<span class='dataFeall'></span>
 				</div>
 			</div>
-
-			<div class='dcontrol'>
-					<button class='bnoprint' id=bJavitas>Javítás</button>
-				</div>
-			</div>
 		</div>
 		<!-- panel end -->
 
 		<div id=divreview>
 			<div class=divReviewTables>
-			<div class=divreviewLeft>
-				<!--
-				<div class=divreviewLeftFilter>
-					<button id=letter1>1</button>
-					<button id=letter2>2</button>
-					<button id=letter3>3</button>
+				<div class=divreviewRight>
+					<div class=divTableReview>
+						<table class=tableReview></table>
+					</div>
 				</div>
-				-->
-				<div class='divreviewLeftContent'>
-					<table class=tableReviewFilter>
-						<tbody>
-						</tbody>
-					</table>
-				</div>
-				
+				<div class=dButtonsReview>
+					<button id=bFolytMost>Folyt. most</button>
+					<button id=bFolytKesobb>Folyt. később</button>
+					<button id=bLezar>Lezárás</button>
+				</div>			
 			</div>
-			<div class=divreviewRight>
-			<div class=divTableReview>
-			<table class=tableReview></table>
-			</div>
-			</div>
-			<div id=divhiany>
-				<div class=labelHiany></div>
-				<div class=dataHiany></div>
-			</div>
-			<div class=dButtonsReview>
-				<button id=bElteres>Eltérések</button>
-				<button id=bFolytMost>Folyt. most</button>
-				<button id=bFolytKesobb>Folyt. később</button>
-				<button id=bLezar>Lezárás</button>
-			</div>			
 		</div>
-		
-	</div>
 </div>
 </body>
