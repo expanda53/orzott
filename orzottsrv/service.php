@@ -455,5 +455,57 @@
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
   }
+  if ($func==='leltar.reviewLoad'){
+		$sql="SELECT * FROM PDA_ORZOTTLELTAR_REVIEW (:login,:fejazon)";
+		$stmt = Firebird::prepare($sql);
+		$login=$r['login'];
+		$fejazon=$r['fejazon'];
+		$stmt->bindParam(':fejazon', $fejazon, PDO::PARAM_STR);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode(Converter::win2utf_array($res));
+  }
+  if ($func==='leltar.folytUpdate') {
+		$azon = $r['azon'];
+		$login = $r['login'];
 
+		$sql=" UPDATE BFEJ SET STAT3='R' WHERE BFEJ.AZON = :azon  ";
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->execute();
+
+		//$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		$res=array();
+		$res[0]['STATUS']='OK';
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+	  
+  }
+  if ($func==='leltar.lezarUpdate') {
+		$azon = $r['azon'];
+		$sql=" UPDATE BFEJ SET STAT3='Z' WHERE AZON=:azon  ";
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->execute();
+		$res=array();
+		$res[0]['STATUS']='OK';
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+	  
+  }  
+  if ($func==='leltar.delRsz') {
+		$azon = $r['azon'];
+		$rendszam = $r['rendszam'];
+		$sql=" DELETE FROM BSOR WHERE BFEJ=:azon and cikk=:rendszam ";
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->bindParam(':rendszam', $rendszam, PDO::PARAM_STR);
+		$stmt->execute();
+		$res=array();
+		$res[0]['RENDSZAM']=$rendszam;
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+	  
+  }    
 ?>
