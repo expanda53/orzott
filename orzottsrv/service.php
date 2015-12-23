@@ -1,4 +1,5 @@
 <?php 
+ error_reporting(0);
   require_once 'firebird.php';
   require_once 'converter.php';
   header('Access-Control-Allow-Origin: *');  

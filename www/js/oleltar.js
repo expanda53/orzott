@@ -25,7 +25,7 @@ OLeltar.prototype.initMibizList = function(){
 }
 OLeltar.prototype.mibizList = function(result) {
 	/* feladat lista ajax eredménye */
-	panelName = 'OLeltar';
+	panelName = 'oleltar';
 	if (result.length>0) {
 		res = result[0];
 		leltar.mibiz=res.MIBIZ;
@@ -42,7 +42,6 @@ OLeltar.prototype.mibizList = function(result) {
 			});
 			
 		})
-
 	//alert(JSON.stringify(res));
 	}
 	
@@ -54,7 +53,7 @@ OLeltar.prototype.selectTask = function() {
 	app.BTEnabled();						
 
 	$('#divheader').html('Õrzött leltár');
-	ajaxCall('leltar.taskReg',{'mibiz':this.mibiz, 'login':login_id},true, '');
+	//ajaxCall('leltar.taskReg',{'mibiz':this.mibiz, 'login':login_id},true, '');
 	$('#divmibizlist').hide();
 	
 	$("#hAZON").val(leltar.fejazon);
