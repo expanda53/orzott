@@ -30,6 +30,7 @@ var depthMeterDialog = {
 						if (app.depthMeterConnected) app.manageConnection2(false);
 						app.depthMeterId = tr.find(".printerid").html();
 						app.depthMeterName = tr.find(".printername").html();
+						app.BT2Enabled();						
 						showMenu();
 					})
 				}

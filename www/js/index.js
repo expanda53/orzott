@@ -34,6 +34,9 @@ var app = {
 	depthMeterName:"",
 	depthMeterConnected:false,
 	depthMeters : [],
+	depthMeterData:"",
+	
+	currentModule:"",
     // Application Constructor
     initialize: function() {
         this.bindEvents();
@@ -227,11 +230,19 @@ var app = {
         // set up a listener to listen for newlines
         // and display any new data that's come in since
         // the last newline:
-        bluetoothSerial2.subscribe('\n', function (data) {
-            console.log(data);
-			//alert(data);
-        });
+        bluetoothSerial2.subscribe('\n', app.onData);
+		
     },
+	onData: function(data) {
+            console.log(data);
+			app.depthMeterData=data;
+			app.depthMeterData = Math.round(app.depthMeterData.replace('T',''));
+			if (app.currentModule=='beerk') {
+				//alert(app.depthMeterData);
+				$('#gstat').val(app.depthMeterData);				
+			}
+			else alert(data);
+	},
 
 /*
     unsubscribes from any Bluetooth serial listener and changes the button:
