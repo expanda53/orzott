@@ -93,6 +93,7 @@ OBeerk.prototype.mibizList = function(result) {
 OBeerk.prototype.selectTask = function(mibiz,mszam3) {
 	/* feladat valaszto ajax inditas */
 	app.BTEnabled();						
+	app.BT2Enabled();						
 	this.meresKell = confirm("Állapot felméréssel?");
 	if (this.meresKell) {
 		$('#divheader').html('Õrzött beérkezés - állapot felméréssel - Sofõr:'+mszam3);
@@ -558,6 +559,7 @@ OBeerk.prototype.folytUpdate=function(result){
 	/* atnezon folyt kesobb ajax eredmenye */
 	$('#divreview').hide();
 	app.BTDisabled();
+	app.BT2Disabled();
 	beerk.initMibizList();
 }
 

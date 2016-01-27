@@ -1,4 +1,4 @@
-var printerDialog = {
+var depthMeterDialog = {
 	show: function(){
 		panelName = 'printer';
 		$.get( "css/"+panelName+".css", function( data ) {
@@ -7,18 +7,18 @@ var printerDialog = {
 				tpl = data; 
 				$('#divContent').html(css + tpl);
 				$('#divContent').show();
-				printerDialog.createTable();				
+				depthMeterDialog.createTable();				
 			});
 			
 		})
 	},
 	createTable:function(){
 				sorok = "";
-				app.printers.forEach(function(printer){
+				app.depthMeters.forEach(function(meter){
 					sorok+="<tr>";
-					sorok+="<td class=printerid>"+printer.id+"</td>";
-					if (printer.name=='undefined')	printer.name="";
-					sorok+="<td class=printername>"+printer.name+"</td>";
+					sorok+="<td class=printerid>"+meter.id+"</td>";
+					if (printer.name=='undefined')	meter.name="";
+					sorok+="<td class=printername>"+meter.name+"</td>";
 					sorok+="</tr>";
 					
 				})
@@ -27,9 +27,9 @@ var printerDialog = {
 					$("#tableprinter tbody").html(sorok);
 					$('#tableprinter tr').bind('click',function(){
 						tr = $(this);
-						if (app.printerConnected) app.manageConnection(false);
-						app.printerId = tr.find(".printerid").html();
-						app.printerName = tr.find(".printername").html();
+						if (app.depthMeterConnected) app.manageConnection2(false);
+						app.depthMeterId = tr.find(".printerid").html();
+						app.depthMeterName = tr.find(".printername").html();
 						showMenu();
 					})
 				}

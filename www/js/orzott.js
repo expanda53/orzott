@@ -102,7 +102,9 @@ function checkLogin(result){
 	else {
 		login_id=$('.divinput').text();
 		login_id = login_id.replace(/(?:\r\n|\r|\n|\t)+/g, '');
-		app.getPrinters();
+		app.getDepthMeters();
+		//app.getPrinters();
+		
 	}
 }
 
