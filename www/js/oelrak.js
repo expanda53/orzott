@@ -202,7 +202,7 @@ OElrak.prototype.hkodSaveCheck = function (result){
 			errormsg='';
 			switch (res.RESULTTEXT) {
 				case 'DIFFERENT_HKOD': 
-					errormsg='A korábban elrakodott termékek más helykódon vannak!';
+					errormsg='A korábban elrakodott termékek más helykódon vannak! '+res.ERRORTEXT;
 					break;
 				case 'NOT_FOUND': 
 					errormsg='Nem található ilyen rendszám a lerakodott abroncsok között!';
@@ -272,6 +272,9 @@ OElrak.prototype.rszAdatokGet = function (result){
 				case 'EMPTY_POSITION': 
 					errormsg='A rendszámhoz tartozó pozíciók üresek!';
 					break;
+				case 'QUANTITY': 
+					errormsg='Nem egyezik a várt és a lerakodott mennyiség! '+res.ERRORTEXT;
+					break;			
 				default:
 					errormsg = res.RESULTTEXT;
 					
@@ -282,24 +285,21 @@ OElrak.prototype.rszAdatokGet = function (result){
 			$('#hMIBIZ').val(res.MIBIZ);	
 			elrak.currentItem=res.RSZTIP;
 			elrak.currentPosition='b'+res.RSZPOZ;
-			alert(errormsg);
+			if (errormsg!='') alert(errormsg);
 			if (meresKell) {
 				/* ha merni kell */
 				panelName='elrak_meres';
-				$.get( "css/"+panelName+".css", function( data ) {
-					css = '<head><style>' + data + '</style></head>';
+				
 					$.get( "views/"+panelName+".tpl", function( data ) { 
 						rsz = $('#rendszam').val();
 						mibiz = $('#hMIBIZ').val();
-						$('#divmeres').html(css + data);
-						$('#divpanel').hide();
+						$('#divmeres').html(data);
+						//$('#divpanel').hide();
 						$('#divmeres').show();
 						
 						fn = 'elrak.getMelyseg';
 						ajaxCall(fn,{'poz':elrak.currentPosition, 'login':login_id},true, fn);
 					});
-					
-				})
 			}
 			
 		}

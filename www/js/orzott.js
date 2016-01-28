@@ -49,6 +49,7 @@ function ajaxCall( func, d,asyn,fn) {
 
 function showMenu() {
 	panelName = 'menu';
+	app.currentModule = "menu";
 	$.get( "css/"+panelName+".css", function( data ) {
 		css = '<head><style>' + data + '</style></head>';
 		$.get( "views/"+panelName+".tpl", function( data ) { 
@@ -56,12 +57,15 @@ function showMenu() {
 			$('#divContent').html(css + tpl);
 
 			$('#bbeerk').bind('click',function () {
+				app.currentModule='beerk';
 				beerk = new OBeerk();
 			}) 
 			$('#bhkod').bind('click',function () {
+				app.currentModule='elrak';
 				elrak = new OElrak();
 			}) 
 			$('#bleltar').bind('click',function () {
+				app.currentModule='leltar';
 				leltar = new OLeltar();
 			}) 
 
@@ -77,6 +81,7 @@ function showMenu() {
 }
 
 function showLogin() {
+	app.BT2Disabled();
 	panelName = 'login';
 	$.get( "css/"+panelName+".css", function( data ) {
 		css = '<head><style>' + data + '</style></head>';

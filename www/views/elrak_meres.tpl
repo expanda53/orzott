@@ -13,11 +13,10 @@
 	
 </script>
 <div class=meres>
-Állapot felmérés<br>
 <!-- <span id=muvelet></span> -->
 <div id=divallapot>
 	<div id=divgstat>
-		<span>Állapot</span>
+		<span id=labelGstat>Állapot</span>
 		<select id=gstat>
 		</select>
 	</div>

@@ -237,9 +237,11 @@ var app = {
             console.log(data);
 			app.depthMeterData=data;
 			app.depthMeterData = Math.round(app.depthMeterData.replace('T',''));
-			if (app.currentModule=='beerk') {
+			if (app.currentModule=='beerk' || app.currentModule=='elrak') {
 				//alert(app.depthMeterData);
-				$('#gstat').val(app.depthMeterData);				
+				if ( $('#gstat').is(":visible") ){
+					$('#gstat').val(app.depthMeterData);				
+				}
 			}
 			else alert(data);
 	},
