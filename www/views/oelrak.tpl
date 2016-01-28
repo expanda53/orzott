@@ -84,6 +84,7 @@
 			<div class='dhkod'>
 				<span id=labelHkod>Helykód</span>
 				<input id=dataHkod>
+				<span id=labelStatus></span>
 			</div>
 
 			<div class='dcontrol'>

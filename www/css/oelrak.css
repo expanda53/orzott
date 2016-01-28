@@ -376,6 +376,26 @@ select {
     font-size: 20px;
     font-weight: bold;
 }
+#labelStatus {
+    display: none;
+    position: absolute;
+    padding: 10px;
+    background-color: black;
+    width: 50px;
+    text-align: center;
+    height: 17px;
+    top: 71px;
+    left: 260px;
+    font-size: 16px;
+    font-weight: bold;
+}
+.statusOk {
+	background-color:green !important;
+}
+.statusError {
+	background-color:red !important;
+	
+}
 /*
 ::-webkit-scrollbar {
     width: 32px;

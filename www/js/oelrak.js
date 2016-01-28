@@ -168,9 +168,11 @@ OElrak.prototype.allapotMent=function(result){
 
 /* hkod innen */
 OElrak.prototype.showHkod=function(){
+	$("#labelStatus").hide();
 	$('.dhkod').show();
 }
 OElrak.prototype.hideHkod=function(){
+	$("#labelStatus").hide();
 	$('.dhkod').hide();
 }
 OElrak.prototype.hkodChange=function(){
@@ -199,6 +201,9 @@ OElrak.prototype.hkodSaveCheck = function (result){
 			ajaxCall(fn,{'azon':azon, 'sorsz':sorsz,'rsz':rsz,'hkod':hkod,'login':login_id},true, fn);
 		}
 		else {
+			$("#labelStatus").attr("class", "statusError");
+			$("#labelStatus").html("Hiba!");
+			$("#labelStatus").show();
 			errormsg='';
 			switch (res.RESULTTEXT) {
 				case 'DIFFERENT_HKOD': 
@@ -237,7 +242,48 @@ OElrak.prototype.hkodSaveCheck = function (result){
 }
 
 OElrak.prototype.hkodSave = function (result){
-	alert(JSON.stringify(result));
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		if (res.RESULT=='OK') {
+			$("#labelStatus").attr("class", "statusOk");
+			$("#labelStatus").html("Ok");
+			$("#labelStatus").show();
+		}
+		else {
+			errormsg='';
+			$("#labelStatus").attr("class", "statusError");
+			$("#labelStatus").html("Hiba!");
+			$("#labelStatus").show();
+			switch (res.RESULTTEXT) {
+				case 'NOT_FOUND': 
+					errormsg='Nem található ilyen rendszám a lerakodott abroncsok között!';
+					break;
+				case 'EMPTY_POSITION': 
+					errormsg='A rendszámhoz tartozó pozíciók üresek!';
+					break;
+				case 'HKOD_EXISTS': 
+					errormsg='Más helykódon is van ez a rendszám!';
+					break;					
+				default:
+					errormsg = res.RESULTTEXT;
+					
+			}
+			/*
+			$('#hAZON').val(res.FEJAZON);
+			$('#hSORSZ').val(res.SORSZ);	
+			$('#rendszam').val(res.RENDSZAM);
+			$('#hMIBIZ').val(res.MIBIZ);	
+			elrak.currentItem=res.RSZTIP;
+			elrak.currentPosition='b'+res.RSZPOZ;
+			*/
+			alert(errormsg);
+			
+		}
+	}
+		
+
+
+	//alert(JSON.stringify(result));
 }
 /* hkod eddig */
 
