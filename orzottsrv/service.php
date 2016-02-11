@@ -1,5 +1,6 @@
 <?php 
  error_reporting(0);
+<?php 
   require_once 'firebird.php';
   require_once 'converter.php';
   header('Access-Control-Allow-Origin: *');  
@@ -424,6 +425,21 @@
 	$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	Firebird::commit();
 	echo json_encode(Converter::win2utf_array($res));
+  }
+  if ($func==='elrak.hkodDel') {
+	/* elrakodasnal adott rendszamhoz tartozo hkodok torlese */
+	$azon = $r['azon'];
+	$rsz = $r['rsz'];
+	$login = $r['login'];
+	$sql=" SELECT * FROM PDA_ORZOTTHKOD_HKODDEL(:azon, :rsz, :login) ";
+	$stmt = Firebird::prepare($sql);
+	$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+	$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
+	$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+	$stmt->execute();
+	$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	Firebird::commit();
+	echo json_encode(Converter::win2utf_array($res));	
   }
   /* orzott leltar */
   if ($func==='leltar.mibizList'){

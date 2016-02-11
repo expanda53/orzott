@@ -32,7 +32,7 @@ button {
 }
 
 .divinput {
-width: 300px;
+width: 350px;
     height: 40px;
     padding: 10px;
     font-size: 30px;
@@ -44,16 +44,16 @@ width: 300px;
 }
 .divnumbuttons{
 	margin:0px auto;
-	width:320px;
+	width:380px;
 	height:100px;
 }
 .bnum,.bbacksp,.blogin {
-	padding: 15px;
+	padding: 17px;
 	background-color:orange;
 	color:black;
 	font-size:17px;
 	font-weight:bold;
-	width:60px;
+	width:70px;
 	margin-bottom:5px;
 	border:1px solid orange;
 }
@@ -61,7 +61,7 @@ width: 300px;
 	margin:0px auto;
 	width:380px;
 	height:100px;
-	margin-top:10px;
+	margin-top:16px;
 }
 
 .bbacksp,.blogin {

@@ -43,8 +43,6 @@
 	$('#bGPanelOptions').bind('click',function () {
 		beerk.GPanelOptions();
 	})	
-
-	
 	
 </script>
 <body>
@@ -61,6 +59,7 @@
 		<!-- panel -->
 		<div id=divpanel>
 			<button id=bMenu>Menü</button>
+			<div id=dmsg></div>
 			<div class='drendszam'>
 				<span id=labelRendszam>Rendszám</span>
 				<input id=dataRendszam>
@@ -85,6 +84,7 @@
 				<span id=labelHkod>Helykód</span>
 				<input id=dataHkod>
 				<span id=labelStatus></span>
+				<button id=bHkodTorol>Helykódok törlése</button>
 			</div>
 
 			<div class='dcontrol'>
@@ -100,13 +100,6 @@
 		<div id=divreview>
 			<div class=divReviewTables>
 			<div class=divreviewLeft>
-				<!--
-				<div class=divreviewLeftFilter>
-					<button id=letter1>1</button>
-					<button id=letter2>2</button>
-					<button id=letter3>3</button>
-				</div>
-				-->
 				<div class='divreviewLeftContent'>
 					<table class=tableReviewFilter>
 						<tbody>

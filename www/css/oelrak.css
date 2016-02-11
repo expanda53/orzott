@@ -7,7 +7,6 @@ button {
 	-moz-border-radius:7px;
 	-webkit-border-radius:7px;
 	border-radius:7px;
-	border:1px solid #77b55a;
 	display:inline-block;
 	cursor:pointer;
 	color:black;
@@ -16,6 +15,7 @@ button {
 	padding:16px 31px;
 	text-decoration:none;
 	font-weight:bold;
+	border:1px solid #77b55a;
 }
 button:active {
 	position:relative;
@@ -24,7 +24,7 @@ button:active {
 button:disabled {
 	background-color:#dfdfdf;
 	color:#000000;
-	border:1px solid #dfdfdf;
+	/*border:1px solid #dfdfdf;*/
 }
 select {
 	margin:2px 0px;
@@ -243,7 +243,7 @@ select {
 
 
 #bMenu {
-	padding:10px 20px;
+/*	padding:10px 20px; */
 }
 #divgpanel {
 	display:none;
@@ -343,7 +343,7 @@ select {
     font-size: 20px;
     font-weight: bold;
 }
-
+/* hkod */
 .dhkod {
     display: none;
     position: absolute;
@@ -379,14 +379,14 @@ select {
 #labelStatus {
     display: none;
     position: absolute;
-    padding: 10px;
+    padding: 5px;
     background-color: black;
-    width: 50px;
+    width: 138px;
     text-align: center;
     height: 17px;
-    top: 71px;
-    left: 260px;
-    font-size: 16px;
+    top: 113px;
+    left: 106px;
+    font-size: 14px;
     font-weight: bold;
 }
 .statusOk {
@@ -396,6 +396,13 @@ select {
 	background-color:red !important;
 	
 }
+#bHkodTorol {
+    position: absolute;
+    top: 31px;
+    left: 260px;
+    background-color: yellow;
+}
+/* hkod eddig */
 /*
 ::-webkit-scrollbar {
     width: 32px;
@@ -457,7 +464,6 @@ select {
     top: 69px;
     left: 250px;
     background-color: orange;
-    border: solid orange 1px;
     width: 160px;
     color: black;
 }
@@ -466,7 +472,6 @@ select {
     top: 12px;
     left: 250px;
     background-color: yellow;
-    border: solid yellow 1px;
     width: 160px;
     color: black;
 }
@@ -477,3 +482,22 @@ select {
     width: 160px;
 }
 /* meres panel eddig*/
+
+/* uzenet panel */
+#dmsg {
+    display: none;
+    position: absolute;
+    top: 32px;
+    left: 125px;
+    height: 40px;
+    max-width: 340px;
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    text-align: center;
+    border: 2px solid red;
+    padding: 5px;
+    z-index: 100;
+    font-size: 15px;
+}
+}
