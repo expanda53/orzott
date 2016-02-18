@@ -55,7 +55,10 @@ function showMenu() {
 		$.get( "views/"+panelName+".tpl", function( data ) { 
 			tpl = data; 
 			$('#divContent').html(css + tpl);
-
+			$('#bkiadas').bind('click',function () {
+				app.currentModule='kiadas';
+				kiadas = new OKiadas();
+			}) 
 			$('#bbeerk').bind('click',function () {
 				app.currentModule='beerk';
 				beerk = new OBeerk();

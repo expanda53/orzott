@@ -8,6 +8,7 @@ $('#divheader').append(' - Felhasználó:'+login_id);
 		Őrzött abroncsok menü
 	</div>
 	<div id=divmenu>
+		<button id=bkiadas>Kiadás</button>
 		<button id=bbeerk>Beérkezés</button>
 		<button id=bhkod>Elpakolás</button>
 		<button id=bleltar>Leltár</button>

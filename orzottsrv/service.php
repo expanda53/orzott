@@ -1,6 +1,5 @@
 <?php 
- error_reporting(0);
-<?php 
+  error_reporting(0);
   require_once 'firebird.php';
   require_once 'converter.php';
   header('Access-Control-Allow-Origin: *');  
@@ -441,6 +440,44 @@
 	Firebird::commit();
 	echo json_encode(Converter::win2utf_array($res));	
   }
+	
+  if ($func==='elrak.reviewRszFilter'){
+		/* atnezo panel , rendszam szuro*/
+		$login = $r['login'];
+		$sql=" SELECT DISTINCT LEFT(BSOR.TAPADO,2) RENDSZAM
+				FROM BSOR
+				WHERE BSOR.BIZTIP='MO06' AND DRB=DRB2
+				";
+
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode(Converter::win2utf_array($res));
+
+  }  
+  if ($func==='elrak.reviewRszGet'){
+		/* atnezo panel, rendszam szuro eredmeny*/
+		$filter = $r['filter'];
+		$filterStr='';
+		if ($filter!='*') {
+			$filterStr = " AND BSOR.TAPADO STARTING WITH '$filter' ";
+		}
+		$azon = $r['azon'];
+		$login = $r['login'];
+		$sql=" SELECT BSOR.TAPADO RENDSZAM, CAST(DRB AS INTEGER) DRB, CAST(DRB2 AS INTEGER) DRB2,CAST(ROGDRB AS INTEGER) ROGDRB
+				FROM BSOR
+				WHERE BSOR.BIZTIP='MO06' AND DRB=DRB2 $filterStr
+				";
+
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode(Converter::win2utf_array($res));
+
+  }  
+
   /* orzott leltar */
   if ($func==='leltar.mibizList'){
 		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTLELTAR (:biztip, :login)";
@@ -525,4 +562,32 @@
 		echo json_encode(Converter::win2utf_array($res));
 	  
   }    
+  /* orzott kiadas */
+  if ($func==='kiadas.mibizList'){
+		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTKI (:biztip, :login)";
+		$stmt = Firebird::prepare($sql);
+		$login=$r['login'];
+		$biztip=$r['biztip'];
+		$stmt->bindParam(':biztip', $biztip, PDO::PARAM_STR);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+  }
+  if ($func==='kiadas.firstHkodGet'){
+		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTKI (:azon, :login)";
+		$stmt = Firebird::prepare($sql);
+		$login=$r['login'];
+		$azon=$r['azon'];
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+  }
+  
 ?>

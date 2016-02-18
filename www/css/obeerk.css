@@ -198,7 +198,7 @@ select {
 }
 #divhiany {
 	position: relative;
-    left: 283px;
+    left: 286px;
     width: 170px;
     top: 5px;
 }
@@ -221,7 +221,7 @@ select {
 	top:0px;
 	left:10px;
 	background-color:#f1f1f1;
-	width:70px;
+	width:73px;
 	border-right:1px dashed black;
 	
 }
@@ -229,7 +229,7 @@ select {
 .divreviewRight {
 	position:absolute;
 	top:32px;
-	left:90px;
+	left:103px;
 	background-color:white;
 	width:366px;
 }

@@ -312,6 +312,7 @@ select {
 }
 
 .drendszam {
+	display: none;
     position: absolute;
     width: 400px;
     text-align: center;
@@ -328,9 +329,9 @@ select {
     text-align: center;
     margin-top: 2px;
     height: 16px;
-    top: 10px;
     left: 31px;
     font-size: 13px;
+    top: 69px;	
 }
 #dataRendszam {
     position: absolute;
@@ -340,14 +341,13 @@ select {
     text-align: center;
     margin-top: 1px;
     height: 14px;
-    top: 10px;
+    top: 69px;
     left: 114px;
     font-size: 20px;
     font-weight: bold;
 }
 /* hkod */
 .dhkod {
-    display: none;
     position: absolute;
     width: 100px;
     text-align: center;
@@ -362,7 +362,7 @@ select {
     text-align: center;
     margin-top: 2px;
     height: 16px;
-    top: 69px;
+    top: 10px;
     left: 23px;
 }
 #dataHkod {
@@ -373,10 +373,10 @@ select {
     text-align: center;
     margin-top: 1px;
     height: 14px;
-    top: 69px;
     left: 106px;
     font-size: 20px;
     font-weight: bold;
+    top: 10px;	
 }
 #labelStatus {
     display: none;
@@ -398,11 +398,12 @@ select {
 	background-color:red !important;
 	
 }
-#bHkodTorol {
+#bHkodUj {
     position: absolute;
     top: 31px;
     left: 260px;
     background-color: yellow;
+	display:none;
 }
 /* hkod eddig */
 /*

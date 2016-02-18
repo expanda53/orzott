@@ -24,7 +24,7 @@
 <input type=hidden id=rendszam>
 <div id=tploBeerk>
 	<div id=divheader>
-		Beérkezett abroncsok elrakodása
+		Őrzött abroncsok kiadása
 	</div>
 	<div id=divcontent>
 		<!-- panel -->
@@ -32,23 +32,20 @@
 			<button id=bMenu>Menü</button>
 			<button id=bEllenorzes>Ellenőrzés</button>
 			<div id=dmsg></div>
-			<div class='drendszam'>
-				<span id=labelRendszam>Rendszám</span>
-				<input id=dataRendszam>
-			</div>
 			<div class='dhkod'>
 				<span id=labelHkod>Helykód</span>
 				<input id=dataHkod>
 				<span id=labelStatus></span>
-				<button id=bHkodTorol>Helykódok törlése</button>
+				<button id=bHkodUj>Új helykód</button>
+			</div>
+			<div class='drendszam'>
+				<span id=labelRendszam>Rendszám</span>
+				<input id=dataRendszam>
 			</div>
 
 		</div>
 		<!-- panel end -->
-		<!-- melysegmeres panel -->
-		<div id=divmeres>
-		</div>
-		<!-- melysegmeres panel end -->
+		<!-- review panel -->
 		<div id=divreview>
 			<div class=divReviewTables>
 			<div class=divreviewLeft>
@@ -74,6 +71,7 @@
 				<button id=bFolytMost>Folytatás</button>
 			</div>			
 		</div>
+		<!-- review panel end -->
 		
 	</div>
 </div>
