@@ -45,6 +45,17 @@ function ajaxCall( func, d,asyn,fn) {
 }
 
 
+showMessage =function (msg, clearObj ){
+	$('#dmsg').html(msg);
+	$('#dmsg').show();
+
+	window.setTimeout(function(){
+		$('#dmsg').hide();
+		if (clearObj!='') {
+			$('#'+clearObj).val('');
+		}
+	},3*1000);
+}
 
 
 function showMenu() {

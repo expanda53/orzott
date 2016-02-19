@@ -576,18 +576,53 @@
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
   }
-  if ($func==='kiadas.firstHkodGet'){
-		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTKI (:azon, :login)";
+  if ($func==='kiadas.nextHkodGet'){
+		$sql="SELECT * FROM PDA_ORZOTTKI_HKOD (:azon, :hkod)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
 		$azon=$r['azon'];
+		$hkod=$r['hkod'];
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
-		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
   }
-  
+  if ($func==='kiadas.nextRszGet'){
+		$sql="SELECT * FROM PDA_ORZOTTKI_RSZ (:azon, :hkod, :rsz)";
+		$stmt = Firebird::prepare($sql);
+		$login=$r['login'];
+		$azon=$r['azon'];
+		$hkod=$r['hkod'];
+		$rsz=$r['rsz'];
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);
+		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+  }
+  if ($func==='kiadas.rszSave'){
+		$sql="SELECT * FROM PDA_ORZOTTKI_SORUPDATE (:azon, :rsz, :rszshort,:login,:hkod)";
+		$stmt = Firebird::prepare($sql);
+		$login=$r['login'];
+		$azon=$r['azon'];
+		$rsz=$r['rsz'];
+		$rszshort=$r['rszshort'];		
+		$hkod=$r['hkod'];
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
+		$stmt->bindParam(':rszshort', $rszshort, PDO::PARAM_STR);		
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);		
+		$stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);		
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+  }
 ?>

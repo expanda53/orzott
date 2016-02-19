@@ -1,6 +1,40 @@
 body{
 	font-family:Verdana;
+	background-color:black;
 }
 #divContent {
 	display:none;
+}
+
+
+button {
+	background-color:#77b55a;
+	-moz-border-radius:7px;
+	-webkit-border-radius:7px;
+	border-radius:7px;
+	display:inline-block;
+	cursor:pointer;
+	color:black;
+	font-family:Arial;
+	font-size:17px;
+	padding:16px 31px;
+	text-decoration:none;
+	font-weight:bold;
+	border:1px solid #77b55a;
+	margin-bottom:5px;
+}
+button:active {
+	position:relative;
+	top:1px;
+}
+button:disabled {
+	background-color:#dfdfdf;
+	color:#000000;
+	/*border:1px solid #dfdfdf;*/
+}
+select {
+	margin:2px 0px;
+	padding:10px 15px;
+	font-size: 20px;
+	-webkit-appearance: menulist-text;
 }

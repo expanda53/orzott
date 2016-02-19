@@ -32,15 +32,31 @@
 			<button id=bMenu>Menü</button>
 			<button id=bEllenorzes>Ellenőrzés</button>
 			<div id=dmsg></div>
+			<div id=divaltalanos>
+				<div id=divsofor>
+					<div id=labelSofor>Sofőr</div>
+					<div id=dataSofor></div>
+				</div>
+				<div id=divjarat>
+					<div id=labelJarat>Járat</div>
+					<div id=dataJarat></div>
+				</div>
+				<div id=divraktar>
+					<div id=labelRaktar>Raktár</div>
+					<div id=dataRaktar></div>
+				</div>
+				
+			</div>
 			<div class='dhkod'>
 				<span id=labelHkod>Helykód</span>
 				<input id=dataHkod>
-				<span id=labelStatus></span>
+				<span id=labelHkodVart></span>
 				<button id=bHkodUj>Új helykód</button>
 			</div>
 			<div class='drendszam'>
 				<span id=labelRendszam>Rendszám</span>
 				<input id=dataRendszam>
+				<span id=labelRendszamVart></span>
 			</div>
 
 		</div>

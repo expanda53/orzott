@@ -29,19 +29,6 @@ var OElrak = function(){
 	this.currentItem = "";
 	this.currentPosition = '';
 }
-OElrak.prototype.showMessage =function (msg, clearObj ){
-	$('#dmsg').html(msg);
-	$('#dmsg').show();
-
-	window.setTimeout(function(){
-		$('#dmsg').hide();
-		if (clearObj!='') {
-			$('#'+clearObj).val('');
-		}
-	},3*1000);
-	
-	
-}
 OElrak.prototype.panelInit = function () {
 	/* kezdõ panel megjelenítése*/
 	panelName='oelrak';
@@ -97,32 +84,32 @@ OElrak.prototype.rszAdatokGet = function (result){
 			switch (res.RESULTTEXT) {
 				case 'TYPE': 
 					errormsg='Nem megfelelõ típus a pozíción!';
-					elrak.showMessage(errormsg,clearObj);
+					showMessage(errormsg,clearObj);
 					break;
 				case 'NOT_FOUND': 
 					errormsg='Nem található ilyen rendszám a lerakodott abroncsok között!';
-					elrak.showMessage(errormsg,clearObj);
+					showMessage(errormsg,clearObj);
 					break;
 				case 'DEEP': 
 					errormsg='Mélységmérés nem lett elvégezve!';
-					elrak.showMessage(errormsg);
+					showMessage(errormsg);
 					meresKell=true;
 					break;
 				case 'POSITION_NOT_FOUND': 
 					errormsg='Lelõtt pozíción nem található abroncs a rendszámhoz!';
-					elrak.showMessage(errormsg,clearObj);
+					showMessage(errormsg,clearObj);
 					break;
 				case 'EMPTY_POSITION': 
 					errormsg='A rendszámhoz tartozó pozíciók üresek!';
-					elrak.showMessage(errormsg,clearObj);
+					showMessage(errormsg,clearObj);
 					break;
 				case 'QUANTITY': 
 					errormsg='Nem egyezik a várt és a lerakodott mennyiség! '+res.ERRORTEXT;
-					elrak.showMessage(errormsg,clearObj);
+					showMessage(errormsg,clearObj);
 					break;
 				case 'ALREADY_DONE': 
 					errormsg='Ez a gumi már el lett pakolva! helykód:'+res.ERRORTEXT;
-					elrak.showMessage(errormsg);
+					showMessage(errormsg);
 					$('#dataHkod').val(res.ERRORTEXT);
 					elrak.showHkod();
 					break;
@@ -305,26 +292,27 @@ OElrak.prototype.hkodSaveCheck = function (result){
 			switch (res.RESULTTEXT) {
 				case 'DIFFERENT_HKOD': 
 					errormsg='A korábban elrakodott termékek más helykódon vannak! '+res.ERRORTEXT;
-					elrak.showMessage(errormsg,clearObj);
+					showMessage(errormsg,clearObj);
 					break;
 				case 'NOT_FOUND': 
 					errormsg='Nem található ilyen rendszám a lerakodott abroncsok között!';
-					elrak.showMessage(errormsg,clearObj);
+					showMessage(errormsg,clearObj);
 					break;
 				case 'ALREADY_DONE': 
 					errormsg='Ez a gumi már el lett pakolva erre a helykódra!';
+					showMessage(errormsg);
 					break;
 				case 'EMPTY_POSITION': 
 					errormsg='A rendszámhoz tartozó pozíciók üresek!';
-					elrak.showMessage(errormsg,clearObj);
+					showMessage(errormsg,clearObj);
 					break;
 				case 'HKOD_EXISTS': 
 					errormsg='Más helykódon is van ez a rendszám!';
-					elrak.showMessage(errormsg,clearObj);
+					showMessage(errormsg,clearObj);
 					break;					
 				default:
 					errormsg = res.RESULTTEXT;
-					elrak.showMessage(errormsg,clearObj);
+					showMessage(errormsg,clearObj);
 					
 			}
 		}
@@ -374,7 +362,7 @@ OElrak.prototype.hkodSave = function (result){
 			elrak.currentItem=res.RSZTIP;
 			elrak.currentPosition='b'+res.RSZPOZ;
 			*/
-			elrak.showMessage(errormsg);
+			showMessage(errormsg);
 			
 		}
 	}
