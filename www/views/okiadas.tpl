@@ -2,18 +2,6 @@
 	
 
 	
-	$('#bFolytMost').bind('click',function (event) {
-		event.stopPropagation();
-        event.preventDefault();
-        if(event.handled !== true) {
-			clickHelp();
-			$('#divreview').hide();
-			$('#divpanel').show();
-            event.handled = true;
-        } else {
-            return false;
-        }
-	})
 	
 </script>
 <body>
@@ -31,7 +19,7 @@
 		<div id=divpanel>
 			<button id=bMenu>Menü</button>
 			<button id=bEllenorzes>Ellenőrzés</button>
-			<div id=dmsg></div>
+			
 			<div id=divaltalanos>
 				<div id=divsofor>
 					<div id=labelSofor>Sofőr</div>
@@ -51,13 +39,15 @@
 				<span id=labelHkod>Helykód</span>
 				<input id=dataHkod>
 				<span id=labelHkodVart></span>
-				<button id=bHkodUj>Új helykód</button>
+				<!-- <button id=bHkodUj>Új helykód</button> -->
 			</div>
 			<div class='drendszam'>
 				<span id=labelRendszam>Rendszám</span>
 				<input id=dataRendszam>
 				<span id=labelRendszamVart></span>
+				<button id=bNincs>Nincs meg</button>
 			</div>
+			
 
 		</div>
 		<!-- panel end -->
@@ -85,6 +75,7 @@
 			<div class=dButtonsReview>
 				<!--<button id=bElteres>Eltérések</button>-->
 				<button id=bFolytMost>Folytatás</button>
+				<button id=bLezar>Lezárás</button>
 			</div>			
 		</div>
 		<!-- review panel end -->

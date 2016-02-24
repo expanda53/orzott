@@ -38,3 +38,32 @@ select {
 	font-size: 20px;
 	-webkit-appearance: menulist-text;
 }
+/* uzenet panel */
+#dmsg {
+    display: none;
+    position: absolute;
+/*
+    top: 35px;
+    left: 280px;
+*/
+	top: 45%;
+    left: 30%;
+    height: 40px;
+	line-height:40px;
+    min-width: 240px;
+	max-width: 340px;
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    text-align: center;
+    border: 3px solid red;
+    padding: 5px;
+    z-index: 100;
+    font-size: 15px;
+}
+.msgtxt {
+	line-height:normal;
+	display:inline-block;
+	vertical-align:middle;s
+}
+/* uzenet panel eddig */

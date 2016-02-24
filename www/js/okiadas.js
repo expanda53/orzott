@@ -22,6 +22,7 @@ function pingPrinter(){
 var OKiadas = function(){
 	this.currentHkod = '';
 	this.currentRsz = '';
+	this.lastRsz = '';
 	this.currentRow = 0;
 	this.fejazon = -1;
 
@@ -40,22 +41,44 @@ OKiadas.prototype.panelInit = function () {
 				kiadas.rszChange();
 			})	
 			$('#dataRendszam').bind('focus',function (event) {
-				$(this).val('');
+				$(this).val("");
+			})	
+			$('#dataHkod').bind('focus',function (event) {
+				$(this).val("");
+				kiadas.hideRsz();
 			})	
 	
 			
 			$('#dataHkod').bind('change',function (event) {
 				kiadas.hkodChange();
 			})	
-			$('#bHkodUj').bind('click',function () {			
-				kiadas.hkodDelInit();
-			})
 			$('#bMenu').bind('click',function () {
 				showMenu();
 			})	
 			$('#bEllenorzes').bind('click',function () {
 				kiadas.showReview();
 			})	
+			$('#bNincs').bind('click',function () {
+				kiadas.rszNotFound();
+			})
+			$('#bFolytMost').bind('click',function (event) {
+				event.stopPropagation();
+				event.preventDefault();
+				if(event.handled !== true) {
+					clickHelp();
+					$('#divreview').hide();
+					$('#divpanel').show();
+					event.handled = true;
+					if ($('#dataRendszam').is(":visible")) $('#dataRendszam').focus();
+					else $('#dataHkod').focus();
+				} else {
+					return false;
+				}
+			})
+			$('#bLezar').bind('click',function () {
+				kiadas.lezarInit();
+			})
+			
 			$('#dataHkod').focus();
 		})
 		fn = 'kiadas.mibizList';
@@ -78,7 +101,7 @@ OKiadas.prototype.mibizList = function (result){
 		$('#dataJarat').html(res.SORREND);
 		$('#dataRaktar').html(res.RAKTAR);
 		
-		/* elso kiszedendo helykod betoltese */
+		/* kovetkezo kiszedendo helykod betoltese */
 		fn = 'kiadas.nextHkodGet';
 		ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon,'hkod':kiadas.currentHkod},true, fn);
 	}
@@ -86,6 +109,7 @@ OKiadas.prototype.mibizList = function (result){
 }
 OKiadas.prototype.nextHkodGet = function (result){
 	/* elso kiszedendo helykod betoltese */
+	$('#dataHkod').val("");
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		$('#labelHkodVart').html(res.HKOD);
@@ -102,12 +126,12 @@ OKiadas.prototype.nextHkodGet = function (result){
 
 /* hkod innen */
 OKiadas.prototype.showHkod=function(){
-	$("#labelStatus").hide();
 	$('.dhkod').show();
+	$('#dataHkod').val("");
 	$('#dataHkod').focus();
 }
 OKiadas.prototype.hideHkod=function(){
-	$("#labelStatus").hide();
+	$('#dataHkod').val("");
 	$('.dhkod').hide();
 }
 OKiadas.prototype.hkodChange=function(){
@@ -143,34 +167,31 @@ OKiadas.prototype.hkodSaveCheck = function (result){
 			ajaxCall(fn,{'azon':azon, 'sorsz':sorsz,'rsz':rsz,'hkod':hkod,'login':login_id},true, fn);
 		}
 		else {
-			$("#labelStatus").attr("class", "statusError");
-			$("#labelStatus").html("Hiba!");
-			$("#labelStatus").show();
 			clearObj='dataHkod';
 			errormsg='';
 			switch (res.RESULTTEXT) {
 				case 'DIFFERENT_HKOD': 
 					errormsg='A korábban kiadasodott termékek más helykódon vannak! '+res.ERRORTEXT;
-					kiadas.showMessage(errormsg,clearObj);
+					showMessage(errormsg,clearObj);
 					break;
 				case 'NOT_FOUND': 
 					errormsg='Nem található ilyen rendszám a lerakodott abroncsok között!';
-					kiadas.showMessage(errormsg,clearObj);
+					showMessage(errormsg,clearObj);
 					break;
 				case 'ALREADY_DONE': 
 					errormsg='Ez a gumi már el lett pakolva erre a helykódra!';
 					break;
 				case 'EMPTY_POSITION': 
 					errormsg='A rendszámhoz tartozó pozíciók üresek!';
-					kiadas.showMessage(errormsg,clearObj);
+					showMessage(errormsg,clearObj);
 					break;
 				case 'HKOD_EXISTS': 
 					errormsg='Más helykódon is van ez a rendszám!';
-					kiadas.showMessage(errormsg,clearObj);
+					showMessage(errormsg,clearObj);
 					break;					
 				default:
 					errormsg = res.RESULTTEXT;
-					kiadas.showMessage(errormsg,clearObj);
+					showMessage(errormsg,clearObj);
 					
 			}
 		}
@@ -183,21 +204,10 @@ OKiadas.prototype.hkodSave = function (result){
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		if (res.RESULT=='OK') {
-			$("#labelStatus").attr("class", "statusOk");
-			$("#labelStatus").html("Ok");
-			$("#labelStatus").show();
-
-			window.setTimeout(function(){
-				$('#dataRendszam').focus();
-
-			},2*1000);
-			
+			showMessage(res.RESULT);
 		}
 		else {
 			errormsg='';
-			$("#labelStatus").attr("class", "statusError");
-			$("#labelStatus").html("Hiba!");
-			$("#labelStatus").show();
 			switch (res.RESULTTEXT) {
 				case 'NOT_FOUND': 
 					errormsg='Nem található ilyen rendszám a lerakodott abroncsok között!';
@@ -212,7 +222,7 @@ OKiadas.prototype.hkodSave = function (result){
 					errormsg = res.RESULTTEXT;
 					
 			}
-			kiadas.showMessage(errormsg);
+			showMessage(errormsg);
 			
 		}
 	}
@@ -224,13 +234,20 @@ OKiadas.prototype.hkodSave = function (result){
 /* hkod eddig */
 
 /* rendszam innen */
+OKiadas.prototype.hideRsz=function(){
+	$('.drendszam').hide();
+}
+OKiadas.prototype.setNextRsz = function (rsz){
+		$('#labelRendszamVart').html(rsz);
+		kiadas.currentRsz= rsz;
+		$('#dataRendszam').focus();
+}
+
 OKiadas.prototype.nextRszGet = function (result){
-	/* elso kiszedendo helykod betoltese */
+	/* elso kiszedendo rendszam betoltese */
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
-		$('#labelRendszamVart').html(res.RSZ);
-		kiadas.currentRsz= res.RSZ;
-		$('#dataRendszam').focus();
+		kiadas.setNextRsz(res.RSZ);
 	}
 }
 OKiadas.prototype.rszChange = function (){
@@ -238,7 +255,7 @@ OKiadas.prototype.rszChange = function (){
 	rsz = $('#dataRendszam').val();
 	if (rsz.indexOf(kiadas.currentRsz)!=-1) {
 		fn = 'kiadas.rszSave';
-		ajaxCall(fn,{'rsz':rsz,'rszshort':kiadas.currentRsz,'azon':kiadas.fejazon,'login':login_id,'hkod':kiadas.currentHkod},true, fn);
+		ajaxCall(fn,{'rsz':rsz,'rszshort':kiadas.currentRsz,'azon':kiadas.fejazon,'login':login_id,'hkod':kiadas.currentHkod,'lastrsz':kiadas.lastRsz},true, fn);
 	}
 	else {
 		showMessage('Rendszám nem egyezik!','dataRendszam');
@@ -249,42 +266,114 @@ OKiadas.prototype.rszSave = function (result){
 	/* belott rendszam mentese */
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
-		if (res.RESULT=='OK') {
-			$("#labelStatus").attr("class", "statusOk");
-			$("#labelStatus").html("Ok");
-			$("#labelStatus").show();
-
-			window.setTimeout(function(){
-				$('#dataRendszam').focus();
-
-			},2*1000);
+		if (res.RESULTTEXT=='OK') {
+			kiadas.lastRsz = kiadas.currentRsz;
+			errormsg = res.RESULTTEXT;
+			showMessage(errormsg,'dataRendszam');
+			if (res.NEXTRSZ!='') {
+				if (res.NEXTRSZ=='NEXTHKOD') {
+					/* nincs a helykodon tobb kiszedheto rendszam*/
+					errormsg='Mentés rendben, HELYKÓD VÁLTÁS!';
+					showMessage(errormsg,'dataRendszam');
+					kiadas.hideRsz();
+					fn = 'kiadas.nextHkodGet';
+					ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon,'hkod':kiadas.currentHkod},true, fn);
+					
+					
+				}
+				else {
+					kiadas.setNextRsz(res.NEXTRSZ);
+					errormsg='Mentés rendben, RENDSZÁM VÁLTÁS!';
+					showMessage(errormsg,'dataRendszam');
+				}
+				
+			}
 			
 		}
 		else {
 			errormsg='';
-			$("#labelStatus").attr("class", "statusError");
-			$("#labelStatus").html("Hiba!");
-			$("#labelStatus").show();
 			switch (res.RESULTTEXT) {
 				case 'NOT_FOUND': 
-					errormsg='Nem található ilyen rendszám a lerakodott abroncsok között!';
+					errormsg='Nem található ilyen rendszám a kiszedendõ abroncsok között!';
 					break;
-				case 'EMPTY_POSITION': 
-					errormsg='A rendszámhoz tartozó pozíciók üresek!';
+				case 'ALREADY_DONE': 
+					errormsg='Ez a pozíció már ki lett szedve!';
 					break;
-				case 'HKOD_EXISTS': 
-					errormsg='Más helykódon is van ez a rendszám!';
+				case 'DIFFERENT_HKOD': 
+					errormsg='Más helykódon van ez a rendszám!';
+					break;					
+				case 'UNKNOWN_ERROR': 
+					errormsg='Adatbázis hiba a felírásnál!';
+					break;					
+				case 'NOT_READY': 
+					errormsg='Az elõzõ rendszám még nincs kész! ('+kiadas.lastRsz+')';
 					break;					
 				default:
 					errormsg = res.RESULTTEXT;
 					
 			}
-			kiadas.showMessage(errormsg);
+			showMessage(errormsg,'dataRendszam');
 			
 		}
 	}
 }
 
+OKiadas.prototype.rszNotFound = function(){
+		fn = 'kiadas.rszEmpty';
+		ajaxCall(fn,{'rszshort':kiadas.currentRsz,'azon':kiadas.fejazon,'login':login_id,'hkod':kiadas.currentHkod},true, fn);
+	
+}
+OKiadas.prototype.rszEmpty = function(result){
+	/* rendszam nullazasa (kiszedesek torlese) */
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		if (res.RESULTTEXT=='OK') {
+			errormsg = res.RESULTTEXT;
+			showMessage(errormsg,'dataRendszam');
+			if (res.NEXTRSZ!='') {
+				if (res.NEXTRSZ=='NEXTHKOD') {
+					/* nincs a helykodon tobb kiszedheto rendszam*/
+					errormsg='Mentés rendben, HELYKÓD VÁLTÁS!';
+					showMessage(errormsg,'dataRendszam');
+					kiadas.hideRsz();
+					fn = 'kiadas.nextHkodGet';
+					ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon,'hkod':kiadas.currentHkod},true, fn);
+					
+					
+				}
+				else {
+					kiadas.setNextRsz(res.NEXTRSZ);
+					errormsg='Mentés rendben, RENDSZÁM VÁLTÁS!';
+					showMessage(errormsg,'dataRendszam');
+				}
+				
+			}
+			
+		}
+		else {
+			errormsg='';
+			switch (res.RESULTTEXT) {
+				case 'NOT_FOUND': 
+					errormsg='Nem található ilyen rendszám a kiszedendõ abroncsok között!';
+					break;
+				case 'ALREADY_DONE': 
+					errormsg='Ez a rendszám még nem lett kiszedve!';
+					break;
+				case 'DIFFERENT_HKOD': 
+					errormsg='Más helykódon van ez a rendszám!';
+					break;					
+				case 'UNKNOWN_ERROR': 
+					errormsg='Adatbázis hiba a felírásnál!';
+					break;					
+				default:
+					errormsg = res.RESULTTEXT;
+					
+			}
+			showMessage(errormsg,'dataRendszam');
+			
+		}
+	}
+}
 /* rendszam eddig */
 
 /* atnezo panel */
@@ -292,12 +381,13 @@ OKiadas.prototype.rszSave = function (result){
 
 OKiadas.prototype.reviewRszGet = function(result) {
 	/* atnezo panel filter ajax eredenye (rendszamok)*/
-	sorok = '';
+	sorok = '<tr><td/></tr>';
 	fej="<thead>"
 				+"<tr>"
 					+"<th class='tdrsz'>Rendszám</th>"
-					+"<th>Lerakodott</th>"
-					+"<th>Elpakolt</th>"
+					+"<th class='tdhkod'>Helykód</th>"
+					+"<th>Kiszedendõ</th>"
+					+"<th>Kiszedett</th>"
 				+"</tr>"
 		+"</thead>";
 	
@@ -306,23 +396,16 @@ OKiadas.prototype.reviewRszGet = function(result) {
 	kiadas.reviewSet = result;
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
-		tdclass='';
-		if (res.DRB2==res.ROGDRB) tdclass=' rowhighlighted';
-		sorok += '<tr class="'+tdclass+'" id="'+res.RENDSZAM+'">';
-		sorok += '<td class="tdrsz">'+res.RENDSZAM+'</td>';
-		sorok +=  '<td class="tmibiz">'+res.DRB2+'</td>'; 
-		sorok +=  '<td class="tmibiz">'+res.ROGDRB+'</td>'; 
-		sorok += '</tr>';
-		if (res.ROGDRB<res.DRB) {
-			hianydb = parseInt(hianydb) + parseInt(res.DRB) - parseInt(res.ROGDRB);
+		if (res.DRB2<res.DRB) {
+			hianydb = parseInt(hianydb) + parseInt(res.DRB) - parseInt(res.DRB2);
 		}
-		
 	}
-	$('.tableReview').html(fej+sorok);
+
 	if (hianydb!=0){
-		$('.labelHiany').html('Elpakolandó:');
+		$('.labelHiany').html('Kiszedendõ:');
 		$('.dataHiany').html(hianydb);
 	}
+	$('.tableReview').html(fej+sorok);
 	kiadas.reviewFilter();
 
 }
@@ -350,7 +433,7 @@ OKiadas.prototype.reviewRszFilter = function(result) {
 		curTD = $(this);
 		filter = curTD.html();
 		fn = 'kiadas.reviewRszGet';
-		r = ajaxCall(fn,{'filter':filter,'login':login_id},true, fn);
+		r = ajaxCall(fn,{'filter':filter,'login':login_id,'azon':kiadas.fejazon},true, fn);
 	})
 
 	$('#rszall').trigger('click');
@@ -364,7 +447,7 @@ OKiadas.prototype.showReview = function() {
 	$('bFolytMost').show();
 	$('#divpanel').hide();
 	fn = 'kiadas.reviewRszFilter';
-	r = ajaxCall(fn,{'login':login_id},true, fn);
+	r = ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon},true, fn);
 	$('#divreview').show();
 	
 }
@@ -379,11 +462,13 @@ OKiadas.prototype.reviewFilter = function() {
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		tdclass='';
-			if (res.DRB2==res.ROGDRB) tdclass=' rowhighlighted';
+			if (res.DRB2==res.DRB) tdclass=' rowhighlighted';
+			if (res.DRB2==0 && res.STAT3=='X') tdclass=' rowhighlighted_notfound';
 			sor += '<tr class="'+tdclass+'" id="'+res.RENDSZAM+'">';
 			sor += '<td class="tdrsz">'+res.RENDSZAM+'</td>';
-			sor +=  '<td class="tmibiz">'+res.DRB2+'</td>'; 
-			sor +=  '<td class="tmibiz">'+res.ROGDRB+'</td>'; 			
+			sor += '<td class="tdhkod">'+res.HKOD+'</td>';
+			sor +=  '<td class="tmibiz">'+res.DRB+'</td>'; 
+			sor +=  '<td class="tmibiz">'+res.DRB2+'</td>'; 			
 			sor += '</tr>';
 
 		
@@ -392,14 +477,64 @@ OKiadas.prototype.reviewFilter = function() {
 }
 
 
+OKiadas.prototype.lezarInit = function() {
+	fn = 'kiadas.closeCheck';
+	ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon},true, fn);
+	
+}
+OKiadas.prototype.closeCheck = function(result){
+	/* szedesi bizonylat zaras elotti ellenorzese*/
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		if (res.RESULTTEXT=='OK') {
+			fn = 'kiadas.closeIt';
+			ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon},true, fn);
+		}
+		else {
+			errormsg='';
+			switch (res.RESULTTEXT) {
+				case 'NOT_READY': 
+					errormsg='Még van kiszedettlen tétel!';
+					break;
+				case 'UNKNOWN_ERROR': 
+					errormsg='Adatbázis hiba a lezárásnál!';
+					break;					
+				default:
+					errormsg = res.RESULTTEXT;
+					
+			}
+			showMessage(errormsg);
+			
+		}
+	}
+}
+OKiadas.prototype.closeIt = function(result){
+	/* szedesi bizonylat zarasa*/
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		if (res.RESULTTEXT=='OK') {
+			$('#bMenu').trigger('click');
+		}
+		else {
+			errormsg='';
+			switch (res.RESULTTEXT) {
+				case 'UNKNOWN_ERROR': 
+					errormsg='Adatbázis hiba a felírásnál!';
+					break;					
+				default:
+					errormsg = res.RESULTTEXT;
+					
+			}
+			showMessage(errormsg);
+			
+		}
+	}
 
-
-
-
+}
 /* atnezo panel eddig */
 
 
-/* kiadasodas eddig */
+/* kiadas eddig */
 
 
 //pingPrinter();

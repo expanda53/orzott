@@ -46,7 +46,7 @@ function ajaxCall( func, d,asyn,fn) {
 
 
 showMessage =function (msg, clearObj ){
-	$('#dmsg').html(msg);
+	$('#dmsg .msgtxt').html(msg);
 	$('#dmsg').show();
 
 	window.setTimeout(function(){
@@ -96,6 +96,7 @@ function showMenu() {
 
 function showLogin() {
 	app.BT2Disabled();
+	app.BTDisabled();
 	panelName = 'login';
 	$.get( "css/"+panelName+".css", function( data ) {
 		css = '<head><style>' + data + '</style></head>';
@@ -122,8 +123,6 @@ function checkLogin(result){
 		login_id=$('.divinput').text();
 		login_id = login_id.replace(/(?:\r\n|\r|\n|\t)+/g, '');
 		app.getDepthMeters();
-		//app.getPrinters();
-		
 	}
 }
 

@@ -1,21 +1,3 @@
-<script>
-	
-
-	
-	$('#bFolytMost').bind('click',function (event) {
-		event.stopPropagation();
-        event.preventDefault();
-        if(event.handled !== true) {
-			clickHelp();
-			$('#divreview').hide();
-			$('#divpanel').show();
-            event.handled = true;
-        } else {
-            return false;
-        }
-	})
-	
-</script>
 <body>
 <div id=divclick></div>
 <input type=hidden id=hAZON>
@@ -31,7 +13,6 @@
 		<div id=divpanel>
 			<button id=bMenu>Menü</button>
 			<button id=bEllenorzes>Ellenőrzés</button>
-			<div id=dmsg></div>
 			<div class='drendszam'>
 				<span id=labelRendszam>Rendszám</span>
 				<input id=dataRendszam>
@@ -39,7 +20,6 @@
 			<div class='dhkod'>
 				<span id=labelHkod>Helykód</span>
 				<input id=dataHkod>
-				<span id=labelStatus></span>
 				<button id=bHkodTorol>Helykódok törlése</button>
 			</div>
 

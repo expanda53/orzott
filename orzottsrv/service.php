@@ -607,15 +607,17 @@
 		echo json_encode(Converter::win2utf_array($res));
   }
   if ($func==='kiadas.rszSave'){
-		$sql="SELECT * FROM PDA_ORZOTTKI_SORUPDATE (:azon, :rsz, :rszshort,:login,:hkod)";
+		$sql="SELECT * FROM PDA_ORZOTTKI_SORUPDATE (:azon, :hkod, :rsz, :rszshort,:login,:lastrsz)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
 		$azon=$r['azon'];
 		$rsz=$r['rsz'];
+		$lastrsz=$r['lastrsz'];
 		$rszshort=$r['rszshort'];		
 		$hkod=$r['hkod'];
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
 		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
+		$stmt->bindParam(':lastrsz', $lastrsz, PDO::PARAM_STR);
 		$stmt->bindParam(':rszshort', $rszshort, PDO::PARAM_STR);		
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);		
 		$stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);		
@@ -625,4 +627,85 @@
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
   }
+  if ($func==='kiadas.rszEmpty'){
+		$sql="SELECT * FROM PDA_ORZOTTKI_SORVISSZA (:azon, :hkod, :rszshort,:login)";
+		$stmt = Firebird::prepare($sql);
+		$login=$r['login'];
+		$azon=$r['azon'];
+		$rszshort=$r['rszshort'];		
+		$hkod=$r['hkod'];
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->bindParam(':rszshort', $rszshort, PDO::PARAM_STR);		
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);		
+		$stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);		
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+  }  
+  if ($func==='kiadas.reviewRszFilter'){
+		/* atnezo panel , rendszam szuro*/
+		$login = $r['login'];
+		$azon=$r['azon'];
+		$sql=" SELECT DISTINCT LEFT(BSOR.TAPADO,2) RENDSZAM
+				FROM BSOR
+				WHERE BFEJ=:azon
+				";
+
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode(Converter::win2utf_array($res));
+
+  }  
+  if ($func==='kiadas.reviewRszGet'){
+		/* atnezo panel, rendszam szuro eredmeny*/
+		$filter = $r['filter'];
+		$filterStr='';
+		if ($filter!='*') {
+			$filterStr = " AND BSOR.TAPADO STARTING WITH '$filter' ";
+		}
+		$azon = $r['azon'];
+		$login = $r['login'];
+		$sql=" SELECT BSOR.CIKK RENDSZAM, BSOR.HKOD, CAST(DRB AS INTEGER) DRB, CAST(DRB2 AS INTEGER) DRB2,COALESCE(BSOR.STAT3,'') STAT3
+				FROM BSOR
+				WHERE BSOR.BFEJ = :azon $filterStr
+				";
+
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode(Converter::win2utf_array($res));
+
+  }  
+
+  if ($func==='kiadas.closeCheck'){
+		/* lezaras elotti ellenorzes*/
+		$azon = $r['azon'];
+		$login = $r['login'];
+		$sql=" SELECT * FROM PDA_ORZOTTKI_CLOSECHECK(:azon, :login)";
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode(Converter::win2utf_array($res));
+  }    
+  if ($func==='kiadas.close'){
+		/* lezaras */
+		$azon = $r['azon'];
+		$login = $r['login'];
+		$sql=" SELECT * FROM PDA_ORZOTTKI_CLOSE(:azon, :login)";
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode(Converter::win2utf_array($res));
+  }    
 ?>

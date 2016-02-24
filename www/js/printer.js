@@ -22,7 +22,9 @@ var printerDialog = {
 					sorok+="</tr>";
 					
 				})
-				if (sorok=="") {showMenu();}
+				if (sorok=="") {
+					showMenu();
+				}
 				else {
 					$("#tableprinter tbody").html(sorok);
 					$('#tableprinter tr').bind('click',function(){
@@ -30,7 +32,9 @@ var printerDialog = {
 						if (app.printerConnected) app.manageConnection(false);
 						app.printerId = tr.find(".printerid").html();
 						app.printerName = tr.find(".printername").html();
+						app.BTEnabled();
 						showMenu();
+						
 					})
 				}
 				

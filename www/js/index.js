@@ -93,6 +93,7 @@ var app = {
 				bluetoothSerial2.list(function(devices) {
 					app.depthMeters.length=0;
 					devices.forEach(function(device) {
+						//alert(device.class);
 						if (device.class=='7936') {//7936 melysegmero, 1664 nyomtato
 							p = new depthMeter(device.id,device.name); 
 							app.depthMeters.push(p);
@@ -238,7 +239,6 @@ var app = {
 			app.depthMeterData=data;
 			app.depthMeterData = Math.round(app.depthMeterData.replace('T',''));
 			if (app.currentModule=='beerk' || app.currentModule=='elrak') {
-				//alert(app.depthMeterData);
 				if ( $('#gstat').is(":visible") ){
 					$('#gstat').val(app.depthMeterData);				
 				}

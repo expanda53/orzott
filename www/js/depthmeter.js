@@ -22,7 +22,11 @@ var depthMeterDialog = {
 					sorok+="</tr>";
 					
 				})
-				if (sorok=="") {showMenu();}
+				if (sorok=="") {
+					//showMenu();
+					//$('#tplDM').hide();
+					app.getPrinters();
+				}
 				else {
 					$("#tableprinter tbody").html(sorok);
 					$('#tableprinter tr').bind('click',function(){
@@ -31,9 +35,12 @@ var depthMeterDialog = {
 						app.depthMeterId = tr.find(".printerid").html();
 						app.depthMeterName = tr.find(".printername").html();
 						app.BT2Enabled();						
-						showMenu();
+						//showMenu();
+						//$('#tplPrinter').hide();
+						app.getPrinters();
 					})
 				}
+				
 				
 
 	}

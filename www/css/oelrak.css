@@ -344,26 +344,6 @@
     font-size: 20px;
     font-weight: bold;
 }
-#labelStatus {
-    display: none;
-    position: absolute;
-    padding: 5px;
-    background-color: black;
-    width: 138px;
-    text-align: center;
-    height: 17px;
-    top: 113px;
-    left: 106px;
-    font-size: 14px;
-    font-weight: bold;
-}
-.statusOk {
-	background-color:green !important;
-}
-.statusError {
-	background-color:red !important;
-	
-}
 #bHkodTorol {
     position: absolute;
     top: 31px;
@@ -451,21 +431,5 @@
 }
 /* meres panel eddig*/
 
-/* uzenet panel */
-#dmsg {
-    display: none;
-    position: absolute;
-    top: 32px;
-    left: 125px;
-    height: 40px;
-    max-width: 340px;
-    background-color: white;
-    color: black;
-    font-weight: bold;
-    text-align: center;
-    border: 2px solid red;
-    padding: 5px;
-    z-index: 100;
-    font-size: 15px;
-}
-}
+
+

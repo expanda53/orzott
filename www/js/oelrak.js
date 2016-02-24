@@ -60,6 +60,22 @@ OElrak.prototype.panelInit = function () {
 			$('#bEllenorzes').bind('click',function () {
 				elrak.showReview();
 			})	
+			$('#bFolytMost').bind('click',function (event) {
+				event.stopPropagation();
+				event.preventDefault();
+				if(event.handled !== true) {
+					clickHelp();
+					$('#divreview').hide();
+					$('#divpanel').show();
+					event.handled = true;
+					if ($('#dataHkod').is(":visible")) $('#dataHkod').focus();
+					else $('#dataRendszam').focus();
+					
+				} else {
+					return false;
+				}
+			})
+			
 			$('#dataRendszam').focus();
 		})
 	})
@@ -194,12 +210,10 @@ OElrak.prototype.allapotMent=function(result){
 
 /* hkod innen */
 OElrak.prototype.showHkod=function(){
-	$("#labelStatus").hide();
 	$('.dhkod').show();
 	$('#dataHkod').focus();
 }
 OElrak.prototype.hideHkod=function(){
-	$("#labelStatus").hide();
 	$('.dhkod').hide();
 }
 OElrak.prototype.hkodChange=function(){
@@ -220,15 +234,10 @@ OElrak.prototype.hkodDel=function(result){
 	for (var i = 0;i < result.length;i++){	
 		res = result[i];
 		if (res.RESULT=='OK') {
-			$("#labelStatus").attr("class", "statusOk");
-			$("#labelStatus").html("Ok");
-			$("#labelStatus").show();
+			showMessage('Mentés rendben');
 		}
 		else {
 			errormsg='';
-			$("#labelStatus").attr("class", "statusError");
-			$("#labelStatus").html("Hiba!");
-			$("#labelStatus").show();
 			switch (res.RESULTTEXT) {
 				case 'NOT_FOUND': 
 					errormsg='Nem található ilyen rendszám a lerakodott abroncsok között!';
@@ -284,9 +293,6 @@ OElrak.prototype.hkodSaveCheck = function (result){
 			ajaxCall(fn,{'azon':azon, 'sorsz':sorsz,'rsz':rsz,'hkod':hkod,'login':login_id},true, fn);
 		}
 		else {
-			$("#labelStatus").attr("class", "statusError");
-			$("#labelStatus").html("Hiba!");
-			$("#labelStatus").show();
 			clearObj='dataHkod';
 			errormsg='';
 			switch (res.RESULTTEXT) {
@@ -325,10 +331,6 @@ OElrak.prototype.hkodSave = function (result){
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		if (res.RESULT=='OK') {
-			$("#labelStatus").attr("class", "statusOk");
-			$("#labelStatus").html("Ok");
-			$("#labelStatus").show();
-
 			window.setTimeout(function(){
 				$('#dataRendszam').focus();
 
@@ -337,9 +339,6 @@ OElrak.prototype.hkodSave = function (result){
 		}
 		else {
 			errormsg='';
-			$("#labelStatus").attr("class", "statusError");
-			$("#labelStatus").html("Hiba!");
-			$("#labelStatus").show();
 			switch (res.RESULTTEXT) {
 				case 'NOT_FOUND': 
 					errormsg='Nem található ilyen rendszám a lerakodott abroncsok között!';
@@ -354,14 +353,7 @@ OElrak.prototype.hkodSave = function (result){
 					errormsg = res.RESULTTEXT;
 					
 			}
-			/*
-			$('#hAZON').val(res.FEJAZON);
-			$('#hSORSZ').val(res.SORSZ);	
-			$('#rendszam').val(res.RENDSZAM);
-			$('#hMIBIZ').val(res.MIBIZ);	
-			elrak.currentItem=res.RSZTIP;
-			elrak.currentPosition='b'+res.RSZPOZ;
-			*/
+
 			showMessage(errormsg);
 			
 		}

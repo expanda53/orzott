@@ -92,7 +92,8 @@ OBeerk.prototype.mibizList = function(result) {
 }
 OBeerk.prototype.selectTask = function(mibiz,mszam3) {
 	/* feladat valaszto ajax inditas */
-	app.BTEnabled();						
+	//app.BTEnabled();						
+	//app.BT2Enabled();						
 	
 	this.meresKell = confirm("Állapot felméréssel?");
 	if (this.meresKell) {
@@ -286,7 +287,7 @@ OBeerk.prototype.selectPosition = function (obj) {
 	}
 	
 	if (drb2>=drb) {
-		alert('A beérkezett mennyiség '+drb+' db!');
+		showMessage('A beérkezett mennyiség '+drb+' db!');
 	}
 	if (tip!='bGumiFelni') {
 		/* print */
@@ -300,7 +301,7 @@ OBeerk.prototype.selectPosition = function (obj) {
 			}
 		}
 		else {
-			alert('printer not found');
+			showMessage('printer not found');
 			if (teszt) btPrint();
 		}
 	}
@@ -337,7 +338,7 @@ OBeerk.prototype.rszMent = function(result) {
 			
 			
 		}
-		else alert('Hiba');
+		else showMessage('Hiba');
 	}
 }
 
@@ -359,7 +360,7 @@ OBeerk.prototype.getMelyseg=function(result){
 OBeerk.prototype.allapotMentes=function(){
 	poz = this.currentPosition;
 	melyseg = $('#gstat').val();
-	if (this.meresKell && melyseg=='-' ) alert('Mentés elõtt mérd meg a mélységet!');
+	if (this.meresKell && melyseg=='-' ) showMessage('Mentés elõtt mérd meg a mélységet!');
 	else {
 		rsz = $('#rendszam').val();
 		mibiz = $('#hMIBIZ').val();
@@ -573,7 +574,7 @@ OBeerk.prototype.lezarStart = function(){
 		stat='X';
 	}
 	if (mehet) {
-		alert('hiany:'+hianydb+' stat:'+stat);
+		showMessage('hiany:'+hianydb+' stat:'+stat);
 		mibiz=$("#hMIBIZ").val();
 		fn = 'beerk.lezarUpdate';
 		ajaxCall(fn,{'mibiz':mibiz,'stat':stat,'login':login_id},true, fn);
