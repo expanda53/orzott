@@ -132,11 +132,11 @@ var app = {
 	
 	
 		if(typeof bluetoothSerial2 != 'undefined'){ 
-			var btAssign = function() {
+			var btAssign2 = function() {
 				app.manageConnection2(true);
 			}
 			bluetoothSerial2.isEnabled(
-				btAssign,
+				btAssign2,
 				function(){alert('bluetooth2 not enabled')}
 			); 
 
@@ -158,6 +158,7 @@ var app = {
 			// returns failure. In other words, if not connected, then connect:
 			var connect = function () {
 				// attempt to connect:
+				//alert("attempt to connect printer");
 				bluetoothSerial.connect(
 					app.printerId,  // device to connect to
 					app.openPort,    // start listening if you succeed
@@ -180,6 +181,7 @@ var app = {
 		}
     },
    manageConnection2: function(needConnect) {
+	   try {
 		if(typeof bluetoothSerial2 != 'undefined') {
 			// connect() will get called only if isConnected() (below)
 			// returns failure. In other words, if not connected, then connect:
@@ -207,6 +209,10 @@ var app = {
 			if (needConnect) bluetoothSerial2.isConnected(null, connect);
 			else bluetoothSerial2.isConnected(disconnect,null);
 		}
+	   }
+	   finally {
+		   
+	   }
     },
 /*
     subscribes to a Bluetooth serial listener for newline
@@ -220,9 +226,11 @@ var app = {
         // and display any new data that's come in since
         // the last newline:
         bluetoothSerial.subscribe('\n', function (data) {
-            console.log(data);
+			console.log(data);
+			//alert('subscribe ok:'+data);
 			//alert(data);
-        });
+        }
+		);
     },
     openPort2: function() {
         // if you get a good Bluetooth serial connection:
@@ -278,7 +286,7 @@ var app = {
 */
     showError: function(error) {
 		console.log("bluetooth error:"+error);
-        //alert(error);
+        //alert("bluetooth error:"+error);
     }
 	
 	

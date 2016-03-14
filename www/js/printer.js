@@ -8,6 +8,10 @@ var printerDialog = {
 				$('#divContent').html(css + tpl);
 				$('#divContent').show();
 				printerDialog.createTable();				
+				$('#btNext').bind('click', function() {
+					showMenu();
+				})
+				
 			});
 			
 		})
@@ -32,8 +36,12 @@ var printerDialog = {
 						if (app.printerConnected) app.manageConnection(false);
 						app.printerId = tr.find(".printerid").html();
 						app.printerName = tr.find(".printername").html();
-						app.BTEnabled();
-						showMenu();
+						try {
+							app.BTEnabled();
+						}
+						finally {
+							showMenu();
+						}
 						
 					})
 				}

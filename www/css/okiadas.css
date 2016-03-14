@@ -118,7 +118,7 @@
 }
 #divhiany {
 	position: relative;
-    left: 386px;
+    left: 347px;
     width: 170px;
     top: 14px;
 }
@@ -139,43 +139,43 @@
 .divreviewLeft{
 	position:relative;
 	top:5px;
-	left:10px;
+	/*left:10px;*/
 	background-color:#f1f1f1;
-	width:73px;
+	width:68px;
 	border-right:1px dashed black;
 	
 }
 .divReviewTables {
-	height:220px;
+	height:182px;
 }
 .divreviewRight {
 	position:absolute;
 	top:5px;
-	left:93px;
+	left:69px;
 	background-color:white;
-	width:460px;
+	width:442px;
 }
 .tableReviewFilter {
 	display:block;
-	height: 220px;
+	height: 182px;
 	overflow-y: scroll;
 	font-size:17px;
 	position:relative;
-	left:10px;
+	left:2px;
 	width:72px;
 }
 .divTableReview{
 	position:relative;
-	height:220px;
+	height:182px;
 }
 .tableReview{
 	display:block;
-	height: 217px;
+	height: 178px;
 	overflow-y: scroll;
-	font-size:15px;
+	font-size:14px;
 	position:relative;
-	left:10px;
-	width:460px;
+	left:5px;
+	width:430px;
 	top:2px;
 }
 
@@ -215,9 +215,6 @@
 	background-color:red;
 }
 
-.tableReviewFilter {
-	background-color:#f1f1f1;
-}
 
 
 .divReviewFilter {
@@ -417,8 +414,8 @@
 /* altalanos */
 #divaltalanos {
 	position: relative;
-    width: 760px;
-    margin-top: 8px;
+    width: 520px;
+    margin-top: 0px;
     height: 36px;
     padding: 5px 0px;
 }
@@ -427,8 +424,9 @@
     height: 35px;
     /* position: relative; */
     float: left;
-    width: 235px;
+    width: 206px;
 }
+
 #labelSofor {
     position: relative;
     padding: 10px;
@@ -437,14 +435,14 @@
     /* top: 10px; */
     /* left: 23px; */
     text-align: center;
-    width: 62px;
+    width: 50px;
 	float:left;
 }
 #dataSofor {
     position: relative;
     padding: 10px;
     background-color: #D4D4D4;
-    width: 128px;
+    width: 112px;
     /*left: 107px;*/
     font-weight: bold;
     /*top: -36px;*/
@@ -460,7 +458,7 @@
     height: 35px;
     /* position: relative; */
     float: left;
-    width: 177px;
+    width: 152px;
     /*margin-left: 10px;*/
 	
 }
@@ -472,14 +470,14 @@
     /* top: 10px; */
     /* left: 23px; */
     text-align: center;
-    width: 62px;
+    width: 50px;
 	float:left;
 }
 #dataJarat {
     position: relative;
     padding: 10px;
     background-color: #D4D4D4;
-    width: 70px;
+    width: 60px;
     /*left: 84px;*/
     font-weight: bold;
     /*top: -36px;*/
@@ -494,8 +492,8 @@
     height: 35px;
     /* position: relative; */
     float: left;
-    width: 177px;
-    /* margin-left: 10px; */
+    width: 153px;
+    margin-left: 2px;
 	
 }
 #labelRaktar {
@@ -506,14 +504,14 @@
     /* top: 10px; */
     /* left: 23px; */
     text-align: center;
-    width: 62px;
+    width: 50px;
 	float:left;
 }
 #dataRaktar {
     position: relative;
     padding: 10px;
     background-color: #D4D4D4;
-    width: 70px;
+    width: 60px;
     /*left: 84px;*/
     font-weight: bold;
     /*top: -36px;*/

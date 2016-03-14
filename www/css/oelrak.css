@@ -102,10 +102,11 @@
 } 
 .dButtonsReview {
     position: absolute;
-    top: 233px;
+    top: 223px;
     clear: both;
     margin: 0px auto;
     width: 600px;
+	left:9px;
 }
 
 .dButtonsReview #bElteres {
@@ -123,7 +124,7 @@
 }
 #divhiany {
 	position: relative;
-    left: 279px;
+    left: 269px;
     width: 170px;
     top: 36px;
 }
@@ -160,7 +161,7 @@
 }
 #divreview table{
 	display:block;
-	height: 170px;
+	height: 191px;
 	overflow-y: scroll;
 	font-size:17px;
 	position:relative;

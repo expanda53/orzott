@@ -8,6 +8,11 @@ var depthMeterDialog = {
 				$('#divContent').html(css + tpl);
 				$('#divContent').show();
 				depthMeterDialog.createTable();				
+				
+				$('#btNext').bind('click', function() {
+					app.getPrinters();
+				})
+				
 			});
 			
 		})
@@ -34,10 +39,12 @@ var depthMeterDialog = {
 						if (app.depthMeterConnected) app.manageConnection2(false);
 						app.depthMeterId = tr.find(".printerid").html();
 						app.depthMeterName = tr.find(".printername").html();
-						app.BT2Enabled();						
-						//showMenu();
-						//$('#tplPrinter').hide();
-						app.getPrinters();
+						try {
+							app.BT2Enabled();						
+						}
+						finally {
+							app.getPrinters();
+						}
 					})
 				}
 				

@@ -250,13 +250,13 @@
 				<div class=labelHiany></div>
 				<div class=dataHiany></div>
 			</div>
-			<div class=dButtonsReview>
+		</div>
+		<div class=dButtonsReview>
 				<button id=bElteres>Eltérések</button>
 				<button id=bFolytMost>Folyt. most</button>
 				<button id=bFolytKesobb>Folyt. később</button>
 				<button id=bLezar>Lezárás</button>
-			</div>			
-		</div>
+		</div>			
 		
 	</div>
 </div>

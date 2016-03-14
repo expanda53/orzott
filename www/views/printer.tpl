@@ -13,6 +13,8 @@
 				<tbody></tbody>
 			</table>
 		</div>
+		<button id=btNext>Kihagyás</button>	
 	</div>
+	
 </div>
 </body>

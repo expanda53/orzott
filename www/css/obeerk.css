@@ -119,7 +119,7 @@
 	line-height:20px;
 	background-color:aliceblue;
 	padding:2px;
-	width:420px;
+	width:387px;
 	border:1px solid black;
 	font-size:15px;
 }
@@ -131,7 +131,7 @@
     top: 132px;
     clear: both;
     margin: 0px auto;
-    width: 600px;
+    width: 554px;
 }
 .dButtons button, .dButtonsReview button {
 	margin:3px auto;
@@ -141,12 +141,13 @@
 	width:30%;
 } 
 .dButtons  .bnoprint{
-	width:19%;
+	width:30%;
 } 
+.divReviewTables {
+	height:194px;
+}
 .dButtonsReview {
-    position: absolute;
-    top: 233px;
-    clear: both;
+    position: relative;
     margin: 0px auto;
     width: 600px;
 }
@@ -164,7 +165,7 @@
 }
 #divhiany {
 	position: relative;
-    left: 286px;
+    left: 285px;
     width: 170px;
     top: 5px;
 }
@@ -177,7 +178,7 @@
 .dataHiany {
 	background-color: yellow;
     padding: 5px;
-    width: 20px;
+    width: 30px;
     position: absolute;
     left: 134px;
     text-align: center;
@@ -187,7 +188,7 @@
 	top:0px;
 	left:10px;
 	background-color:#f1f1f1;
-	width:73px;
+	width:82px;
 	border-right:1px dashed black;
 	
 }
@@ -201,7 +202,7 @@
 }
 #divreview table{
 	display:block;
-	height: 170px;
+	height: 163px;
 	overflow-y: scroll;
 	font-size:17px;
 	position:relative;
@@ -237,7 +238,7 @@
 }
 
 .tableReviewFilter {
-	background-color:#f1f1f1;
+	/* background-color:#f1f1f1; */
 }
 
 

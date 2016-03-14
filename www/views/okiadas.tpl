@@ -1,9 +1,3 @@
-<script>
-	
-
-	
-	
-</script>
 <body>
 <div id=divclick></div>
 <input type=hidden id=hAZON>

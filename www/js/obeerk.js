@@ -65,6 +65,7 @@ OBeerk.prototype.mibizList = function(result) {
 		sor += '<tr id="'+res.MIBIZ+'">';
 		sor += '<td  class="tmszam3">'+res.FUVAR+'</td>'; 
 		sor +=  '<td class="tkezelo">'+res.KEZELOK+'</td>'; 
+		sor +=  '<td class="tdrbsum">'+res.DRBSUM+'</td>'; 
 		sor +=  '<td class="tstat">'+res.STATUSZ+'</td>'; 
 		sor += '</tr>';
 	}

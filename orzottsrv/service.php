@@ -18,7 +18,7 @@
   }
   
   if ($func==='beerk.mibizList'){
-		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTLERAK (:biztip, :login)";
+		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTLERAK2 (:biztip, :login)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
 		$biztip=$r['biztip'];
