@@ -16,6 +16,15 @@
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
   }
+  if ($func==='loadSettings'){
+		$sql="select tetel,ertek  from ini where konftip='SAJC' and szekcio = 'ANDROID' and tetel like 'ORZOTT%'";
+		$stmt = Firebird::prepare($sql);
+		/*$login=trim($r['user']);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);*/
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode(Converter::win2utf_array($res));
+  }
   
   if ($func==='beerk.mibizList'){
 		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTLERAK2 (:biztip, :login)";

@@ -153,6 +153,7 @@ var app = {
 	},
 	
    manageConnection: function(needConnect) {
+	    /* printer */
 		if(typeof bluetoothSerial != 'undefined') {
 			// connect() will get called only if isConnected() (below)
 			// returns failure. In other words, if not connected, then connect:
@@ -162,7 +163,7 @@ var app = {
 				bluetoothSerial.connect(
 					app.printerId,  // device to connect to
 					app.openPort,    // start listening if you succeed
-					app.showError    // show the error if you fail
+					app.showErrorPrinter    // show the error if you fail
 				);
 				
 			};
@@ -171,7 +172,7 @@ var app = {
 			var disconnect = function () {
 				bluetoothSerial.disconnect(
 					app.closePort,     // stop listening to the port
-					app.showError      // show the error if you fail
+					app.showErrorPrinter      // show the error if you fail
 				);
 			};
 
@@ -181,6 +182,7 @@ var app = {
 		}
     },
    manageConnection2: function(needConnect) {
+	   /* depthmeter */
 	   try {
 		if(typeof bluetoothSerial2 != 'undefined') {
 			// connect() will get called only if isConnected() (below)
@@ -190,7 +192,7 @@ var app = {
 				bluetoothSerial2.connect(
 					app.depthMeterId,  // device to connect to
 					app.openPort2,    // start listening if you succeed
-					app.showError    // show the error if you fail
+					app.showErrorDepthMeter    // show the error if you fail
 				);
 				
 			};
@@ -199,7 +201,7 @@ var app = {
 			var disconnect = function () {
 				bluetoothSerial2.disconnect(
 					app.closePort2,     // stop listening to the port
-					app.showError      // show the error if you fail
+					app.showErrorDepthMeter      // show the error if you fail
 				);
 				
 				
@@ -258,6 +260,7 @@ var app = {
     unsubscribes from any Bluetooth serial listener and changes the button:
 */
     closePort: function() {
+		/* printer */
         // if you get a good Bluetooth serial connection:
         // unsubscribe from listening:
 		app.printerConnected=false;
@@ -266,10 +269,11 @@ var app = {
                     //alert(data);
 					console.log(data);
                 },
-                app.showError
+                app.showErrorPrinter
         );
     },
     closePort2: function() {
+		/* depthMeter */
         // if you get a good Bluetooth serial connection:
         // unsubscribe from listening:
 		app.depthMeterConnected=false;
@@ -278,14 +282,20 @@ var app = {
                     //alert(data);
 					console.log(data);
                 },
-                app.showError
+                app.showErrorDepthMeter
         );
     },
 /*
     appends @error to the message div:
 */
-    showError: function(error) {
-		console.log("bluetooth error:"+error);
+    showErrorPrinter: function(error) {
+		console.log("printer bluetooth error:"+error);
+		this.printerConnected = false;
+        //alert("bluetooth error:"+error);
+    },
+    showErrorDepthMeter: function(error) {
+		console.log("depthmeter bluetooth error:"+error);
+		this.depthMeterConnected = false;
         //alert("bluetooth error:"+error);
     }
 	

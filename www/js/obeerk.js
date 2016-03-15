@@ -269,7 +269,9 @@ OBeerk.prototype.selectPosition = function (obj) {
 	}
 	var printError = function(){
 		console.log('btprint error:'+beerk.currentItem+':'+beerk.currentPosition);
-		alert('Nyomtatási hiba');
+		app.printerConnected=false;
+		if (app.printerId!="") BTEnabled();
+		if (app.printerConnected==false) alert('Nyomtatási hiba');
 	}
 	azon = $('#hAZON').val();
 	sorsz = $('#hSORSZ').val();	
@@ -290,7 +292,10 @@ OBeerk.prototype.selectPosition = function (obj) {
 	if (drb2>=drb) {
 		showMessage('A beérkezett mennyiség '+drb+' db!');
 	}
-	if (tip!='bGumiFelni') {
+	/* ha a sajcegben a mindenre nyomtat=IGEN, akkor minden gombra nyomtatas van */
+	mindenre_nyomtat = settings.getItem('ORZOTT_LERAKODAS_MINDENRE_NYOMTAT').toUpperCase()==='IGEN';
+
+	if (mindenre_nyomtat || tip!='bGumiFelni') {
 		/* print */
 		if(typeof bluetoothSerial != 'undefined') {
 			try {

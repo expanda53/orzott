@@ -86,7 +86,10 @@ function showMenu() {
 			$('#blogout').bind('click',function () {
 				showLogin();
 			}) 
-
+			settings_to_users = settings.getItem('ORZOTT_BEALLITASOKAT_LATHAT');
+			if (settings_to_users != null && settings_to_users.indexOf(login_id)>-1) {
+				$('#bsettings').show();
+			}
 			$('#divContent').show();
 
 		});
@@ -122,9 +125,18 @@ function checkLogin(result){
 	else {
 		login_id=$('.divinput').text();
 		login_id = login_id.replace(/(?:\r\n|\r|\n|\t)+/g, '');
+		fn = 'loadSettings';
+		r = ajaxCall(fn,{},true, fn);
+
 		app.getDepthMeters();
 	}
 }
+
+function loadSettings(result) {
+	if (settings.items==null) settings.setItems(result);
+}
+
+
 
 $(document).ready(function () {
 	showLogin();
