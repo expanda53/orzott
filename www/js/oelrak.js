@@ -20,9 +20,6 @@ function clickHelp(){
 	$('#divclick').show();
 	window.setTimeout(function(){$('#divclick').hide();},20);
 }
-function pingPrinter(){
-
-}
 var OElrak = function(){
 	this.meresKell=false;
 	this.panelInit();
@@ -141,9 +138,9 @@ OElrak.prototype.rszAdatokGet = function (result){
 			elrak.currentItem=res.RSZTIP;
 			elrak.currentPosition='b'+res.RSZPOZ;
 			if (meresKell) {
-				/* ha merni kell */
-				panelName='elrak_meres';
-				
+					/* ha merni kell */
+					panelName='elrak_meres';
+			
 					$.get( "views/"+panelName+".tpl", function( data ) { 
 						rsz = $('#rendszam').val();
 						mibiz = $('#hMIBIZ').val();
@@ -182,7 +179,7 @@ OElrak.prototype.showPozPanel = function(obj) {
 
 OElrak.prototype.getMelyseg=function(result){
 	$("#gstat").html('');
-	$("#gstat").append('<option value="-">Válasszon</option>');
+	$("#gstat").append('<option value="" disabled selected>Válasszon</option>');
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		$("#gstat").append('<option value='+res.KOD+'>'+res.KOD+'</option>');
@@ -480,4 +477,3 @@ OElrak.prototype.reviewFilter = function() {
 /* elrakodas eddig */
 
 
-//pingPrinter();

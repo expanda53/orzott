@@ -353,7 +353,7 @@ OBeerk.prototype.rszMent = function(result) {
 
 OBeerk.prototype.getMelyseg=function(result){
 	$("#gstat").html('');
-	$("#gstat").append('<option value="-">Válasszon</option>');
+	$("#gstat").append('<option value="-" selected disabled>Válasszon</option>');
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		$("#gstat").append('<option value='+res.KOD+'>'+res.KOD+'</option>');
@@ -366,7 +366,7 @@ OBeerk.prototype.getMelyseg=function(result){
 OBeerk.prototype.allapotMentes=function(){
 	poz = this.currentPosition;
 	melyseg = $('#gstat').val();
-	if (this.meresKell && melyseg=='-' ) showMessage('Mentés elõtt mérd meg a mélységet!');
+	if (this.meresKell && (melyseg=='-' || melyseg=='' || melyseg==null)) showMessage('Mentés elõtt mérd meg a mélységet!');
 	else {
 		rsz = $('#rendszam').val();
 		mibiz = $('#hMIBIZ').val();

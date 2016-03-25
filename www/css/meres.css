@@ -47,3 +47,36 @@
     left: 357px;
     width: 160px;
 }
+#divcsok {
+	
+	width:320px;
+	height:130px;
+}
+.divcb {
+	padding:5px;
+	background-color:white;
+	width:52px;
+	float:left;
+	height:30px;
+	text-align:center;
+}
+.divcb input {
+
+	height:30px;
+    vertical-align:middle;
+}	
+.divgcsok {
+	display:none;
+}	
+.divgcsok select{
+	width:312px;
+}
+#labelcsok {
+	width:45px;
+	height:30px;
+	padding:5px;
+	float:left;
+	background-color:yellow;
+	margin-right:9px;
+	text-align:center
+}

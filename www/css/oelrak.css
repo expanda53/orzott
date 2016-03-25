@@ -430,6 +430,39 @@
     left: 250px;
     width: 160px;
 }
+#divcsok {
+	position: absolute;
+	top:42px;
+	width:297px;
+	height:130px;
+}
+.divcb {
+	padding:5px;
+	background-color:white;
+	width:48px;
+	float:left;
+	height:30px;
+	text-align:center;
+	margin-top:3px;
+}
+.divcb input {
+
+	height:30px;
+    vertical-align:middle;
+}	
+	
+.divgcsok select{
+	width:232px;
+}
+#labelcsok {
+	width:222px;
+	height:14px;
+	padding:5px;
+	float:left;
+	background-color:yellow;
+	margin-right:9px;
+	text-align:center
+}
 /* meres panel eddig*/
 
 
