@@ -33,8 +33,10 @@
 			$('#cbd').attr('disabled',true);	
 		}
 		else {
-			$('#cbfcs').removeAttr('disabled');
-			$('#cbfs').removeAttr('disabled');
+			if (beerk.currentItem!='bGumi') {
+				$('#cbfcs').removeAttr('disabled');
+				$('#cbfs').removeAttr('disabled');
+			}
 			$('#cbd').removeAttr('disabled');	
 		}
 		$('.divgcsok').hide();
@@ -42,8 +44,8 @@
 
 		
 	})
-	$('.divcb input[type=checkbox]').change(function(){
-		
+	
+	$('.divcb input[type=checkbox]').change(function(event){
 		if ($(this).attr('id')=='cbcs') {
 			$('#cbd').attr('disabled',$(this).prop('checked'));
 			if ($(this).prop('checked')) $('.divgcsok').show();
@@ -73,7 +75,7 @@
 			}
 		})
 		$('#gstat').val(newgstat);
-		
+
 	})
 	
 	
@@ -90,8 +92,6 @@
 	<button class=bpozicio id=bPOT>POT-5</button>
 	<button class=bpozicio id=bJHI>JHI-6</button>
 	<button class=bpozicio id=bBHI>BHI-7</button>
-	
-	
 </div>
 <div id=divallapot>
 	<div id=divgstat>

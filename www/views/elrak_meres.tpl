@@ -1,5 +1,16 @@
 <script>
-	var defgstat=null;
+    var defgstat=null;
+	function uncheckAll(){
+		$('#cbcs').prop('checked',false);
+		$('#cbfcs').prop('checked',false);
+		$('#cbfs').prop('checked',false);
+		$('#cbd').prop('checked',false);	
+	}
+	uncheckAll();
+	$('#cbfcs').attr('disabled',true);
+	$('#cbfs').attr('disabled',true);
+	$('#cbd').attr('disabled',true);	
+	
 	$('#bAllapotClose').bind('click',function () {
 		$('#divmeres').hide();
 		$('#divpanel').show();
@@ -12,13 +23,38 @@
 	})
 
 	$('#gstat').bind('change',function(){
-		$('#cbcs').prop('checked',false);
-		$('#cbfcs').prop('checked',false);
-		$('#cbfs').prop('checked',false);
-		$('#cbd').prop('checked',false);
+		uncheckAll();
 		defgstat = $('#gstat').val();
+		if (defgstat==null || defgstat=='-' || defgstat=='') {
+			$('#cbfcs').attr('disabled',true);
+			$('#cbfs').attr('disabled',true);
+			$('#cbd').attr('disabled',true);	
+		}
+		else {
+			if (elrak.currentItem!='A') {
+				$('#cbfcs').removeAttr('disabled');
+				$('#cbfs').removeAttr('disabled');
+			}
+			$('#cbd').removeAttr('disabled');	
+		}
+		$('.divgcsok').hide();
+		$('#gcsok').val("");
+
+		
 	})
 	$('.divcb input[type=checkbox]').change(function(){
+		if ($(this).attr('id')=='cbcs') {
+			$('#cbd').attr('disabled',$(this).prop('checked'));
+			if ($(this).prop('checked')) $('.divgcsok').show();
+			else {
+				$('.divgcsok').hide();
+				$('#gcsok').val("");
+			}
+		}
+		if ($(this).attr('id')=='cbd') $('#cbcs').attr('disabled',$(this).prop('checked'));
+		if ($(this).attr('id')=='cbfcs') $('#cbfs').attr('disabled',$(this).prop('checked'));		
+		if ($(this).attr('id')=='cbfs') $('#cbfcs').attr('disabled',$(this).prop('checked'));		
+
 		newgstat = defgstat;
 		if (newgstat==null) newgstat='';
 		if ($('#cbcs').prop('checked')) {
@@ -38,6 +74,7 @@
 		$('#gstat').val(newgstat);
 		
 	})
+	
 		
 </script>
 <div class=meres>
@@ -73,5 +110,5 @@
 </div>
 <button id=bAllapotMent>Mentés</button>
 <button id=bAllapotClose>Bezár</button>
-<button id=bAllapotJavitas>Javítás</button>
+<!--<button id=bAllapotJavitas>Javítás</button>-->
 </div>

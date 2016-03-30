@@ -251,6 +251,7 @@ var app = {
 			if (app.currentModule=='beerk' || app.currentModule=='elrak') {
 				if ( $('#gstat').is(":visible") ){
 					$('#gstat').val(app.depthMeterData);				
+					$('#gstat').trigger('change');
 				}
 			}
 			else alert(data);

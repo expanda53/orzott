@@ -27,9 +27,13 @@
 	left:5px;
 	right:5px;
 }
+.dtable{
+	overflow-y: scroll;
+	height:181px;
+}
 .tmibizlist {
 	border-collapse:collapse;
-	margin:10px 0px;
+	/*margin:10px 0px;*/
 }
 .tmibizlist tr { 
 	margin:5px 0px;
@@ -71,12 +75,13 @@
 	display:none;
 }
 #srendszam {
-	margin:2px 0px;
-	padding:10px 15px;
-	font-size: 20px;
-	-webkit-appearance: menulist-text;
-	background-color:white;
-
+margin: 2px 0px;
+    padding: 10px 15px;
+    font-size: 18px;
+    /* -webkit-appearance: menulist-text; */
+    background-color: white;
+    border: 1px dashed #E81717;
+    width: 88px;
 }
 .divlabels {
     top: 86px;

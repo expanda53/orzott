@@ -7,6 +7,16 @@
   $p     = explode("/", $request);
   $func = $p[1];
   $r = $_REQUEST;
+  
+  function _debug($stmt,$r) {
+    $sql = $stmt->queryString;
+    foreach ($r as $key => $value) {
+        $field=$key;
+        $sql = str_replace(':'.$field,addslashes($value),$sql);
+    }
+    echo 'sql:'.$sql;
+  }
+  
   if ($func==='checkLogin'){
 		$sql="select count(1) RCOUNT from pda_kezelok where kezelo=:login";
 		$stmt = Firebird::prepare($sql);
@@ -25,7 +35,7 @@
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
   }
-  
+  /* lerakodas */
   if ($func==='beerk.mibizList'){
 		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTLERAK2 (:biztip, :login)";
 		$stmt = Firebird::prepare($sql);
@@ -267,13 +277,15 @@
 		$poz = $r['poz'];
 		$tip = $r['tip'];
 		$melyseg = $r['melyseg'];
-		$sql=" SELECT * FROM PDA_ORZOTTLERAK_ALLAPOTMENT(:mibiz, :rsz, :poz,:tip, :melyseg,:login) ";
+        $csereok = $r['csereok'];
+		$sql=" SELECT * FROM PDA_ORZOTTLERAK_ALLAPOTMENT(:mibiz, :rsz, :poz,:tip, :melyseg,:csereok,:login) ";
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
 		$stmt->bindParam(':mibiz', $mibiz, PDO::PARAM_STR);
 		$stmt->bindParam(':poz', $poz, PDO::PARAM_STR);
 		$stmt->bindParam(':tip', $tip, PDO::PARAM_STR);
 		$stmt->bindParam(':melyseg', $melyseg, PDO::PARAM_STR);
+        $stmt->bindParam(':csereok', utf8_decode($csereok), PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -386,7 +398,9 @@
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));	  
   }
+  /* lerakodas eddig */
   
+  /* elrakodas */
   if ($func=='elrak.rszAdatokGet') {
 	/* elrakodasnal rendszam adatok + adott rendszambol mennyi van kiszedve*/
 	$rsz = $r['rsz'];
@@ -572,16 +586,35 @@
 	  
   }    
   /* orzott kiadas */
-  if ($func==='kiadas.mibizList'){
-		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTKI (:biztip, :login)";
+  if ($func==='kiadas.raktarList'){
+		$sql="SELECT * FROM PDA_ORZOTTKI_RAKTARLIST (:login,:akttip, :biztip)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
 		$biztip=$r['biztip'];
+        $akttip=$r['akttip'];
 		$stmt->bindParam(':biztip', $biztip, PDO::PARAM_STR);
+        $stmt->bindParam(':akttip', $akttip, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+  }  
+  if ($func==='kiadas.mibizList'){
+		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTKI (:biztip, :login,:akttip,:raktar)";
+		$stmt = Firebird::prepare($sql);
+		$login=$r['login'];
+		$biztip=$r['biztip'];
+        $akttip=$r['akttip'];
+        $raktar=$r['raktar'];
+		$stmt->bindParam(':biztip', $biztip, PDO::PARAM_STR);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+        $stmt->bindParam(':akttip', $akttip, PDO::PARAM_STR);
+        $stmt->bindParam(':raktar', $raktar, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        //_debug($stmt,$r);    
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
   }
@@ -717,4 +750,19 @@
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
   }    
+  if ($func==='kiadas.setLabelData'){
+		$sql="SELECT * FROM PDA_ORZOTTKI_CIMKEADATOK (:azon, :rsz)";
+		$stmt = Firebird::prepare($sql);
+		$login=$r['login'];
+		$azon=$r['azon'];
+		$rsz=$r['rsz'];
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
+		//$stmt->bindParam(':login', $login, PDO::PARAM_STR);		
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+  }
+  
 ?>

@@ -450,6 +450,9 @@
 	height:30px;
     vertical-align:middle;
 }	
+.divgcsok {
+	display:none;
+}	
 	
 .divgcsok select{
 	width:232px;

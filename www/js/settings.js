@@ -7,10 +7,14 @@ var settings = {
 		result=null;
 		for (x in this.items){
 			akt = this.items[x];
-			if (akt.TETEL.toUpperCase() === tetel.toUpperCase()) {
-				result = akt.ERTEK;
-				break;
+			
+			if (akt!=null) {
+				if (akt.TETEL.toUpperCase() === tetel.toUpperCase()) {
+					result = akt.ERTEK;
+					break;
+				}
 			}
+			else result="";
 		}
 		return result;
 	}

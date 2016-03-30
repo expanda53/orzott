@@ -113,16 +113,18 @@
 		<!-- tasklist -->
 		<div id=divmibizlist>
 			<button id=bMenu>Menü</button>
-			<table class=tmibizlist>
-				
-				<{sorok}>
-			</table>
+			<div class=dtable>
+				<table class=tmibizlist>
+					
+					<{sorok}>
+				</table>
+			</div>
 		</div>
 		<!-- tasklist end -->
 		<!-- panel -->
 		<div id=divpanel>
 			<div class='drendszam'>
-				<span id=srendszam></span>
+				<div id=srendszam></div>
 			</div>
 			<div class='rszadatok'>
 				<!--

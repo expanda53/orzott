@@ -184,6 +184,8 @@ OElrak.prototype.getMelyseg=function(result){
 		res = result[i];
 		$("#gstat").append('<option value='+res.KOD+'>'+res.KOD+'</option>');
 	}
+	manualChoice = settings.getItem('ORZOTT_MELYSEGMERES_KEZZEL_IS')!=null && settings.getItem('ORZOTT_MELYSEGMERES_KEZZEL_IS').toUpperCase()=='IGEN';
+	if (!manualChoice) $('#gstat').attr('disabled',true);
 	$('#divgstat').show();
 	
 }
@@ -196,7 +198,16 @@ OElrak.prototype.allapotMentes=function(){
 	mibiz = $('#hMIBIZ').val();
 	tip=elrak.currentItem;
 	fn='elrak.allapotMent';
-	ajaxCall(fn,{'rsz':rsz,'mibiz':mibiz,'poz':poz,'melyseg':melyseg,'login':login_id,'tip':tip},true, fn);
+
+	csereok = $('#gcsok').val();
+	if ((melyseg=='-' || melyseg=='' || melyseg==null)) showMessage('Mentés elõtt mérd meg a mélységet!');
+	else 
+	if (melyseg=='CS' && csereok=="") {
+		showMessage('Csere esetén töltd ki a csere okát!');
+	}
+	else {
+		ajaxCall(fn,{'rsz':rsz,'mibiz':mibiz,'poz':poz,'melyseg':melyseg,'login':login_id,'tip':tip,'csereok':csereok},true, fn);
+	}
 
 }
 OElrak.prototype.allapotMent=function(result){

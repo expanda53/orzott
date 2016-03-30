@@ -1,4 +1,6 @@
-
+#divpanel {
+	display:none;
+}
 #divclick {
 	position:fixed;
 	top:0px;
@@ -294,11 +296,20 @@
 
 }
 
+/* hkod,rsz container */
+.dhkodrsz {
+    position: relative;
+    width: 511px;
+    height: 41px;
+}
+/* hkod,rsz container eddig */
+
 /* hkod */
 .dhkod {
     position: relative;
-    width: 550px;
+    width: 173px;
     height: 41px;
+	float: left;
 }
 
 #labelHkod {
@@ -314,33 +325,32 @@
     /* top: 10px; */
     /* left: 23px; */
 }
-#dataHkod {
+/*#dataHkod {
 	position: relative;
     float: left;
     padding: 10px;
     background-color: white;
     width: 125px;
     text-align: center;
-    /* margin-top: 1px; */
+    
     height: 14px;
-    /* left: 106px; */
+    
     font-size: 20px;
     margin: 1px 4px 0px 0px;
     font-weight: bold;
-    /* top: 10px; */	
+    
 }
+*/
 #labelHkodVart {
     position: relative;
     float: left;
     padding: 10px;
-    background-color: #f1f1f1;
+    background-color: #ffffff;
     width: 62px;
     text-align: center;
-    /* margin-top: 0px; */
     height: 16px;
-    /* top: 10px; */
-    /* left: 256px; */
     font-style: italic;
+	font-weight:bold;
     margin: 2px 4px 2px 0px;
 }
 
@@ -351,6 +361,7 @@
 	display: none;
     position: relative;
     width: 500px;
+	height: 41px;
     /* text-align: center; */
     /* margin-top: 2px; */
     /* top: 126px; */
@@ -405,9 +416,21 @@
 #bNincs {
     position: relative;
     /* float: left; */
-    /* margin: 0px 0px 0px 3px; */
-    top: 45px;
-    left: -325px;
+    margin-top: 4px;
+    /*top: 45px;*/
+    /*left: -325px;*/
+}
+#drszadatok {
+	
+}
+#dmeretminta{
+    background-color: #D4D4D4;
+    width: 484px;
+    padding: 5px;
+    float: left;
+    position: relative;
+    height: 15px;
+	font-weight:bold;
 }
 /* rendszam eddig */
 
@@ -522,6 +545,31 @@
 }
 /* altalanos / raktar eddig */
 /* altalanos eddig */
+/* cimke panel */
+#divcimke {
+	display:none;
+	width:100%;
+	position:relative;
+	top:0px;
+	height:100%;
+}
+#divcimke div{
+	width: 200px;
+    float: left;
+	margin-left:25px;
+}
+#dcimkebuttons {
+    width: 507px !important;
+}
+#bCimkeClose {
+    margin-left: 50px;
+}
+
+.bcimkeprint {
+	
+}
+
+/* cimke panel eddig */
 /*
 ::-webkit-scrollbar {
     width: 32px;

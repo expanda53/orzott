@@ -25,6 +25,7 @@ var OKiadas = function(){
 	this.lastRsz = '';
 	this.currentRow = 0;
 	this.fejazon = -1;
+	this.aktbiztip = 'MO05';
 
 	this.panelInit();
 }
@@ -43,16 +44,20 @@ OKiadas.prototype.panelInit = function () {
 			$('#dataRendszam').bind('focus',function (event) {
 				$(this).val("");
 			})	
+			/*
 			$('#dataHkod').bind('focus',function (event) {
 				$(this).val("");
 				kiadas.hideRsz();
 			})	
-	
+			*/
 			
+			/*
 			$('#dataHkod').bind('change',function (event) {
 				kiadas.hkodChange();
-			})	
-			$('#bMenu').bind('click',function () {
+			})
+			*/
+					
+			$('#bMenu, #bMenu1').bind('click',function () {
 				showMenu();
 			})	
 			$('#bEllenorzes').bind('click',function () {
@@ -61,6 +66,14 @@ OKiadas.prototype.panelInit = function () {
 			$('#bNincs').bind('click',function () {
 				kiadas.rszNotFound();
 			})
+			$('#bCimke').bind('click',function () {
+				kiadas.showCimkePanel();
+			})
+			$('#bCimkeClose').bind('click',function () {
+				$('#divcimke').hide();
+				$('#divpanel').show();
+			})
+			
 			$('#bFolytMost').bind('click',function (event) {
 				event.stopPropagation();
 				event.preventDefault();
@@ -70,7 +83,7 @@ OKiadas.prototype.panelInit = function () {
 					$('#divpanel').show();
 					event.handled = true;
 					if ($('#dataRendszam').is(":visible")) $('#dataRendszam').focus();
-					else $('#dataHkod').focus();
+					//else $('#dataHkod').focus();
 				} else {
 					return false;
 				}
@@ -78,19 +91,37 @@ OKiadas.prototype.panelInit = function () {
 			$('#bLezar').bind('click',function () {
 				kiadas.lezarInit();
 			})
+			$('#kiadastip').bind('change',function(){
+				akttip = $(this).val();
+				fn = 'kiadas.raktarList';
+				ajaxCall(fn,{'login':login_id,'biztip':kiadas.aktbiztip,'akttip':akttip},true, fn);
+				
+			})
+			$('#btStart').bind('click',function(){
+				fn = 'kiadas.mibizList';
+				akttip = $('#kiadastip').val();
+				raktar = $('#raktarlist').val();
+				ajaxCall(fn,{'login':login_id,'biztip':kiadas.aktbiztip,'akttip':akttip,'raktar':raktar},true, fn);
+
+			})
 			
-			$('#dataHkod').focus();
+			//$('#dataHkod').focus();
+			$('#kiadastip').trigger('change');
 		})
-		fn = 'kiadas.mibizList';
-		ajaxCall(fn,{'login':login_id,'biztip':'MO05'},true, fn);
 
+		
 	})
-	
-	
-
 }
 
 /* fopanel */
+OKiadas.prototype.raktarList = function (result){
+	html = "";
+	$("#raktarlist").html('');
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		$("#raktarlist").append('<option value='+res.RAKTAR+'>'+res.RAKTAR+'</option>');
+	}
+}
 OKiadas.prototype.mibizList = function (result){
 	/* bfej.azon kiolvasasa, eltarolasa */
 	for (var i = 0;i < result.length;i++){
@@ -98,23 +129,26 @@ OKiadas.prototype.mibizList = function (result){
 		kiadas.fejazon = res.FEJAZON;
 		
 		$('#dataSofor').html(res.FUVAR);
-		$('#dataJarat').html(res.SORREND);
+		$('#dataJarat').html($('#kiadastip option:selected').text());
 		$('#dataRaktar').html(res.RAKTAR);
 		
 		/* kovetkezo kiszedendo helykod betoltese */
 		fn = 'kiadas.nextHkodGet';
 		ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon,'hkod':kiadas.currentHkod},true, fn);
+		
+		$('#divmibizlist').hide();
+		$('#divpanel').show();		
 	}
 
 }
 OKiadas.prototype.nextHkodGet = function (result){
 	/* elso kiszedendo helykod betoltese */
-	$('#dataHkod').val("");
+	//$('#dataHkod').val("");
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		$('#labelHkodVart').html(res.HKOD);
 		kiadas.currentHkod= res.HKOD;
-		
+		kiadas.hkodChange();
 	}
 }
 
@@ -127,15 +161,16 @@ OKiadas.prototype.nextHkodGet = function (result){
 /* hkod innen */
 OKiadas.prototype.showHkod=function(){
 	$('.dhkod').show();
-	$('#dataHkod').val("");
-	$('#dataHkod').focus();
+	//$('#dataHkod').val("");
+	//$('#dataHkod').focus();
 }
 OKiadas.prototype.hideHkod=function(){
-	$('#dataHkod').val("");
+	//$('#dataHkod').val("");
 	$('.dhkod').hide();
 }
 OKiadas.prototype.hkodChange=function(){
-	if ($('#dataHkod').val() == this.currentHkod) {
+	
+	//if ($('#dataHkod').val() == this.currentHkod) {
 		$('.drendszam').show();
 		$('#dataRendszam').empty();
 		/* kovetkezo kiszedendo rendszam betoltese */
@@ -143,102 +178,27 @@ OKiadas.prototype.hkodChange=function(){
 		ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon,'hkod':kiadas.currentHkod,'rsz':kiadas.currentRsz},true, fn);
 		
 		
-	}
-	else showMessage('Nem megfelelõ helykód!','dataHkod');
+	//}
+	//else showMessage('Nem megfelelõ helykód!','dataHkod');
 }
 
 
-OKiadas.prototype.hkodSaveCheck = function (result){
-	/* hkod ellenõrzés, majd mentés (ha a visszaadott result=ok) */
-	for (var i = 0;i < result.length;i++){
-		res = result[i];
-		
-		$('#hSORSZ').val(res.SORSZ);	
-		$('#rendszam').val(res.RENDSZAM);
-		$('#hMIBIZ').val(res.MIBIZ);	
-		
-		if (res.RESULT=='OK') {
-			rsz = $('#dataRendszam').val();
-			hkod = $('#dataHkod').val();
-			azon = res.FEJAZON;
-			sorsz = res.SORSZ;	
-
-			fn = 'kiadas.hkodSave';
-			ajaxCall(fn,{'azon':azon, 'sorsz':sorsz,'rsz':rsz,'hkod':hkod,'login':login_id},true, fn);
-		}
-		else {
-			clearObj='dataHkod';
-			errormsg='';
-			switch (res.RESULTTEXT) {
-				case 'DIFFERENT_HKOD': 
-					errormsg='A korábban kiadasodott termékek más helykódon vannak! '+res.ERRORTEXT;
-					showMessage(errormsg,clearObj);
-					break;
-				case 'NOT_FOUND': 
-					errormsg='Nem található ilyen rendszám a lerakodott abroncsok között!';
-					showMessage(errormsg,clearObj);
-					break;
-				case 'ALREADY_DONE': 
-					errormsg='Ez a gumi már el lett pakolva erre a helykódra!';
-					break;
-				case 'EMPTY_POSITION': 
-					errormsg='A rendszámhoz tartozó pozíciók üresek!';
-					showMessage(errormsg,clearObj);
-					break;
-				case 'HKOD_EXISTS': 
-					errormsg='Más helykódon is van ez a rendszám!';
-					showMessage(errormsg,clearObj);
-					break;					
-				default:
-					errormsg = res.RESULTTEXT;
-					showMessage(errormsg,clearObj);
-					
-			}
-		}
-	}
-		
-	
-}
-
-OKiadas.prototype.hkodSave = function (result){
-	for (var i = 0;i < result.length;i++){
-		res = result[i];
-		if (res.RESULT=='OK') {
-			showMessage(res.RESULT);
-		}
-		else {
-			errormsg='';
-			switch (res.RESULTTEXT) {
-				case 'NOT_FOUND': 
-					errormsg='Nem található ilyen rendszám a lerakodott abroncsok között!';
-					break;
-				case 'EMPTY_POSITION': 
-					errormsg='A rendszámhoz tartozó pozíciók üresek!';
-					break;
-				case 'HKOD_EXISTS': 
-					errormsg='Más helykódon is van ez a rendszám!';
-					break;					
-				default:
-					errormsg = res.RESULTTEXT;
-					
-			}
-			showMessage(errormsg);
-			
-		}
-	}
-		
-
-
-	//alert(JSON.stringify(result));
-}
 /* hkod eddig */
 
 /* rendszam innen */
 OKiadas.prototype.hideRsz=function(){
 	$('.drendszam').hide();
 }
-OKiadas.prototype.setNextRsz = function (rsz){
+OKiadas.prototype.setNextRsz = function (rszRec){
+		if (rszRec.RSZ!=undefined) rsz = rszRec.RSZ;
+		if (rszRec.NEXTRSZ!=undefined) rsz = rszRec.NEXTRSZ;
+		meret = rszRec.MERET;
+		minta=rszRec.MINTA;
+		cicsop = rszRec.MARKA;
+		fegu=rszRec.FEGU;
+		
 		$('#labelRendszamVart').html(rsz);
+		$('#dmeretminta').html(meret+" "+cicsop+" "+minta+" ("+fegu+")");
 		kiadas.currentRsz= rsz;
 		$('#dataRendszam').focus();
 }
@@ -247,7 +207,7 @@ OKiadas.prototype.nextRszGet = function (result){
 	/* elso kiszedendo rendszam betoltese */
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
-		kiadas.setNextRsz(res.RSZ);
+		kiadas.setNextRsz(res);
 	}
 }
 OKiadas.prototype.rszChange = function (){
@@ -282,7 +242,7 @@ OKiadas.prototype.rszSave = function (result){
 					
 				}
 				else {
-					kiadas.setNextRsz(res.NEXTRSZ);
+					kiadas.setNextRsz(res);
 					errormsg='Mentés rendben, RENDSZÁM VÁLTÁS!';
 					showMessage(errormsg,'dataRendszam');
 				}
@@ -342,7 +302,7 @@ OKiadas.prototype.rszEmpty = function(result){
 					
 				}
 				else {
-					kiadas.setNextRsz(res.NEXTRSZ);
+					kiadas.setNextRsz(res);
 					errormsg='Mentés rendben, RENDSZÁM VÁLTÁS!';
 					showMessage(errormsg,'dataRendszam');
 				}
@@ -532,7 +492,69 @@ OKiadas.prototype.closeIt = function(result){
 
 }
 /* atnezo panel eddig */
+/* cimke nyomtatas */
+OKiadas.prototype.showCimkePanel = function(){
+	$('#divpanel').hide();
+	$('#divcimke').show();
+	fn = 'kiadas.setLabelData';
+	ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon,'rsz':this.currentRsz},true, fn);
 
+}
+OKiadas.prototype.setLabelData = function(result){
+	/* cimke nyomtatashoz gombok */
+	html = "";
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		html+="<div><button class='bcimkeprint' val='"+res.RSZ+"'>"+res.RSZ+"</button></div>";
+	}
+	$('#dcimkebuttons').html(html);
+	$('.bcimkeprint').bind('click',function(){
+		kiadas.printLabel( $(this) );
+	});
+}
+OKiadas.prototype.printLabel = function(aktbutton){
+	rszprint = aktbutton.attr('val');
+	var btPrint = function() {
+		$.get( "views/prn_rendszam_lerak.tpl", function( data ) {
+
+				
+				tpl = data.replace(/\[RENDSZPOZ\]/g,rszprint); 
+				tpl += '\r\n';
+				var writeOk = function(){
+				}
+				var writeError = function(){
+					console.log('btprint write error:kiadas, label print:'+rszprint);
+				}
+				if (!teszt) bluetoothSerial.write(tpl,writeOk,writeError);
+				if (teszt) writeOk();
+				
+		})
+	}
+	
+	var printError = function(){
+		console.log('btprint write error:kiadas, label print:'+rszprint);
+		app.printerConnected=false;
+		if (app.printerId!="") BTEnabled();
+		if (app.printerConnected==false) alert('Nyomtatási hiba');
+	}
+	/* print */
+	if(typeof bluetoothSerial != 'undefined') {
+			try {
+				printing=true;
+				bluetoothSerial.isConnected(btPrint, printError);
+			}
+			finally {
+				printing=false;
+			}
+	}
+	else {
+			showMessage('printer not found');
+			if (teszt) btPrint();
+	}
+	
+
+}
+/* cimke nyomtatas eddig */
 
 /* kiadas eddig */
 

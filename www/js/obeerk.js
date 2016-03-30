@@ -1,4 +1,5 @@
 /* beerkezes */
+/* beerkezes */
 markaUpdate = false;
 meretUpdate = false;
 mintaUpdate = false;
@@ -190,6 +191,7 @@ OBeerk.prototype.showAllapotPanel = function(obj){
 				$('#divmeres').html(css + data);
 				$('#divpanel').hide();
 				$('#divmeres').show();
+				$('#divpozicio').show();				
 				var muvelet = "";
 				if (beerk.currentItem=="bGumi") muvelet = "beérkezés: gumi";
 				if (beerk.currentItem=="bFelni") muvelet = "beérkezés: felni";
@@ -329,10 +331,12 @@ OBeerk.prototype.rszMent = function(result) {
 			$('.dataDrbFEGU').html(res.FE+'/'+res.GU);
 			
 			id=beerk.currentPosition;
-			$('.bpozicio').attr('disabled','disabled');
-			$( '#'+id).addClass( "bpozicioSelected" );
+			//$('.bpozicio').attr('disabled','disabled');
+			//$( '#'+id).addClass( "bpozicioSelected" );
 			if (beerk.meresKell) {
 				//meres panel betoltese
+				$('#muvelet').append(' ('+beerk.currentPosition.substring(1)+')');
+				$('#divpozicio').hide();
 				$('#divallapot').show();
 				$('#bAllapotMent').show();
 				$('#bAllapotClose').hide();
@@ -358,6 +362,8 @@ OBeerk.prototype.getMelyseg=function(result){
 		res = result[i];
 		$("#gstat").append('<option value='+res.KOD+'>'+res.KOD+'</option>');
 	}
+	manualChoice = settings.getItem('ORZOTT_MELYSEGMERES_KEZZEL_IS')!=null && settings.getItem('ORZOTT_MELYSEGMERES_KEZZEL_IS').toUpperCase()=='IGEN';
+	if (!manualChoice) $('#gstat').attr('disabled',true);
 	$('#divgstat').show();
 
 	
@@ -366,13 +372,18 @@ OBeerk.prototype.getMelyseg=function(result){
 OBeerk.prototype.allapotMentes=function(){
 	poz = this.currentPosition;
 	melyseg = $('#gstat').val();
+	csereok = $('#gcsok').val();
 	if (this.meresKell && (melyseg=='-' || melyseg=='' || melyseg==null)) showMessage('Mentés elõtt mérd meg a mélységet!');
+	else 
+	if (melyseg=='CS' && csereok=="") {
+		showMessage('Csere esetén töltd ki a csere okát!');
+	}
 	else {
 		rsz = $('#rendszam').val();
 		mibiz = $('#hMIBIZ').val();
 		tip=beerk.currentItem;
 		fn='beerk.allapotMent';
-		ajaxCall(fn,{'rsz':rsz,'mibiz':mibiz,'poz':poz,'melyseg':melyseg,'login':login_id,'tip':tip},true, fn);
+		ajaxCall(fn,{'rsz':rsz,'mibiz':mibiz,'poz':poz,'melyseg':melyseg,'login':login_id,'tip':tip,'csereok':csereok},true, fn);
 	}
 }
 OBeerk.prototype.allapotMent=function(result){
@@ -566,7 +577,7 @@ OBeerk.prototype.folytKesobb=function(){
 OBeerk.prototype.folytUpdate=function(result){
 	/* atnezon folyt kesobb ajax eredmenye */
 	$('#divreview').hide();
-	app.BTDisabled();
+	//app.BTDisabled();
 	beerk.initMibizList();
 }
 
