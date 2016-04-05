@@ -17,7 +17,9 @@
     echo 'sql:'.$sql;
   }
   
-  if ($func==='checkLogin'){
+  switch ($func) {
+  
+  case 'checkLogin':
 		$sql="select count(1) RCOUNT from pda_kezelok where kezelo=:login";
 		$stmt = Firebird::prepare($sql);
 		$login=trim($r['user']);
@@ -25,8 +27,9 @@
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
-  }
-  if ($func==='loadSettings'){
+        break;
+  
+  case 'loadSettings':
 		$sql="select tetel,ertek  from ini where konftip='SAJC' and szekcio = 'ANDROID' and tetel like 'ORZOTT%'";
 		$stmt = Firebird::prepare($sql);
 		/*$login=trim($r['user']);
@@ -34,9 +37,10 @@
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
-  }
+        break;
+  
   /* lerakodas */
-  if ($func==='beerk.mibizList'){
+  case 'beerk.mibizList':
 		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTLERAK2 (:biztip, :login)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
@@ -46,9 +50,9 @@
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
-  }
+        break;
 
-  if ($func==='beerk.panelInit'){
+  case 'beerk.panelInit':
 		$mibiz = $r['mibiz'];
 		$login = $r['login'];
 		$sql=" SELECT FIRST 1  BFEJ.AZON,BFEJ.MIBIZ
@@ -62,9 +66,9 @@
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
+        break;
 
-  }
-  if ($func==='beerk.rszAdatokGet'){
+  case 'beerk.rszAdatokGet':
 		$azon = $r['azon'];
 		$rsz = $r['rsz'];
 		$sql=" SELECT FIRST 1  SORSZ, CAST(ABS(DRB) AS INTEGER) AS DRB ,CEG.NEV CEGNEV ,CAST(DRB2 AS INTEGER) AS CDRB,AKTSOR.DEVEAR AS PDAKEZ, AKTSOR.STAT3 AS ROWSTAT,
@@ -86,9 +90,10 @@
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
+        break;
 
-  }
-  if ($func==='beerk.rszAdatokSet'){
+  
+  case 'beerk.rszAdatokSet':
 		$azon = $r['azon'];
 		$rsz = $r['rsz'];
 		$fedb = $r['fedb'];
@@ -110,9 +115,9 @@
 		} 
 
 		echo json_encode($res);
+        break;
 
-  }  
-  if ($func==='beerk.taskReg'){
+  case 'beerk.taskReg':
 		$mibiz = $r['mibiz'];
 		$login = $r['login'];
 		$sql=" EXECUTE PROCEDURE PDA_ORZOTTLERAK_TASKREG ( :mibiz, :login ) ";
@@ -124,10 +129,9 @@
 		$res=null;
 		//$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
+        break;
 
-  }
-  
-  if ($func==='beerk.rszMent') {
+  case 'beerk.rszMent':
 		$azon = $r['azon'];
 		$sorsz = $r['sorsz'];
 		$drb2 = $r['drb2'];
@@ -149,10 +153,9 @@
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
+        break;
 	  
-  }
-
-  if ($func==='beerk.rszJav') {
+  case 'beerk.rszJav':
 		$azon = $r['azon'];
 		$sorsz = $r['sorsz'];
 		$rsz = $r['rsz'];
@@ -167,10 +170,8 @@
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
-	  
-  }  
-  
-  if ($func==='beerk.reviewRszFilter'){
+	    break;
+  case 'beerk.reviewRszFilter':
 		$azon = $r['azon'];
 		$login = $r['login'];
 		$sql=" SELECT DISTINCT LEFT(BSOR.TAPADO,2) RENDSZAM
@@ -184,10 +185,8 @@
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
-
-  }  
-  
-  if ($func==='beerk.reviewRszGet'){
+        break;
+  case 'beerk.reviewRszGet':
 		$filter = $r['filter'];
 		$filterStr='';
 		if ($filter!='*') {
@@ -206,10 +205,9 @@
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
-
-  }  
-  
-  if ($func==='beerk.folytUpdate') {
+        break;
+    
+    case 'beerk.folytUpdate':
 		$azon = $r['azon'];
 		$login = $r['login'];
 		/*
@@ -229,9 +227,8 @@
 		$res[0]['STATUS']='OK';
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
-	  
-  }
-  if ($func==='beerk.lezarUpdate') {
+        break;
+	case 'beerk.lezarUpdate':
 		$mibiz = $r['mibiz'];
 		$stat = $r['stat'];
 		$login = $r['login'];
@@ -245,9 +242,10 @@
 		$res[0]['STATUS']='OK';
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
+        break;
 	  
-  }
-  if ($func==='beerk.getPositions') {
+  
+  case 'beerk.getPositions':
 		$rsz = $r['rsz'];
 		$mibiz = $r['mibiz'];
 		$login = $r['login'];
@@ -259,8 +257,10 @@
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
-  }  
-  if ($func==='beerk.getMelyseg' || $func==='elrak.getMelyseg') {
+        break;
+  
+  case 'beerk.getMelyseg':
+  case 'elrak.getMelyseg':
 		$login = $r['login'];
 		$sql=" SELECT KOD FROM AKHSTAT WHERE TIPUS='G' ORDER BY KOD3,KOD2,KOD";
 		$stmt = Firebird::prepare($sql);
@@ -268,9 +268,9 @@
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
-	  
-  } 
-  if ($func==='beerk.allapotMent' || $func==='elrak.allapotMent') {
+        break;
+   case 'beerk.allapotMent':
+   case 'elrak.allapotMent':
 		$rsz = $r['rsz'];
 		$mibiz = $r['mibiz'];
 		$login = $r['login'];
@@ -291,8 +291,8 @@
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
-  }  
-  if ($func=='getMarka'){
+        break;
+  case 'getMarka':
 		$marka = trim($r['marka']);
 		$meret = trim($r['meret']);
 		$minta = trim($r['minta']);
@@ -317,8 +317,8 @@
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));	  
-  }
-  if ($func=='getMeret'){
+        break;
+  case 'getMeret':
 		$marka = trim($r['marka']);
 		$meret = trim($r['meret']);
 		$minta = trim($r['minta']);
@@ -343,8 +343,8 @@
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));	  
-  }
-  if ($func=='getMinta'){
+        break;
+  case 'getMinta':
 		$marka = trim($r['marka']);
 		$meret = trim($r['meret']);
 		$minta = trim($r['minta']);
@@ -370,8 +370,8 @@
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));	  
-  }
-  if ($func=='getSI'){
+        break;
+    case 'getSI':
 		$marka = trim($r['marka']);
 		$meret = trim($r['meret']);
 		$minta = trim($r['minta']);
@@ -397,11 +397,11 @@
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));	  
-  }
+        break;
   /* lerakodas eddig */
   
   /* elrakodas */
-  if ($func=='elrak.rszAdatokGet') {
+  case 'elrak.rszAdatokGet':
 	/* elrakodasnal rendszam adatok + adott rendszambol mennyi van kiszedve*/
 	$rsz = $r['rsz'];
 	$sql=" SELECT * FROM PDA_ORZOTTHKOD_GETRSZ(:rsz) ";
@@ -411,9 +411,9 @@
 	$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	Firebird::commit();
 	echo json_encode(Converter::win2utf_array($res));
-  }
+    break;
 
-  if ($func=='elrak.hkodSaveCheck') {
+  case 'elrak.hkodSaveCheck':
 	/* elrakodasnal hkod mentes elotti ellenorzesek*/
 	$rsz = $r['rsz'];
 	$hkod = $r['hkod'];
@@ -427,9 +427,9 @@
 	$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	Firebird::commit();
 	echo json_encode(Converter::win2utf_array($res));
-  }
+    break;
 
-  if ($func=='elrak.hkodSave') {
+  case 'elrak.hkodSave':
 	/* elrakodasnal hkod mentes (elotte ellenorzes volt, ide csak akkor kerul, ha azon tuljutott)*/
 	$azon = $r['azon'];
 	$sorsz = $r['sorsz'];
@@ -447,8 +447,8 @@
 	$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	Firebird::commit();
 	echo json_encode(Converter::win2utf_array($res));
-  }
-  if ($func==='elrak.hkodDel') {
+    break;
+  case 'elrak.hkodDel':
 	/* elrakodasnal adott rendszamhoz tartozo hkodok torlese */
 	$azon = $r['azon'];
 	$rsz = $r['rsz'];
@@ -462,9 +462,9 @@
 	$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	Firebird::commit();
 	echo json_encode(Converter::win2utf_array($res));	
-  }
+    break;
 	
-  if ($func==='elrak.reviewRszFilter'){
+  case 'elrak.reviewRszFilter':
 		/* atnezo panel , rendszam szuro*/
 		$login = $r['login'];
 		$sql=" SELECT DISTINCT LEFT(BSOR.TAPADO,2) RENDSZAM
@@ -477,9 +477,8 @@
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
-
-  }  
-  if ($func==='elrak.reviewRszGet'){
+        break;
+  case 'elrak.reviewRszGet':
 		/* atnezo panel, rendszam szuro eredmeny*/
 		$filter = $r['filter'];
 		$filterStr='';
@@ -498,11 +497,9 @@
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
-
-  }  
-
+        break;
   /* orzott leltar */
-  if ($func==='leltar.mibizList'){
+  case 'leltar.mibizList':
 		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTLELTAR (:biztip, :login)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
@@ -514,8 +511,8 @@
 		
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
-  }
-  if ($func==='leltar.rszSave'){
+        break;
+  case 'leltar.rszSave':
 		$sql="SELECT * FROM PDA_ORZOTTLELTAR_SORUPDATE (:login,:fejazon, :hkod, :rendszam)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
@@ -531,8 +528,9 @@
 		
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
-  }
-  if ($func==='leltar.reviewLoad'){
+        break;
+  
+  case 'leltar.reviewLoad':
 		$sql="SELECT * FROM PDA_ORZOTTLELTAR_REVIEW (:login,:fejazon)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
@@ -542,8 +540,9 @@
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
-  }
-  if ($func==='leltar.folytUpdate') {
+        break;
+  
+  case 'leltar.folytUpdate':
 		$azon = $r['azon'];
 		$login = $r['login'];
 
@@ -557,9 +556,8 @@
 		$res[0]['STATUS']='OK';
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
-	  
-  }
-  if ($func==='leltar.lezarUpdate') {
+        break;
+  case 'leltar.lezarUpdate':
 		$azon = $r['azon'];
 		$sql=" UPDATE BFEJ SET STAT3='Z' WHERE AZON=:azon  ";
 		$stmt = Firebird::prepare($sql);
@@ -569,9 +567,8 @@
 		$res[0]['STATUS']='OK';
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
-	  
-  }  
-  if ($func==='leltar.delRsz') {
+        break;
+  case 'leltar.delRsz':
 		$azon = $r['azon'];
 		$rendszam = $r['rendszam'];
 		$sql=" DELETE FROM BSOR WHERE BFEJ=:azon and cikk=:rendszam ";
@@ -583,10 +580,9 @@
 		$res[0]['RENDSZAM']=$rendszam;
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
-	  
-  }    
+        break;
   /* orzott kiadas */
-  if ($func==='kiadas.raktarList'){
+  case 'kiadas.raktarList':
 		$sql="SELECT * FROM PDA_ORZOTTKI_RAKTARLIST (:login,:akttip, :biztip)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
@@ -600,8 +596,8 @@
 		
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
-  }  
-  if ($func==='kiadas.mibizList'){
+        break;
+  case 'kiadas.mibizList':
 		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTKI (:biztip, :login,:akttip,:raktar)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
@@ -617,8 +613,8 @@
         //_debug($stmt,$r);    
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
-  }
-  if ($func==='kiadas.nextHkodGet'){
+        break;
+  case 'kiadas.nextHkodGet':
 		$sql="SELECT * FROM PDA_ORZOTTKI_HKOD (:azon, :hkod)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
@@ -631,8 +627,8 @@
 		
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
-  }
-  if ($func==='kiadas.nextRszGet'){
+        break;
+  case 'kiadas.nextRszGet':
 		$sql="SELECT * FROM PDA_ORZOTTKI_RSZ (:azon, :hkod, :rsz)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
@@ -647,8 +643,8 @@
 		
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
-  }
-  if ($func==='kiadas.rszSave'){
+        break;
+  case 'kiadas.rszSave':
 		$sql="SELECT * FROM PDA_ORZOTTKI_SORUPDATE (:azon, :hkod, :rsz, :rszshort,:login,:lastrsz)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
@@ -668,8 +664,8 @@
 		
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
-  }
-  if ($func==='kiadas.rszEmpty'){
+        break;
+  case 'kiadas.rszEmpty':
 		$sql="SELECT * FROM PDA_ORZOTTKI_SORVISSZA (:azon, :hkod, :rszshort,:login)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
@@ -685,8 +681,8 @@
 		
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
-  }  
-  if ($func==='kiadas.reviewRszFilter'){
+        break;
+  case 'kiadas.reviewRszFilter':
 		/* atnezo panel , rendszam szuro*/
 		$login = $r['login'];
 		$azon=$r['azon'];
@@ -701,9 +697,8 @@
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
-
-  }  
-  if ($func==='kiadas.reviewRszGet'){
+        break;
+  case 'kiadas.reviewRszGet':
 		/* atnezo panel, rendszam szuro eredmeny*/
 		$filter = $r['filter'];
 		$filterStr='';
@@ -723,10 +718,9 @@
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
+        break;
 
-  }  
-
-  if ($func==='kiadas.closeCheck'){
+  case 'kiadas.closeCheck':
 		/* lezaras elotti ellenorzes*/
 		$azon = $r['azon'];
 		$login = $r['login'];
@@ -737,8 +731,8 @@
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
-  }    
-  if ($func==='kiadas.close'){
+        break;
+  case 'kiadas.close':
 		/* lezaras */
 		$azon = $r['azon'];
 		$login = $r['login'];
@@ -749,8 +743,8 @@
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
-  }    
-  if ($func==='kiadas.setLabelData'){
+        break;
+  case 'kiadas.setLabelData':
 		$sql="SELECT * FROM PDA_ORZOTTKI_CIMKEADATOK (:azon, :rsz)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
@@ -763,6 +757,22 @@
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
+        break;
+  case 'kiadas.rszReset':
+		$sql="SELECT * FROM PDA_ORZOTTKI_RSZRESET (:azon, :rsz, :login)";
+		$stmt = Firebird::prepare($sql);
+		$login=$r['login'];
+		$azon=$r['azon'];
+		$rsz=$r['rsz'];
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);		
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+        break;
+    default:
+        echo json_encode('unknown command');
   }
-  
 ?>

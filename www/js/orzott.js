@@ -8,11 +8,7 @@ function ajaxCall( func, d,asyn,fn) {
   console.debug('ajax:'+func+' data:'+JSON.stringify(d));
   $.ajax({
         type: "POST",
-		//url: "http://192.168.22.200/orzottsrv/service.php/" + func, /* akh local teszt */
-		//url: "http://192.168.1.105/orzottsrv/service.php/" + func, /* otthoni eles */
 		url: "http://redmine.akh.hu/orzott_api/service.php/" + func, /* akh eles */
-		//url: "http://192.168.22.144/orzott_api/service.php/" + func, /* akh eles */
-		
         data: d,
 		async: asyn,
         dataType: "json",

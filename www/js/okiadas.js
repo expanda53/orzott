@@ -424,7 +424,7 @@ OKiadas.prototype.reviewFilter = function() {
 		tdclass='';
 			if (res.DRB2==res.DRB) tdclass=' rowhighlighted';
 			if (res.DRB2==0 && res.STAT3=='X') tdclass=' rowhighlighted_notfound';
-			sor += '<tr class="'+tdclass+'" id="'+res.RENDSZAM+'">';
+			sor += '<tr stat="'+res.STAT3+'" class="'+tdclass+'" id="'+res.RENDSZAM+'">';
 			sor += '<td class="tdrsz">'+res.RENDSZAM+'</td>';
 			sor += '<td class="tdhkod">'+res.HKOD+'</td>';
 			sor +=  '<td class="tmibiz">'+res.DRB+'</td>'; 
@@ -434,12 +434,40 @@ OKiadas.prototype.reviewFilter = function() {
 		
 	}
 	$('.tableReview tbody').append(sor);
+	$('.tableReview tbody tr').bind('click',function(){
+		curTR = $(this);
+		rszTD = curTR.find('.tdrsz');
+		if (curTR.attr('stat')=='X') {
+			/* "nincs meg" esetén fut csak, "nincs meg" jelzes torles */
+			if (confirm("Mégis szedhetõ?")) {
+				rsz = rszTD.html();
+				fn = 'kiadas.rszReset';
+				r = ajaxCall(fn,{'rsz':rsz,'azon':kiadas.fejazon,'login':login_id},true, fn);
+			}
+		}
+	})
+}
+
+OKiadas.prototype.rszReset = function(result){
+	/* "nincs meg" jelzes torlese */
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		if (res.RESULTTEXT=='OK') {
+			showMessage('Visszaállítás rendben!','');
+			kiadas.showReview();
+		}
+		else {
+			showMessage('HIBA:'+res.RESULTTEXT,'');
+		}
+	}
 }
 
 
 OKiadas.prototype.lezarInit = function() {
-	fn = 'kiadas.closeCheck';
-	ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon},true, fn);
+	if (confirm("Zárható?")) {
+		fn = 'kiadas.closeCheck';
+		ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon},true, fn);
+	}
 	
 }
 OKiadas.prototype.closeCheck = function(result){
