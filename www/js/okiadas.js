@@ -562,7 +562,7 @@ OKiadas.prototype.printLabel = function(aktbutton){
 	var printError = function(){
 		console.log('btprint write error:kiadas, label print:'+rszprint);
 		app.printerConnected=false;
-		if (app.printerId!="") BTEnabled();
+		if (app.printerId!="") BTEnabled(null);
 		if (app.printerConnected==false) alert('Nyomtatási hiba');
 	}
 	/* print */

@@ -48,6 +48,10 @@ OElrak.prototype.panelInit = function () {
 			$('#dataHkod').bind('change',function (event) {
 				elrak.hkodChange();
 			})	
+			$('#bHkodMentes').bind('click',function () {			
+				elrak.hkodChange();
+			})
+
 			$('#bHkodTorol').bind('click',function () {			
 				elrak.hkodDelInit();
 			})
@@ -88,6 +92,13 @@ OElrak.prototype.rszAdatokGet = function (result){
 		res = result[i];
 		if (res.RESULT=='OK') {
 				$('#dataHkod').val('');
+                if (res.HKOD!='') {
+                    $('#dataHkod').val(res.HKOD);
+                    $('#bHkodMentes').show();
+                }                
+                else {
+                    $('#bHkodMentes').hide();
+                }
 				elrak.showHkod();
 				
 		}
@@ -126,6 +137,10 @@ OElrak.prototype.rszAdatokGet = function (result){
 					$('#dataHkod').val(res.ERRORTEXT);
 					elrak.showHkod();
 					break;
+				case 'ALREADY_STARTED': 
+					errormsg='Már van egy elkezdett garnitúra:<BR>'+res.ERRORTEXT;
+					showMessage(errormsg,clearObj);
+					break;
 
 				default:
 					errormsg = res.RESULTTEXT;
@@ -135,6 +150,14 @@ OElrak.prototype.rszAdatokGet = function (result){
 			$('#hSORSZ').val(res.SORSZ);	
 			$('#rendszam').val(res.RENDSZAM);
 			$('#hMIBIZ').val(res.MIBIZ);	
+            if (res.HKOD!='') {
+				$('#dataHkod').val(res.HKOD);
+				elrak.showHkod();
+                $('#bHkodMentes').show();
+            }
+            else {
+                $('#bHkodMentes').hide();
+            }
 			elrak.currentItem=res.RSZTIP;
 			elrak.currentPosition='b'+res.RSZPOZ;
 			if (meresKell) {
@@ -278,8 +301,13 @@ OElrak.prototype.hkodSaveInit=function(){
 	/* helykod mentes */
 	rsz = $('#dataRendszam').val();
 	hkod = $('#dataHkod').val();
-	fn = 'elrak.hkodSaveCheck';
-	ajaxCall(fn,{'rsz':rsz,'hkod':hkod,'login':login_id},true, fn);
+    if (hkod!='') {
+        fn = 'elrak.hkodSaveCheck';
+        ajaxCall(fn,{'rsz':rsz,'hkod':hkod,'login':login_id},true, fn);
+    }
+    else {
+        showMessage('Helykód nem lehet üres!');
+    }
 }
 
 OElrak.prototype.hkodSaveCheck = function (result){

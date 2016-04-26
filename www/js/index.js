@@ -111,12 +111,11 @@ var app = {
 		}	
 		
 	},	
-	BTEnabled:function(){
-	
-	
+	BTEnabled:function(delayedFunc){
 		if(typeof bluetoothSerial != 'undefined'){ 
+            //alert('btenabled start');
 			var btAssign = function() {
-				app.manageConnection(true);
+				app.manageConnection(true,delayedFunc);
 			}
 			bluetoothSerial.isEnabled(
 				btAssign,
@@ -152,17 +151,18 @@ var app = {
 		app.manageConnection2(false);
 	},
 	
-   manageConnection: function(needConnect) {
+   manageConnection: function(needConnect,delayedFunc) {
 	    /* printer */
 		if(typeof bluetoothSerial != 'undefined') {
 			// connect() will get called only if isConnected() (below)
 			// returns failure. In other words, if not connected, then connect:
+            //alert('manageConnection start');
 			var connect = function () {
 				// attempt to connect:
 				//alert("attempt to connect printer");
 				bluetoothSerial.connect(
 					app.printerId,  // device to connect to
-					app.openPort,    // start listening if you succeed
+					app.openPort(delayedFunc),    // start listening if you succeed
 					app.showErrorPrinter    // show the error if you fail
 				);
 				
@@ -220,10 +220,11 @@ var app = {
     subscribes to a Bluetooth serial listener for newline
     and changes the button:
 */
-    openPort: function() {
+    openPort: function(delayedFunc) {
         // if you get a good Bluetooth serial connection:
         console.log("Connected to: " + app.printerId);
-		app.printerConnected=true;
+        //alert('openport start');
+		
         // set up a listener to listen for newlines
         // and display any new data that's come in since
         // the last newline:
@@ -231,8 +232,14 @@ var app = {
 			console.log(data);
 			//alert('subscribe ok:'+data);
 			//alert(data);
+        });
+        app.printerConnected=true;
+        if (delayedFunc!=null) {
+            window.setTimeout(
+                function() {bluetoothSerial.isConnected(delayedFunc,null)}
+                ,5000
+            );            
         }
-		);
     },
     openPort2: function() {
         // if you get a good Bluetooth serial connection:

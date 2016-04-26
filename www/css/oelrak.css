@@ -351,6 +351,13 @@
     left: 260px;
     background-color: yellow;
 }
+#bHkodMentes {
+    position: absolute;
+    top: 112px;
+    left: 23px;
+    background-color: #FFA500;
+    WIDTH: 232px;
+}
 /* hkod eddig */
 /*
 ::-webkit-scrollbar {

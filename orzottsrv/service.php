@@ -232,10 +232,11 @@
 		$mibiz = $r['mibiz'];
 		$stat = $r['stat'];
 		$login = $r['login'];
-		$sql=" EXECUTE PROCEDURE PDA_LERAKODAS_LEZAR(:mibiz,:stat)  ";
+		$sql=" SELECT RESULT FROM PDA_LERAKODAS_LEZAR(:mibiz,:stat,:login)  ";
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':mibiz', $mibiz, PDO::PARAM_STR);
 		$stmt->bindParam(':stat', $stat, PDO::PARAM_STR);
+        $stmt->bindParam(':login', $login, PDO::PARAM_STR);
 		$stmt->execute();
 		//$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		$res=array();

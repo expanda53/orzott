@@ -20,7 +20,8 @@
 			<div class='dhkod'>
 				<span id=labelHkod>Helykód</span>
 				<input id=dataHkod>
-				<button id=bHkodTorol>Helykódok törlése</button>
+				<button id=bHkodMentes>Mentés</button>
+                <button id=bHkodTorol>Helykódok törlése</button>
 			</div>
 
 		</div>

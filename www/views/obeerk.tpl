@@ -80,7 +80,7 @@
 	$('#bGPanelOptions').bind('click',function () {
 		beerk.GPanelOptions();
 	})	
-	$('#srendszam').bind('click',function (event) {
+	$('#srendszam, #bRendszam').bind('click',function (event) {
 		clickHelp();
         beerk.showReview()	
 	})	
@@ -217,6 +217,7 @@
 					<button class='bprint' id=bGumiFelni>Gumi+Felni</button>
 					<button class='bprint' id=bFelni>Felni</button>
 					<button class='bnoprint' id=bJavitas>Javítás</button>
+                    <button class='bnoprint' id=bRendszam>Rendszámok</button>
 				</div>
 			</div>
 		</div>

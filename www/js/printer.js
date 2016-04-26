@@ -33,11 +33,11 @@ var printerDialog = {
 					$("#tableprinter tbody").html(sorok);
 					$('#tableprinter tr').bind('click',function(){
 						tr = $(this);
-						if (app.printerConnected) app.manageConnection(false);
+						if (app.printerConnected) app.manageConnection(false,null);
 						app.printerId = tr.find(".printerid").html();
 						app.printerName = tr.find(".printername").html();
 						try {
-							app.BTEnabled();
+							app.BTEnabled(null,null);
 						}
 						finally {
 							showMenu();

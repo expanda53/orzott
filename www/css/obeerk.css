@@ -148,6 +148,9 @@ margin: 2px 0px;
 .dButtons  .bnoprint{
 	width:30%;
 } 
+#bRendszam {
+    background-color:yellow;
+}
 .divReviewTables {
 	height:194px;
 }

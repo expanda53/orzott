@@ -50,7 +50,7 @@ OLeltar.prototype.mibizList = function(result) {
 }
 OLeltar.prototype.selectTask = function() {
 	/* feladat valaszto ajax inditas */
-	app.BTEnabled();						
+	app.BTEnabled(null);						
 
 	$('#divheader').html('Õrzött leltár');
 	//ajaxCall('leltar.taskReg',{'mibiz':this.mibiz, 'login':login_id},true, '');
