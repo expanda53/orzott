@@ -307,7 +307,7 @@
 /* hkod */
 .dhkod {
     position: relative;
-    width: 173px;
+    width: 175px;
     height: 41px;
 	float: left;
 }
@@ -318,7 +318,7 @@
     /* display: block; */
     padding: 10px;
     background-color: #f1f1f1;
-    width: 61px;
+    width: 51px;
     text-align: center;
     margin: 2px 4px 2px 0px;
     /* height: 19px; */
@@ -346,7 +346,7 @@
     float: left;
     padding: 10px;
     background-color: #ffffff;
-    width: 62px;
+    width: 76px;
     text-align: center;
     height: 16px;
     font-style: italic;
@@ -360,7 +360,7 @@
 .drendszam {
 	display: none;
     position: relative;
-    width: 500px;
+    width: 511px;
 	height: 41px;
     /* text-align: center; */
     /* margin-top: 2px; */
@@ -388,7 +388,7 @@
     float: left;
     padding: 10px;
     background-color: white;
-    width: 125px;
+    width: 132px;
     text-align: center;
     margin-top: 1px;
     height: 14px;
@@ -403,7 +403,7 @@
     float: left;
     padding: 10px;
     background-color: #f1f1f1;
-    width: 62px;
+    width: 70px;
     text-align: center;
     margin-top: 2px;
     height: 16px;
@@ -411,26 +411,32 @@
     font-style: italic;
     font-size: 13px;
     /* top: 69px; */
-    margin: 2px 4px 2px 0px;
+    margin: 2px 0px 2px 0px;
 }
 #bNincs {
     position: relative;
-    /* float: left; */
     margin-top: 4px;
-    /*top: 45px;*/
-    /*left: -325px;*/
+    width: 127px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+#bEllenorzes{
+    width: 127px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 #drszadatok {
 	
 }
-#dmeretminta{
+#dmeretminta,#dtelep{
     background-color: #D4D4D4;
-    width: 484px;
+    width: 501px;
     padding: 5px;
     float: left;
     position: relative;
     height: 15px;
 	font-weight:bold;
+    margin-bottom:2px;
 }
 /* rendszam eddig */
 
@@ -568,7 +574,9 @@
 .bcimkeprint {
 	
 }
-
+#teleplist {
+    display:none;
+}
 /* cimke panel eddig */
 /*
 ::-webkit-scrollbar {

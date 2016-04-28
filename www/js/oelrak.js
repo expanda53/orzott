@@ -105,6 +105,7 @@ OElrak.prototype.rszAdatokGet = function (result){
 		else {
 			errormsg='';
 			var meresKell=false;
+            var showHkod = false;
 			switch (res.RESULTTEXT) {
 				case 'TYPE': 
 					errormsg='Nem megfelelõ típus a pozíción!';
@@ -135,35 +136,40 @@ OElrak.prototype.rszAdatokGet = function (result){
 					errormsg='Ez a gumi már el lett pakolva! helykód:'+res.ERRORTEXT;
 					showMessage(errormsg);
 					$('#dataHkod').val(res.ERRORTEXT);
-					elrak.showHkod();
+					//elrak.showHkod();
+                    showHkod=true;
 					break;
 				case 'ALREADY_STARTED': 
 					errormsg='Már van egy elkezdett garnitúra:<BR>'+res.ERRORTEXT;
 					showMessage(errormsg,clearObj);
 					break;
-
 				default:
 					errormsg = res.RESULTTEXT;
+                    showHkod = true;
 					
 			}
 			$('#hAZON').val(res.FEJAZON);
 			$('#hSORSZ').val(res.SORSZ);	
 			$('#rendszam').val(res.RENDSZAM);
 			$('#hMIBIZ').val(res.MIBIZ);	
-            if (res.HKOD!='') {
-				$('#dataHkod').val(res.HKOD);
-				elrak.showHkod();
-                $('#bHkodMentes').show();
+            $('#dataHkod').val(res.HKOD);
+            if (!meresKell) {
+                if (res.HKOD!='') {
+                    if (showHkod) {
+                        elrak.showHkod();
+                        $('#bHkodMentes').show();
+                    }
+                }
+                else {
+                    $('#bHkodMentes').hide();
+                }
             }
-            else {
-                $('#bHkodMentes').hide();
-            }
+            
 			elrak.currentItem=res.RSZTIP;
 			elrak.currentPosition='b'+res.RSZPOZ;
 			if (meresKell) {
 					/* ha merni kell */
 					panelName='elrak_meres';
-			
 					$.get( "views/"+panelName+".tpl", function( data ) { 
 						rsz = $('#rendszam').val();
 						mibiz = $('#hMIBIZ').val();
@@ -236,6 +242,8 @@ OElrak.prototype.allapotMentes=function(){
 OElrak.prototype.allapotMent=function(result){
 	$('#bAllapotClose').trigger( "click" );
 	elrak.showHkod();
+    if ($('#dataHkod').val()!='') $('#bHkodMentes').show();
+    else $('#bHkodMentes').hide();
 }
 /* allapot panel eddig */
 

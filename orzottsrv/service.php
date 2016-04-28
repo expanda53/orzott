@@ -238,9 +238,9 @@
 		$stmt->bindParam(':stat', $stat, PDO::PARAM_STR);
         $stmt->bindParam(':login', $login, PDO::PARAM_STR);
 		$stmt->execute();
-		//$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		$res=array();
-		$res[0]['STATUS']='OK';
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		//$res=array();
+		//$res[0]['STATUS']='OK';
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
@@ -598,17 +598,36 @@
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
+  case 'kiadas.telepList':
+		$sql="SELECT * FROM PDA_ORZOTTKI_TELEPLIST (:login,:akttip, :biztip ,:aktraktar)";
+		$stmt = Firebird::prepare($sql);
+		$login=$r['login'];
+		$biztip=$r['biztip'];
+        $akttip=$r['akttip'];
+        $aktraktar=$r['aktraktar'];
+		$stmt->bindParam(':biztip', $biztip, PDO::PARAM_STR);
+        $stmt->bindParam(':akttip', $akttip, PDO::PARAM_STR);
+        $stmt->bindParam(':aktraktar', $aktraktar, PDO::PARAM_STR);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+        break;
   case 'kiadas.mibizList':
-		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTKI (:biztip, :login,:akttip,:raktar)";
+		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTKI (:biztip, :login,:akttip,:raktar,:cegazon)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
 		$biztip=$r['biztip'];
         $akttip=$r['akttip'];
         $raktar=$r['raktar'];
+        $cegazon=$r['cegazon'];
 		$stmt->bindParam(':biztip', $biztip, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
         $stmt->bindParam(':akttip', $akttip, PDO::PARAM_STR);
         $stmt->bindParam(':raktar', $raktar, PDO::PARAM_STR);
+        $stmt->bindParam(':cegazon', $cegazon, PDO::PARAM_STR);
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
         //_debug($stmt,$r);    

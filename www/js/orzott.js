@@ -83,7 +83,7 @@ function showMenu() {
 				showLogin();
 			}) 
 			settings_to_users = settings.getItem('ORZOTT_BEALLITASOKAT_LATHAT');
-			if (settings_to_users != null && settings_to_users.indexOf(login_id)>-1) {
+			if (1==2 && settings_to_users != null && settings_to_users.indexOf(login_id)>-1) {
 				$('#bsettings').show();
 			}
 			$('#divContent').show();

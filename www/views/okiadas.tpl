@@ -12,18 +12,22 @@
 		<!-- tasklist -->
 		<div id=divmibizlist>
 			<button id=bMenu1>Menü</button>
-			<select id=kiadastip>
-				<!-- <option value='*'>Mind  -->
-				<option value='I' selected >Irány
-				<option value='G'>Gyűjtő
-				<option value='H'>Teleptöltés
-			</select>
-			<select id=raktarlist>
-			</select>			
-			<table class=tmibizlist>
-				
-				<{sorok}>
-			</table>
+            <div id=taskfilter>
+                <select id=kiadastip>
+                    <!-- <option value='*'>Mind  -->
+                    <option value='I' selected >Irány
+                    <option value='G'>Gyűjtő
+                    <option value='H'>Teleptöltés
+                </select>
+                <select id=raktarlist>
+                </select>			
+                <select id=teleplist>
+                </select>            
+                <table class=tmibizlist>
+                    
+                    <{sorok}>
+                </table>
+            </div>
 			<button id=btStart>Indítás</button>
 		</div>
 		<!-- tasklist end -->	
@@ -31,7 +35,9 @@
 		<div id=divpanel>
 			<button id=bMenu>Menü</button>
 			<button id=bEllenorzes>Ellenőrzés</button>
-			
+			<button id=bNincs>Nincs meg</button>
+			<button id=bCimke>Címke</button>
+
 			<div id=divaltalanos>
 				<div id=divsofor>
 					<div id=labelSofor>Sofőr</div>
@@ -46,6 +52,9 @@
 					<div id=dataRaktar></div>
 				</div>
 				
+			</div>
+			<div id=drszadatok>
+					<div id=dtelep></div>
 			</div>
 			<div class='dhkodrsz'>
 				<div class='dhkod'>
@@ -62,9 +71,7 @@
 				<div id=drszadatok>
 					<div id=dmeretminta></div>
 				</div>
-				<button id=bNincs>Nincs meg</button>
-				<button id=bCimke>Címke</button>
-			</div>
+            </div>
 
 		</div>
 		<!-- panel end -->

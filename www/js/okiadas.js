@@ -72,6 +72,7 @@ OKiadas.prototype.panelInit = function () {
 			$('#bCimkeClose').bind('click',function () {
 				$('#divcimke').hide();
 				$('#divpanel').show();
+                $('#dataRendszam').focus();
 			})
 			
 			$('#bFolytMost').bind('click',function (event) {
@@ -97,11 +98,26 @@ OKiadas.prototype.panelInit = function () {
 				ajaxCall(fn,{'login':login_id,'biztip':kiadas.aktbiztip,'akttip':akttip},true, fn);
 				
 			})
+			$('#raktarlist').bind('change',function(){
+				akttip = $('#kiadastip').val();
+                if (akttip=='H') /* teleptolto */ {
+                    aktraktar = $(this).val();
+                    fn = 'kiadas.telepList';
+                    ajaxCall(fn,{'login':login_id,'biztip':kiadas.aktbiztip,'akttip':akttip,'aktraktar':aktraktar},true, fn);
+                }
+                else {
+                    $("#teleplist").val("0");
+                    $("#teleplist").hide();
+                }
+				
+			})                
 			$('#btStart').bind('click',function(){
 				fn = 'kiadas.mibizList';
 				akttip = $('#kiadastip').val();
 				raktar = $('#raktarlist').val();
-				ajaxCall(fn,{'login':login_id,'biztip':kiadas.aktbiztip,'akttip':akttip,'raktar':raktar},true, fn);
+                if (akttip=='H') cegazon = $("#teleplist").val();
+                else cegazon=0;
+				ajaxCall(fn,{'login':login_id,'biztip':kiadas.aktbiztip,'akttip':akttip,'raktar':raktar,'cegazon':cegazon},true, fn);
 
 			})
 			
@@ -121,11 +137,23 @@ OKiadas.prototype.raktarList = function (result){
 		res = result[i];
 		$("#raktarlist").append('<option value='+res.RAKTAR+'>'+res.RAKTAR+'</option>');
 	}
+    $('#raktarlist').trigger('change');
 }
-OKiadas.prototype.mibizList = function (result){
-	/* bfej.azon kiolvasasa, eltarolasa */
+
+OKiadas.prototype.telepList = function (result){
+	html = "";
+	$("#teleplist").html('');
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
+		$("#teleplist").append('<option value='+res.CEGAZON+'>'+res.TELEPNEV+'</option>');
+	}
+    $("#teleplist").show();
+}
+
+OKiadas.prototype.mibizList = function (result){
+	/* bfej.azon kiolvasasa, eltarolasa */
+	//for (var i = 0;i < result.length;i++){
+		res = result[0];
 		kiadas.fejazon = res.FEJAZON;
 		
 		$('#dataSofor').html(res.FUVAR);
@@ -138,7 +166,7 @@ OKiadas.prototype.mibizList = function (result){
 		
 		$('#divmibizlist').hide();
 		$('#divpanel').show();		
-	}
+	//}
 
 }
 OKiadas.prototype.nextHkodGet = function (result){
@@ -196,9 +224,11 @@ OKiadas.prototype.setNextRsz = function (rszRec){
 		minta=rszRec.MINTA;
 		cicsop = rszRec.MARKA;
 		fegu=rszRec.FEGU;
+        telepnev = rszRec.TELEPNEV;
 		
 		$('#labelRendszamVart').html(rsz);
 		$('#dmeretminta').html(meret+" "+cicsop+" "+minta+" ("+fegu+")");
+        $('#dtelep').html(telepnev);
 		kiadas.currentRsz= rsz;
 		$('#dataRendszam').focus();
 }
@@ -279,15 +309,22 @@ OKiadas.prototype.rszSave = function (result){
 }
 
 OKiadas.prototype.rszNotFound = function(){
+    if (confirm("Biztos nincs meg?")) {
 		fn = 'kiadas.rszEmpty';
 		ajaxCall(fn,{'rszshort':kiadas.currentRsz,'azon':kiadas.fejazon,'login':login_id,'hkod':kiadas.currentHkod},true, fn);
+    }
+    else $('#dataRendszam').focus();
 	
 }
 OKiadas.prototype.rszEmpty = function(result){
 	/* rendszam nullazasa (kiszedesek torlese) */
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
-		if (res.RESULTTEXT=='OK') {
+		if (res.RESULTTEXT=='OKTOVABB' || res.RESULTTEXT=='OKVISSZA') {
+            if (res.RESULTTEXT=='OKVISSZA') {
+                hkod = $('#labelHkodVart').html();
+                alert('Ne felejtsd el a kiszedett abroncsokat visszarakni a helyére: '+hkod+' !');
+            }
 			errormsg = res.RESULTTEXT;
 			showMessage(errormsg,'dataRendszam');
 			if (res.NEXTRSZ!='') {
@@ -308,6 +345,11 @@ OKiadas.prototype.rszEmpty = function(result){
 				}
 				
 			}
+            else {
+                /* nincs tobb szedheto rsz a bizonylaton */
+				errormsg='Mentés rendben, NINCS TÖBB SZEDHETÖ RENDSZÁM!';
+				showMessage(errormsg,'dataRendszam');
+            }
 			
 		}
 		else {
