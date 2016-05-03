@@ -174,9 +174,16 @@ OKiadas.prototype.nextHkodGet = function (result){
 	//$('#dataHkod').val("");
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
-		$('#labelHkodVart').html(res.HKOD);
-		kiadas.currentHkod= res.HKOD;
-		kiadas.hkodChange();
+        if (res.HKOD=='NOTFOUND') {
+            showMessage('Nincs több szedhetõ tétel!','');
+            kiadas.showReview();
+            
+        }
+        else {
+            $('#labelHkodVart').html(res.HKOD);
+            kiadas.currentHkod= res.HKOD;
+            kiadas.hkodChange();
+        }
 	}
 }
 

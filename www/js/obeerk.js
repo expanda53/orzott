@@ -240,7 +240,7 @@ OBeerk.prototype.selectPosition = function (obj) {
 	var btPrint = function() {
 		//tip = beerk.currentItem;
         if (app.printerConnected){
-            alert('printer connected');
+            //alert('printer connected');
             rsz = $('#rendszam').val();
             $.get( "views/prn_rendszam_lerak.tpl", function( data ) {
                     //data = $('#tplprint').val();
@@ -361,6 +361,7 @@ OBeerk.prototype.rszMent = function(result) {
 					ajaxCall(fn,{'poz':beerk.currentPosition, 'login':login_id},true, fn);
 				}
 			}
+            else $('#bAllapotClose').trigger( "click" );
 			
 			
 		}

@@ -16,6 +16,8 @@
 			<div class='drendszam'>
 				<span id=labelRendszam>Rendszám</span>
 				<input id=dataRendszam>
+                <div id=labelRszWork>Rendszám munkában</div>
+                <div id=dataRszWork></div>
 			</div>
 			<div class='dhkod'>
 				<span id=labelHkod>Helykód</span>

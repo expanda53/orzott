@@ -76,15 +76,25 @@ OElrak.prototype.panelInit = function () {
 					return false;
 				}
 			})
+			fn = 'elrak.getRszInProgress';
+			ajaxCall(fn,{},true, fn);
+            $('#dataRendszam').focus();
 			
-			$('#dataRendszam').focus();
 		})
 	})
 
 }
 
 /* fopanel */
-
+OElrak.prototype.getRszInProgress = function (result){
+    for (var i = 0;i < result.length;i++){
+        res = result[i];
+        $('#dataRszWork').html(res.RENDSZAM);
+        $('#dataRszWork').show();
+        $('#labelRszWork').show();
+        
+    }
+}
 OElrak.prototype.rszAdatokGet = function (result){
 	/* rendszam valasztas ajax eredmenye, rszChange indítja */
 	clearObj='dataRendszam';
@@ -169,6 +179,8 @@ OElrak.prototype.rszAdatokGet = function (result){
 			elrak.currentPosition='b'+res.RSZPOZ;
 			if (meresKell) {
 					/* ha merni kell */
+                    $('#dataRszWork').hide();
+                    $('#labelRszWork').hide();
 					panelName='elrak_meres';
 					$.get( "views/"+panelName+".tpl", function( data ) { 
 						rsz = $('#rendszam').val();
@@ -183,6 +195,7 @@ OElrak.prototype.rszAdatokGet = function (result){
 			}
 		}
 	}
+
 }
 
 OElrak.prototype.rszChange = function (){
@@ -249,11 +262,17 @@ OElrak.prototype.allapotMent=function(result){
 
 /* hkod innen */
 OElrak.prototype.showHkod=function(){
+    $('#dataRszWork').hide();
+    $('#labelRszWork').hide();
 	$('.dhkod').show();
 	$('#dataHkod').focus();
 }
 OElrak.prototype.hideHkod=function(){
 	$('.dhkod').hide();
+    fn = 'elrak.getRszInProgress';
+	ajaxCall(fn,{},true, fn);
+
+   
 }
 OElrak.prototype.hkodChange=function(){
 	this.hkodSaveInit();
@@ -273,7 +292,10 @@ OElrak.prototype.hkodDel=function(result){
 	for (var i = 0;i < result.length;i++){	
 		res = result[i];
 		if (res.RESULT=='OK') {
-			showMessage('Mentés rendben');
+			showMessage('Törlés rendben');
+            fn = 'elrak.getRszInProgress';
+            ajaxCall(fn,{},true, fn);
+
 		}
 		else {
 			errormsg='';
@@ -375,6 +397,10 @@ OElrak.prototype.hkodSave = function (result){
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		if (res.RESULT=='OK') {
+            //munkaban levo rsz lekerdezese
+            fn = 'elrak.getRszInProgress';
+            ajaxCall(fn,{},true, fn);
+
 			window.setTimeout(function(){
 				$('#dataRendszam').focus();
 

@@ -402,6 +402,14 @@
   /* lerakodas eddig */
   
   /* elrakodas */
+  case 'elrak.getRszInProgress':
+	$sql=" SELECT * FROM PDA_ORZOTTHKOD_GETRSZSTARTED ";
+	$stmt = Firebird::prepare($sql);
+	$stmt->execute();
+	$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	echo json_encode(Converter::win2utf_array($res));
+    break;
+    
   case 'elrak.rszAdatokGet':
 	/* elrakodasnal rendszam adatok + adott rendszambol mennyi van kiszedve*/
 	$rsz = $r['rsz'];
@@ -752,7 +760,7 @@
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
         break;
-  case 'kiadas.close':
+  case 'kiadas.closeIt':
 		/* lezaras */
 		$azon = $r['azon'];
 		$login = $r['login'];
@@ -762,6 +770,7 @@
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
   case 'kiadas.setLabelData':
