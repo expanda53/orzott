@@ -41,7 +41,10 @@ function ajaxCall( func, d,asyn,fn) {
 }
 
 
-showMessage =function (msg, clearObj,timeout = 3 ){
+
+
+showMessage =function (msg, clearObj,timeout ){
+    timeout = typeof timeout !== 'undefined' ? timeout : 3; //default paramétert csak igy eszi meg.
 	$('#dmsg .msgtxt').html(msg);
 	$('#dmsg').show();
 
@@ -133,8 +136,9 @@ function loadSettings(result) {
 }
 
 
-
-$(document).ready(function () {
-	showLogin();
-})
+if (teszt) {
+    $(document).ready(function () {
+        showLogin();
+    })
+}
 

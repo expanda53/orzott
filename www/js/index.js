@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+ console.log('orzott start');
 function printer (pid,pname) {
 	this.id =pid;
 	this.name = pname;
@@ -47,6 +48,7 @@ var app = {
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
+        document.addEventListener("backbutton", this.onBackKeyDown, false);
     },
     // deviceready Event Handler
     //
@@ -57,7 +59,6 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-		document.addEventListener("backbutton", this.onBackKeyDown, false);
 		showLogin();
         console.log('Received Event: ' + id);
 		
@@ -317,4 +318,5 @@ else {
 	//alert('cordova ok');
 }
 app.initialize();
+
 

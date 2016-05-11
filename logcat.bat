@@ -1,1 +1,1 @@
-adb logcat 'Web Console:I' -v log >orzott.log
+adb logcat -v brief >orzott.log

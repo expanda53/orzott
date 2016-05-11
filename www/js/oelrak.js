@@ -257,7 +257,8 @@ OElrak.prototype.allapotMentes=function(){
 }
 OElrak.prototype.allapotMent=function(result){
 	$('#bAllapotClose').trigger( "click" );
-	elrak.showHkod();
+    if ($('#dataHkodWork').val()!='NINCS') elrak.hkodChange();
+	else elrak.showHkod();
 }
 /* allapot panel eddig */
 
