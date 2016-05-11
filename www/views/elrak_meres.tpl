@@ -7,15 +7,24 @@
 		$('#cbd').prop('checked',false);	
 	}
 	uncheckAll();
-	$('#cbfcs').attr('disabled',true);
-	$('#cbfs').attr('disabled',true);
+	if (elrak.currentItem=='A') {
+        $('#cbfcs').attr('disabled',true);
+        $('#cbfs').attr('disabled',true);
+    }
 	$('#cbd').attr('disabled',true);	
-	
+    if (elrak.currentItem=='F') {
+        $('#cbcs').attr('disabled',true);	
+    }
+    
+    
 	$('#bAllapotClose').bind('click',function () {
 		$('#divmeres').hide();
 		$('#divpanel').show();
+        
         fn = 'elrak.getRszInProgress';
         ajaxCall(fn,{},true, fn);
+        
+        
 	})
 	$('#bAllapotMent').bind('click',function () {
 		elrak.allapotMentes();
@@ -28,25 +37,47 @@
 		uncheckAll();
 		defgstat = $('#gstat').val();
 		if (defgstat==null || defgstat=='-' || defgstat=='') {
-			$('#cbfcs').attr('disabled',true);
-			$('#cbfs').attr('disabled',true);
+            //ha uresre allitotta, akkor csak a cseret valaszthatja
+            if (elrak.currentItem=='A') {
+                //gumi eseten a felniseket nem valaszthatja
+                $('#cbfcs').attr('disabled',true);
+                $('#cbfs').attr('disabled',true);
+            }
+            //defekt mindig lekapcsolva, csak meres utan lehet valasztani
 			$('#cbd').attr('disabled',true);	
 		}
 		else {
+            //ha nem ures
 			if (elrak.currentItem!='A') {
+                //ha felni vagy kerek, akkor valaszthatja a felnis allapotokat 
 				$('#cbfcs').removeAttr('disabled');
 				$('#cbfs').removeAttr('disabled');
 			}
-			$('#cbd').removeAttr('disabled');	
+			//ha nem felni, akkor a defekt is valaszthato. 
+            if (elrak.currentItem!='F') $('#cbd').removeAttr('disabled');	
+            else {
+                //felni eseten cs nem valaszthato, csak a fcs, fs
+                $('#cbcs').attr('disabled',true);
+            }
+
 		}
 		$('.divgcsok').hide();
 		$('#gcsok').val("");
 
 		
 	})
+        
 	$('.divcb input[type=checkbox]').change(function(){
 		if ($(this).attr('id')=='cbcs') {
-			$('#cbd').attr('disabled',$(this).prop('checked'));
+			//ha a cseret valasztotta, akkor a defektet kikapcsoljuk. Ha cseret kikapcsolta, akkor a defektet bekapcsoljuk
+			defekt_disabled = $(this).prop('checked');
+            //ha felni van kivalasztva, a defektet nem lehet bekapcsolni
+            if (elrak.currentItem == 'F') defekt_disabled = true;
+            $('#cbd').attr('disabled',defekt_disabled);
+            //ha nincs merve, akkor csak a cs, csfcs, fs valaszthato. Gumi eseten csak a cs. Defekt soha
+            if (defgstat==null || defgstat=='-' || defgstat=='') {
+                $('#cbd').attr('disabled',true);	
+            }
 			if ($(this).prop('checked')) $('.divgcsok').show();
 			else {
 				$('.divgcsok').hide();
@@ -74,7 +105,10 @@
 			}
 		})
 		$('#gstat').val(newgstat);
-		
+        if ($('#gstat').val()==null) {
+            showMessage('Nincs ilyen választható állapot!');
+            $('#gstat').val(defgstat);
+        }
 	})
 	
 		

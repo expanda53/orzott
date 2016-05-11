@@ -315,13 +315,13 @@
 #labelRszWork {
     position: absolute;
     padding: 4px 10px 16px 10px;
-    background-color: #f1f1f1;
-    width: 62px;
+    background-color: #D4CACA;
+    width: 76px;
     text-align: center;
     margin-top: 2px;
     height: 17px;
-    top: 9px;
-    left: 267px;
+    top: 30px;
+    left: 322px;
     font-size: 12px;
 }
 #dataRszWork {
@@ -332,8 +332,33 @@
     text-align: center;
     margin-top: 1px;
     height: 17px;
-    top: 10px;
-    left: 351px;
+    top: 70px;
+    left: 322px;
+    font-size: 15px;
+    /* font-weight: bold; */
+}
+#labelHkodWork {
+    position: absolute;
+    padding: 4px 10px 16px 10px;
+    background-color: #D4CACA;
+    width: 76px;
+    text-align: center;
+    margin-top: 2px;
+    height: 17px;
+    top: 30px;
+    left: 421px;
+    font-size: 12px;
+}
+#dataHkodWork {
+    position: absolute;
+    padding: 10px;
+    background-color: white;
+    width: 76px;
+    text-align: center;
+    margin-top: 1px;
+    height: 17px;
+    top: 70px;
+    left: 421px;
     font-size: 15px;
     /* font-weight: bold; */
 }
@@ -372,17 +397,13 @@
 }
 #bHkodTorol {
     position: absolute;
-    top: 31px;
-    left: 260px;
+    top: 21px;
+    left: 318px;
     background-color: yellow;
+    width: 198px;
+    font-size: 15px;
 }
-#bHkodMentes {
-    position: absolute;
-    top: 112px;
-    left: 23px;
-    background-color: #FFA500;
-    WIDTH: 232px;
-}
+
 /* hkod eddig */
 /*
 ::-webkit-scrollbar {
@@ -441,11 +462,11 @@
 	/*display:none;*/
 }
 #bAllapotClose {
-    position: absolute;
-    top: 69px;
-    left: 250px;
+position: absolute;
+    top: 55px;
+    left: 350px;
     background-color: orange;
-    width: 160px;
+    width: 131px;
     color: black;
 }
 #bAllapotJavitas {
@@ -458,9 +479,9 @@
 }
 #bAllapotMent {
     position: absolute;
-    top: -45px;
-    left: 250px;
-    width: 160px;
+    top: 55px;
+    left: 234px;
+    width: 112px;
 }
 #divcsok {
 	position: absolute;

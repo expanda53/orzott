@@ -41,7 +41,7 @@ function ajaxCall( func, d,asyn,fn) {
 }
 
 
-showMessage =function (msg, clearObj ){
+showMessage =function (msg, clearObj,timeout = 3 ){
 	$('#dmsg .msgtxt').html(msg);
 	$('#dmsg').show();
 
@@ -50,7 +50,7 @@ showMessage =function (msg, clearObj ){
 		if (clearObj!='') {
 			$('#'+clearObj).val('');
 		}
-	},3*1000);
+	},timeout*1000);
 }
 
 

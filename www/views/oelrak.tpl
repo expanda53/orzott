@@ -13,17 +13,22 @@
 		<div id=divpanel>
 			<button id=bMenu>Menü</button>
 			<button id=bEllenorzes>Ellenőrzés</button>
+            <div class='divmunkaban'>
+                <div id=labelRszWork>Rendszám munkában</div>
+                <div id=dataRszWork></div>
+                <div id=labelHkodWork>Hkód munkában</div>
+                <div id=dataHkodWork></div>
+            </div>
+
 			<div class='drendszam'>
 				<span id=labelRendszam>Rendszám</span>
 				<input id=dataRendszam>
-                <div id=labelRszWork>Rendszám munkában</div>
-                <div id=dataRszWork></div>
+                <button id=bHkodTorol>Helykódok törlése</button>
 			</div>
 			<div class='dhkod'>
 				<span id=labelHkod>Helykód</span>
 				<input id=dataHkod>
-				<button id=bHkodMentes>Mentés</button>
-                <button id=bHkodTorol>Helykódok törlése</button>
+                
 			</div>
 
 		</div>

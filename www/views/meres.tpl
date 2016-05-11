@@ -7,9 +7,14 @@
 		$('#cbd').prop('checked',false);	
 	}
 	uncheckAll();
-	$('#cbfcs').attr('disabled',true);
-	$('#cbfs').attr('disabled',true);
+	if (beerk.currentItem=='bGumi') {
+        $('#cbfcs').attr('disabled',true);
+        $('#cbfs').attr('disabled',true);
+    }
 	$('#cbd').attr('disabled',true);	
+    if (beerk.currentItem=='bFelni') {
+        $('#cbcs').attr('disabled',true);	
+    }
 	
 	$('#bAllapotClose').bind('click',function () {
 		$('#divmeres').hide();
@@ -28,26 +33,44 @@
 		uncheckAll();
 		defgstat = $('#gstat').val();
 		if (defgstat==null || defgstat=='-' || defgstat=='') {
-			$('#cbfcs').attr('disabled',true);
-			$('#cbfs').attr('disabled',true);
+            //ha uresre allitotta, akkor csak a cseret valaszthatja
+            if (beerk.currentItem=='bGumi') {
+                //gumi eseten a felniseket nem valaszthatja
+                $('#cbfcs').attr('disabled',true);
+                $('#cbfs').attr('disabled',true);
+            }
+            //defekt mindig lekapcsolva, csak meres utan lehet valasztani
 			$('#cbd').attr('disabled',true);	
 		}
 		else {
+            //ha nem ures
 			if (beerk.currentItem!='bGumi') {
+                //ha felni vagy kerek, akkor valaszthatja a felnis allapotokat 
 				$('#cbfcs').removeAttr('disabled');
 				$('#cbfs').removeAttr('disabled');
 			}
-			$('#cbd').removeAttr('disabled');	
+            //ha nem felni, akkor a defekt is valaszthato. 
+            if (beerk.currentItem!='bFelni') $('#cbd').removeAttr('disabled');	
+            else {
+                //felni eseten cs nem valaszthato, csak a fcs, fs
+                $('#cbcs').attr('disabled',true);
+            }
 		}
 		$('.divgcsok').hide();
 		$('#gcsok').val("");
-
-		
 	})
 	
 	$('.divcb input[type=checkbox]').change(function(event){
 		if ($(this).attr('id')=='cbcs') {
-			$('#cbd').attr('disabled',$(this).prop('checked'));
+            //ha a cseret valasztotta, akkor a defektet kikapcsoljuk. Ha cseret kikapcsolta, akkor a defektet bekapcsoljuk
+			defekt_disabled = $(this).prop('checked');
+            //ha felni van kivalasztva, a defektet nem lehet bekapcsolni
+            if (beerk.currentItem == 'bFelni') defekt_disabled = true;
+            $('#cbd').attr('disabled',defekt_disabled);
+            //ha nincs merve, akkor csak a cs, csfcs, fs valaszthato. Gumi eseten csak a cs. Defekt soha
+            if (defgstat==null || defgstat=='-' || defgstat=='') {
+                $('#cbd').attr('disabled',true);	
+            }
 			if ($(this).prop('checked')) $('.divgcsok').show();
 			else {
 				$('.divgcsok').hide();
@@ -75,7 +98,10 @@
 			}
 		})
 		$('#gstat').val(newgstat);
-
+        if ($('#gstat').val()==null) {
+            showMessage('Nincs ilyen választható állapot!');
+            $('#gstat').val(defgstat);
+        }
 	})
 	
 	
@@ -85,13 +111,13 @@
 Állapot felmérés<br>
 <span id=muvelet></span>
 <div id=divpozicio>
-	<button class=bpozicio id=bJE>JE-1</button>
-	<button class=bpozicio id=bBE>BE-2</button>
-	<button class=bpozicio id=bJH>JH-3</button>
-	<button class=bpozicio id=bBH>BH-4</button>
-	<button class=bpozicio id=bPOT>POT-5</button>
-	<button class=bpozicio id=bJHI>JHI-6</button>
-	<button class=bpozicio id=bBHI>BHI-7</button>
+	<button class=bpozicio id=bJE>JE</button>
+	<button class=bpozicio id=bBE>BE</button>
+	<button class=bpozicio id=bJH>JH</button>
+	<button class=bpozicio id=bBH>BH</button>
+	<button class=bpozicio id=bPOT>POT</button>
+	<button class=bpozicio id=bJHI>JHI</button>
+	<button class=bpozicio id=bBHI>BHI</button>
 </div>
 <div id=divallapot>
 	<div id=divgstat>

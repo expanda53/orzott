@@ -266,7 +266,8 @@ OKiadas.prototype.rszSave = function (result){
 		if (res.RESULTTEXT=='OK') {
 			kiadas.lastRsz = kiadas.currentRsz;
 			errormsg = res.RESULTTEXT;
-			showMessage(errormsg,'dataRendszam');
+            $('#dataRendszam').val('');
+			showMessage(errormsg,'',1);
 			if (res.NEXTRSZ!='') {
 				if (res.NEXTRSZ=='NEXTHKOD') {
 					/* nincs a helykodon tobb kiszedheto rendszam*/

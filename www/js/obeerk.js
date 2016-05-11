@@ -192,10 +192,12 @@ OBeerk.prototype.showAllapotPanel = function(obj){
 				$('#divpanel').hide();
 				$('#divmeres').show();
 				$('#divpozicio').show();				
-				var muvelet = "";
-				if (beerk.currentItem=="bGumi") muvelet = "beérkezés: gumi";
-				if (beerk.currentItem=="bFelni") muvelet = "beérkezés: felni";
-				if (beerk.currentItem=="bGumiFelni") muvelet = "beérkezés: kerék";
+				var muvelet = 'Rendszám: '+rsz+' ';
+                
+				if (beerk.currentItem=="bGumi") muvelet += "beérkezés: gumi";
+				if (beerk.currentItem=="bFelni") muvelet += "beérkezés: felni";
+				if (beerk.currentItem=="bGumiFelni") muvelet += "beérkezés: kerék";
+                muvelet += beerk.szlevAllapot;
 				beerk.currentPosition = '';
 				$('#muvelet').html(muvelet);
 				fn='beerk.getPositions';
@@ -239,7 +241,7 @@ OBeerk.prototype.selectPosition = function (obj) {
 	
 	var btPrint = function() {
 		//tip = beerk.currentItem;
-        if (app.printerConnected){
+        if (app.printerConnected || teszt){
             //alert('printer connected');
             rsz = $('#rendszam').val();
             $.get( "views/prn_rendszam_lerak.tpl", function( data ) {
@@ -313,7 +315,7 @@ OBeerk.prototype.selectPosition = function (obj) {
     //alert(mindenre);
     //alert(mindenre_nyomtat);
 
-	if (mindenre_nyomtat || tip!='bGumiFelni') {
+	if (mindenre_nyomtat || tip!='bGumiFelni' || teszt) {
 		/* print */
 		if(typeof bluetoothSerial != 'undefined') {
 			try {
@@ -374,7 +376,7 @@ OBeerk.prototype.rszMent = function(result) {
 
 OBeerk.prototype.getMelyseg=function(result){
 	$("#gstat").html('');
-	$("#gstat").append('<option value="-" selected disabled>Válasszon</option>');
+	$("#gstat").append('<option value="-" selected disabled>Mérjen!</option>');
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		$("#gstat").append('<option value='+res.KOD+'>'+res.KOD+'</option>');
@@ -428,6 +430,9 @@ OBeerk.prototype.rszAdatokGet = function (result){
 		if (checkParam(beerk.rszAdatok[7])=='L' && beerk.fedb>0) feall='Lemez';
 		if (checkParam(beerk.rszAdatok[7])=='A' && beerk.fedb>0) feall='Alu';
 		$(".dataFeall").html(feall);
+        
+        beerk.szlevAllapot = '  (Szállítólevélen JE:'+beerk.rszAdatok[0]+' BE:'+beerk.rszAdatok[1]+' JH:'+beerk.rszAdatok[2]+' BH:'+beerk.rszAdatok[3]+' POT:'+beerk.rszAdatok[4]+' JHI:'+beerk.rszAdatok[5]+' BHI:'+beerk.rszAdatok[6]+')';
+        
 	}
 	$('.rszadatok').show();
 	$('.dcontrol').show();
