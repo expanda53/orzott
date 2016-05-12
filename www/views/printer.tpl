@@ -1,9 +1,9 @@
 <body>
 <div id=tplPrinter>
-	<div id=divheader>
+	<div id=divheaderS>
 		BT nyomtató választás
 	</div>
-	<div id=divcontent>
+	<div id=divcontentS>
 		<div class=divprinterlist>
 			<table id=tableprinter>
 				<thead>

@@ -39,6 +39,10 @@ OLeltar.prototype.mibizList = function(result) {
 				//feladat valasztas inditasa
 				leltar.selectTask();
 				$('#divContent').show();
+                $('#divheader').bind('click',function(){
+                    app.getDepthMeters();
+                })
+                
 			});
 			
 		})

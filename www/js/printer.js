@@ -5,11 +5,12 @@ var printerDialog = {
 			css = '<head><style>' + data + '</style></head>';
 			$.get( "views/"+panelName+".tpl", function( data ) { 
 				tpl = data; 
-				$('#divContent').html(css + tpl);
-				$('#divContent').show();
+				$('#divSettings').html(css + tpl);
+                $('#divContent').hide();
+				$('#divSettings').show();
 				printerDialog.createTable();				
 				$('#btNext').bind('click', function() {
-					showMenu();
+					printerDialog.showNext();
 				})
 				
 			});
@@ -27,7 +28,7 @@ var printerDialog = {
 					
 				})
 				if (sorok=="") {
-					showMenu();
+					printerDialog.showNext();
 				}
 				else {
 					$("#tableprinter tbody").html(sorok);
@@ -40,12 +41,20 @@ var printerDialog = {
 							app.BTEnabled(null,null);
 						}
 						finally {
-							showMenu();
+							printerDialog.showNext();
 						}
 						
 					})
 				}
 				
 
-	}
+	},
+    showNext:function(){
+        if (app.currentModule=='') showMenu();
+        else {
+            $('#divSettings').hide();
+            $('#divContent').show();
+        }
+    }
+        
 }

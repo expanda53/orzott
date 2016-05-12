@@ -38,6 +38,10 @@ OKiadas.prototype.panelInit = function () {
 			tpl = data; 
 			$('#divContent').html(css + tpl);		
 			$('#divContent').show();
+            $('#divheader').bind('click',function(){
+                app.getDepthMeters();
+            })
+            
 			$('#dataRendszam').bind('change',function (event) {
 				kiadas.rszChange();
 			})	

@@ -59,7 +59,7 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-		showLogin();
+        showLogin();
         console.log('Received Event: ' + id);
 		
     },

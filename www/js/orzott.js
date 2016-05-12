@@ -1,6 +1,6 @@
 var beerk = null;
 var elrak = null;
-var teszt = false;
+var teszt = true;
 $.support.cors=true;
 $.ajaxSetup({ cache: false });
 function ajaxCall( func, d,asyn,fn) {
@@ -34,13 +34,16 @@ function ajaxCall( func, d,asyn,fn) {
             console.debug('ajax error:'+func+' data:'+JSON.stringify(data));
 			//alert('ajax error:'+func+' data:'+JSON.stringify(data));
 			res='ERROR';
+            ajaxError(func);
         }
   });
 
   return res;
 }
 
-
+function ajaxError(func){
+    alert(func);
+}
 
 
 showMessage =function (msg, clearObj,timeout ){
@@ -58,13 +61,18 @@ showMessage =function (msg, clearObj,timeout ){
 
 
 function showMenu() {
-	panelName = 'menu';
+	$('#divSettings').hide();
+    panelName = 'menu';
 	app.currentModule = "menu";
 	$.get( "css/"+panelName+".css", function( data ) {
 		css = '<head><style>' + data + '</style></head>';
 		$.get( "views/"+panelName+".tpl", function( data ) { 
 			tpl = data; 
 			$('#divContent').html(css + tpl);
+            $('#divheader').bind('click',function(){
+                app.getDepthMeters();
+            })
+            
 			$('#bkiadas').bind('click',function () {
 				app.currentModule='kiadas';
 				kiadas = new OKiadas();

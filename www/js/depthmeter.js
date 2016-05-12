@@ -5,8 +5,9 @@ var depthMeterDialog = {
 			css = '<head><style>' + data + '</style></head>';
 			$.get( "views/"+panelName+".tpl", function( data ) { 
 				tpl = data; 
-				$('#divContent').html(css + tpl);
-				$('#divContent').show();
+				$('#divSettings').html(css + tpl);
+				$('#divSettings').show();
+                $('#divContent').hide();
 				depthMeterDialog.createTable();				
 				
 				$('#btNext').bind('click', function() {

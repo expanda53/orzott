@@ -87,6 +87,9 @@ OBeerk.prototype.mibizList = function(result) {
 			})
 			
 			$('#divContent').show();
+            $('#divheader').bind('click',function(){
+                app.getDepthMeters();
+            })
 		});
 		
 	})
