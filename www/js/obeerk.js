@@ -313,11 +313,8 @@ OBeerk.prototype.selectPosition = function (obj) {
 		showMessage('A beérkezett mennyiség '+drb+' db!');
 	}
 	/* ha a sajcegben a mindenre nyomtat=IGEN, akkor minden gombra nyomtatas van */
-	mindenre = settings.getItem('ORZOTT_LERAKODAS_MINDENRE_NYOMTAT').toUpperCase();
-    mindenre_nyomtat = (mindenre =='IGEN');
-    //alert(mindenre);
-    //alert(mindenre_nyomtat);
-
+	mindenre_nyomtat = (settings.getItem('ORZOTT_LERAKODAS_MINDENRE_NYOMTAT').toUpperCase() == 'IGEN');
+    
 	if (mindenre_nyomtat || tip!='bGumiFelni' || teszt) {
 		/* print */
 		if(typeof bluetoothSerial != 'undefined') {
@@ -427,6 +424,7 @@ OBeerk.prototype.rszAdatokGet = function (result){
 		$("#hSORSZ").val(res.SORSZ);
 		beerk.fedb = res.FEDB;
 		beerk.gudb = res.GUDB;
+        beerk.evszak = res.EVSZAK;
 		beerk.rszAdatok = res.RSZADATOK.split("\n");
 		beerk.rszAdatokTEMP = beerk.rszAdatok;
 		feall='';
@@ -711,9 +709,13 @@ OBeerk.prototype.GPanelFunctions = function(func,src,trg){
 	else
 	if (func=='del') {
 		$('#gpMarka'+src).empty();
+        $('#gpMarka'+src).val('');
 		$('#gpMeret'+src).empty();
+        $('#gpMeret'+src).val('');
 		$('#gpMinta'+src).empty();
+        $('#gpMinta'+src).val('');
 		$('#gpSI'+src).empty();
+        $('#gpSI'+src).val('');
 	}
 	$('#divGPOptions').hide();
 		
@@ -721,7 +723,8 @@ OBeerk.prototype.GPanelFunctions = function(func,src,trg){
 
 OBeerk.prototype.GPanelClose = function (saveData){
 	if (saveData) {
-			beerk.fedb = $('#gpFelnidb option:selected').val();
+			beerk.evszak = $('#gpEvszak option:selected').val();
+            beerk.fedb = $('#gpFelnidb option:selected').val();
 			beerk.rszAdatok[7]=$('#gpFelnitip option:selected').val();
 			beerk.rszAdatok[9]=$('#gpMarkaA option:selected').text();
 			beerk.rszAdatok[10]=$('#gpMeretA option:selected').text();
@@ -763,7 +766,7 @@ OBeerk.prototype.GPanelClose = function (saveData){
 			fn='beerk.rszAdatokSet';
 			rsz = $('#rendszam').val();
 			azon = $('#hAZON').val();				
-			ajaxCall(fn,{'rsz':rsz,'azon':azon,'fedb':beerk.fedb,'data':JSON.stringify(beerk.rszAdatok),'login':login_id},true, fn);
+			ajaxCall(fn,{'rsz':rsz,'azon':azon,'fedb':beerk.fedb,'data':JSON.stringify(beerk.rszAdatok),'evszak':beerk.evszak,'login':login_id},true, fn);
 			$('.dataMeret').html(newContent);
 			$(".dataFegu").html(beerk.fedb+'/'+beerk.gudb);
 			feall='';
@@ -780,6 +783,14 @@ OBeerk.prototype.GPanelClose = function (saveData){
 }
 OBeerk.prototype.showGPanel =function(){
 	$('.drendszam, .rszadatok, .dcontrol').hide();
+        /* evszak */
+        $('#gpEvszak').val(beerk.evszak);
+        $('#gpEvszak').bind('change',function(event){
+            /* evszak valtasnal torlom az adatokat */
+            beerk.GPanelFunctions('del','A','');
+            beerk.GPanelFunctions('del','B','');
+            beerk.GPanelFunctions('del','P','');
+        });
 		/* marka */
 		fn='getMarka';
 		obj='gpMarka';
@@ -787,7 +798,7 @@ OBeerk.prototype.showGPanel =function(){
 		$('#'+obj+tengely).focus(function(){ 
 			fn='getMarka';
 			tengely='A';
-			ajaxCall(fn,{'marka':'mind','meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val()},false, fn+tengely);
+			ajaxCall(fn,{'marka':'mind','meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val(),'evszak':$('#gpEvszak').val()},false, fn+tengely);
 		});
 		if (checkParam(beerk.rszAdatokTEMP[9])!='') {
 			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[9],'meret':beerk.rszAdatokTEMP[10],'minta':beerk.rszAdatokTEMP[11],'si':beerk.rszAdatokTEMP[18]},true, fn+tengely);
@@ -797,19 +808,19 @@ OBeerk.prototype.showGPanel =function(){
 		$('#'+obj+tengely).focus(function(){ 
 			fn='getMarka';
 			tengely='B';
-			ajaxCall(fn,{'marka':'mind','meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val()},false, fn+tengely);
+			ajaxCall(fn,{'marka':'mind','meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val(),'evszak':$('#gpEvszak').val()},false, fn+tengely);
 		});
 		if (checkParam(beerk.rszAdatokTEMP[12])!='') {
-			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[12],'meret':beerk.rszAdatokTEMP[13],'minta':beerk.rszAdatokTEMP[14],'si':beerk.rszAdatokTEMP[19]},true, fn+tengely);
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[12],'meret':beerk.rszAdatokTEMP[13],'minta':beerk.rszAdatokTEMP[14],'si':beerk.rszAdatokTEMP[19],'evszak':$('#gpEvszak').val()},true, fn+tengely);
 		}
 		tengely='P';
 		$('#'+obj+tengely).focus(function(){ 
 			fn='getMarka';
 			tengely='P';
-			ajaxCall(fn,{'marka':'mind','meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val()},false, fn+tengely);
+			ajaxCall(fn,{'marka':'mind','meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val(),'evszak':'mind'},false, fn+tengely);
 		});
 		if (checkParam(beerk.rszAdatokTEMP[15])!='') {
-			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[15],'meret':beerk.rszAdatokTEMP[16],'minta':beerk.rszAdatokTEMP[17],'si':beerk.rszAdatokTEMP[20]},true, fn+tengely);
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[15],'meret':beerk.rszAdatokTEMP[16],'minta':beerk.rszAdatokTEMP[17],'si':beerk.rszAdatokTEMP[20],'evszak':'mind'},true, fn+tengely);
 		}
 
 		/* meret */
@@ -819,30 +830,30 @@ OBeerk.prototype.showGPanel =function(){
 		$('#'+obj+tengely).focus(function(){ 
 			fn='getMeret';
 			tengely='A';
-			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':'mind','minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val()},false, fn+tengely);
+			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':'mind','minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val(),'evszak':$('#gpEvszak').val()},false, fn+tengely);
 		});
 		if (checkParam(beerk.rszAdatokTEMP[9])!='') {
-			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[9],'meret':beerk.rszAdatokTEMP[10],'minta':beerk.rszAdatokTEMP[11],'si':beerk.rszAdatokTEMP[18]},true, fn+tengely);
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[9],'meret':beerk.rszAdatokTEMP[10],'minta':beerk.rszAdatokTEMP[11],'si':beerk.rszAdatokTEMP[18],'evszak':$('#gpEvszak').val()},true, fn+tengely);
 		}
 
 		tengely='B';
 		$('#'+obj+tengely).focus(function(){ 
 			fn='getMeret';
 			tengely='B';
-			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':'mind','minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val()},false, fn+tengely);
+			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':'mind','minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val(),'evszak':$('#gpEvszak').val()},false, fn+tengely);
 		});
 		if (checkParam(beerk.rszAdatokTEMP[12])!='') {
-			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[12],'meret':beerk.rszAdatokTEMP[13],'minta':beerk.rszAdatokTEMP[14],'si':beerk.rszAdatokTEMP[19]},true, fn+tengely);
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[12],'meret':beerk.rszAdatokTEMP[13],'minta':beerk.rszAdatokTEMP[14],'si':beerk.rszAdatokTEMP[19],'evszak':$('#gpEvszak').val()},true, fn+tengely);
 		}
 
 		tengely='P';
 		$('#'+obj+tengely).focus(function(){ 
 			fn='getMeret';
 			tengely='P';
-			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':'mind','minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val()},false, fn+tengely);
+			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':'mind','minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val(),'evszak':'mind'},false, fn+tengely);
 		});
 		if (checkParam(beerk.rszAdatokTEMP[15])!='') {
-			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[15],'meret':beerk.rszAdatokTEMP[16],'minta':beerk.rszAdatokTEMP[17],'si':beerk.rszAdatokTEMP[20]},true, fn+tengely);
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[15],'meret':beerk.rszAdatokTEMP[16],'minta':beerk.rszAdatokTEMP[17],'si':beerk.rszAdatokTEMP[20],'evszak':'mind'},true, fn+tengely);
 		}
 
 		/* minta */
@@ -852,30 +863,30 @@ OBeerk.prototype.showGPanel =function(){
 		$('#'+obj+tengely).focus(function(){ 
 			fn='getMinta';
 			tengely='A';
-			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':'mind','si':$('#gpSI'+tengely).val()},false, fn+tengely);
+			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':'mind','si':$('#gpSI'+tengely).val(),'evszak':$('#gpEvszak').val()},false, fn+tengely);
 		});
 		if (checkParam(beerk.rszAdatokTEMP[9])!='') {
-			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[9],'meret':beerk.rszAdatokTEMP[10],'minta':beerk.rszAdatokTEMP[11],'si':beerk.rszAdatokTEMP[18]},true, fn+tengely);
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[9],'meret':beerk.rszAdatokTEMP[10],'minta':beerk.rszAdatokTEMP[11],'si':beerk.rszAdatokTEMP[18],'evszak':$('#gpEvszak').val()},true, fn+tengely);
 		}
 		
 		tengely='B';
 		$('#'+obj+tengely).focus(function(){ 
 			fn='getMinta';
 			tengely='B';
-			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':'mind','si':$('#gpSI'+tengely).val()},false, fn+tengely);
+			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':'mind','si':$('#gpSI'+tengely).val(),'evszak':$('#gpEvszak').val()},false, fn+tengely);
 		});
 		if (checkParam(beerk.rszAdatokTEMP[12])!='') {
-			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[12],'meret':beerk.rszAdatokTEMP[13],'minta':beerk.rszAdatokTEMP[14],'si':beerk.rszAdatokTEMP[19]},true, fn+tengely);
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[12],'meret':beerk.rszAdatokTEMP[13],'minta':beerk.rszAdatokTEMP[14],'si':beerk.rszAdatokTEMP[19],'evszak':$('#gpEvszak').val()},true, fn+tengely);
 		}
 		
 		tengely='P';
 		$('#'+obj+tengely).focus(function(){ 
 			fn='getMinta';
 			tengely='P';
-			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':'mind','si':$('#gpSI'+tengely).val()},false, fn+tengely);
+			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':'mind','si':$('#gpSI'+tengely).val(),'evszak':'mind'},false, fn+tengely);
 		});
 		if (checkParam(beerk.rszAdatokTEMP[15])!='') {
-			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[15],'meret':beerk.rszAdatokTEMP[16],'minta':beerk.rszAdatokTEMP[17],'si':beerk.rszAdatokTEMP[20]},true, fn+tengely);
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[15],'meret':beerk.rszAdatokTEMP[16],'minta':beerk.rszAdatokTEMP[17],'si':beerk.rszAdatokTEMP[20],'evszak':'mind'},true, fn+tengely);
 		}
 
 		/* si */
@@ -885,30 +896,30 @@ OBeerk.prototype.showGPanel =function(){
 		$('#'+obj+tengely).focus(function(){ 
 			fn='getSI';
 			tengely='A';
-			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':'mind'},false, fn+tengely);
+			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':'mind','evszak':$('#gpEvszak').val()},false, fn+tengely);
 		});
 		if (checkParam(beerk.rszAdatokTEMP[9])!='') {
-			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[9],'meret':beerk.rszAdatokTEMP[10],'minta':beerk.rszAdatokTEMP[11],'si':beerk.rszAdatokTEMP[18]},true, fn+tengely);
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[9],'meret':beerk.rszAdatokTEMP[10],'minta':beerk.rszAdatokTEMP[11],'si':beerk.rszAdatokTEMP[18],'evszak':$('#gpEvszak').val()},true, fn+tengely);
 		}
 		
 		tengely='B';
 		$('#'+obj+tengely).focus(function(){ 
 			fn='getSI';
 			tengely='B';
-			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':'mind'},false, fn+tengely);
+			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':'mind','evszak':$('#gpEvszak').val()},false, fn+tengely);
 		});
 		if (checkParam(beerk.rszAdatokTEMP[12])!='') {
-			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[12],'meret':beerk.rszAdatokTEMP[13],'minta':beerk.rszAdatokTEMP[14],'si':beerk.rszAdatokTEMP[19]},true, fn+tengely);
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[12],'meret':beerk.rszAdatokTEMP[13],'minta':beerk.rszAdatokTEMP[14],'si':beerk.rszAdatokTEMP[19],'evszak':$('#gpEvszak').val()},true, fn+tengely);
 		}
 		
 		tengely='P';
 		$('#'+obj+tengely).focus(function(){ 
 			fn='getSI';
 			tengely='P';
-			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':'mind'},false, fn+tengely);
+			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':'mind','evszak':'mind'},false, fn+tengely);
 		});
 		if (checkParam(beerk.rszAdatokTEMP[15])!='') {
-			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[15],'meret':beerk.rszAdatokTEMP[16],'minta':beerk.rszAdatokTEMP[17],'si':beerk.rszAdatokTEMP[20]},true, fn+tengely);
+			ajaxCall(fn,{'marka':beerk.rszAdatokTEMP[15],'meret':beerk.rszAdatokTEMP[16],'minta':beerk.rszAdatokTEMP[17],'si':beerk.rszAdatokTEMP[20],'evszak':'mind'},true, fn+tengely);
 		}
 		
 		//felni:

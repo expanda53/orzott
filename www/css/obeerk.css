@@ -328,6 +328,26 @@ margin: 2px 0px;
 
 }
 
+.labelGPEvszak {
+    position: absolute;
+    padding: 10px;
+    background-color: #f1f1f1;
+    width: 39px;
+    text-align: center;
+    margin-top: 2px;
+    height: 23px;
+    top: 173px;
+    left: 303px;
+}
+#gpEvszak {
+	position: absolute;
+    width: 75px;
+    text-align: center;
+    margin-top: 2px;
+    top: 173px;
+    left: 362px;
+
+}
 
 /*
 ::-webkit-scrollbar {

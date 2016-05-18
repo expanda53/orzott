@@ -76,7 +76,8 @@
          WHEN BFEJ.MIBIZ LIKE 'ELOSZ%' OR BFEJ.MIBIZ LIKE 'TELEP%' THEN CEG.NEV 
          ELSE COALESCE(BFEJ.MSZAM3,'')||' '||COALESCE(MSZAM.NEV,'') END MSZAM3,
     AKTSOR.TAPADO RENDSZAM, COALESCE(AKTSOR.GYSZAM,'')||' '||COALESCE(AKTSOR.LEIR,'') MERETMINTA, CAST(COALESCE(JARUL2,0) AS INTEGER)||'/'||CAST(COALESCE(JARUL1,0) AS INTEGER) FEGU,
-	AKTSOR.MJBEL RSZADATOK,CAST(COALESCE(JARUL2,0) AS INTEGER) FEDB,CAST(COALESCE(JARUL1,0) AS INTEGER) GUDB,(SELECT FEGU FROM PDA_ORZOTTLERAK_POSDETAILS(CAST(AKTSOR.MJSOR2 AS VARCHAR(500)))) FEGUKESZ
+	AKTSOR.MJBEL RSZADATOK,CAST(COALESCE(JARUL2,0) AS INTEGER) FEDB,CAST(COALESCE(JARUL1,0) AS INTEGER) GUDB,(SELECT FEGU FROM PDA_ORZOTTLERAK_POSDETAILS(CAST(AKTSOR.MJSOR2 AS VARCHAR(500)))) FEGUKESZ,
+    AKTSOR.POZIC EVSZAK 
     FROM BSOR AKTSOR 
     INNER JOIN BFEJ ON BFEJ.AZON=AKTSOR.BFEJ 
     LEFT JOIN CEG ON COALESCE(AKTSOR.PONTOZ, AKTSOR.CEG)=CEG.AZON
@@ -97,14 +98,16 @@
 		$azon = $r['azon'];
 		$rsz = $r['rsz'];
 		$fedb = $r['fedb'];
+        $evszak = $r['evszak'];
 		$login = $r['login'];
 		$rszadatok = implode("\r\n", str_replace("\r",'',json_decode($r['data'])));
-		$sql=" SELECT RESULT FROM PDA_ORZOTTLERAK_RSZUPDATE(:azon, :rsz, '$rszadatok', :fedb, :login) ";
+		$sql=" SELECT RESULT FROM PDA_ORZOTTLERAK_RSZUPDATE(:azon, :rsz, '$rszadatok', :fedb, :evszak, :login) ";
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
 		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
 		$stmt->bindParam(':fedb', $fedb, PDO::PARAM_STR);
+        $stmt->bindParam(':evszak', $evszak, PDO::PARAM_STR);
 		try { 
 			$stmt->execute();
 			$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -298,19 +301,24 @@
 		$meret = trim($r['meret']);
 		$minta = trim($r['minta']);
 		$si = trim($r['si']);
+        $evszak = trim($r['evszak']);
 		if (strtoupper($marka)=='MIND') $marka='';
 		if (strtoupper($meret)=='MIND') $meret='';
 		if (strtoupper($minta)=='MIND') $minta='';
 		if (strtoupper($si)=='MIND') $si='';
+        if (strtoupper($evszak)=='MIND') $evszak='';
+        else $evszak=strtoupper($evszak[0]);
 		$marka=str_replace('\\r','',$marka);
 		$meret=str_replace('\\r','',$meret);		
 		$minta=str_replace('\\r','',$minta);		
 		$si=str_replace('\\r','',$si);
+        $evszak=str_replace('\\r','',$evszak);
 		$where='';
 		if (trim($marka)!='') $where = " MARKA = '$marka' ";
 		if (trim($meret)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MERET,'/',''),' ','') = replace(replace('$meret','/',''),' ','') ";}
 		if (trim($minta)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(replace(replace(MINTA,'/',''),' ',''),'.',''),'*','') = replace(replace(replace(replace('$minta','/',''),' ',''),'.',''),'*','') ";}
 		if (trim($si)!='') 	  {if ($where!='') $where.=' AND ';$where .= " SI = '$si' ";}
+		if (trim($evszak)!='') 	  {if ($where!='') $where.=' AND ';$where .= " EVSZAK = '$evszak' ";}        
 		if ($where!='') $where = ' AND ' .$where;
 		$sql=" SELECT DISTINCT MARKA FROM AKHTORZS WHERE CICSOP STARTING WITH 'A' $where";
 		$stmt = Firebird::prepare($sql);
@@ -324,19 +332,24 @@
 		$meret = trim($r['meret']);
 		$minta = trim($r['minta']);
 		$si = trim($r['si']);
+        $evszak = trim($r['evszak']);
 		if (strtoupper($marka)=='MIND') $marka='';
 		if (strtoupper($meret)=='MIND') $meret='';
 		if (strtoupper($minta)=='MIND') $minta='';
 		if (strtoupper($si)=='MIND') $si='';
+        if (strtoupper($evszak)=='MIND') $evszak='';
+        else $evszak=strtoupper($evszak[0]);
 		$marka=str_replace('\\r','',$marka);
 		$meret=str_replace('\\r','',$meret);		
 		$minta=str_replace('\\r','',$minta);		
 		$si=str_replace('\\r','',$si);
+        $evszak=str_replace('\\r','',$evszak);
 		$where='';
 		if (trim($marka)!='') $where = " MARKA = '$marka' ";
 		if (trim($meret)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MERET,'/',''),' ','') = replace(replace('$meret','/',''),' ','') ";}
 		if (trim($minta)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(replace(replace(MINTA,'/',''),' ',''),'.',''),'*','') = replace(replace(replace(replace('$minta','/',''),' ',''),'.',''),'*','') ";}
 		if (trim($si)!='') 	  {if ($where!='') $where.=' AND ';$where .= " SI = '$si' ";}
+        if (trim($evszak)!='') 	  {if ($where!='') $where.=' AND ';$where .= " EVSZAK = '$evszak' ";}        
 		if ($where!='') $where = ' AND ' .$where;
 		$sql=" SELECT DISTINCT MERET FROM AKHTORZS  WHERE CICSOP STARTING WITH 'A' $where";
 		$stmt = Firebird::prepare($sql);
@@ -350,19 +363,24 @@
 		$meret = trim($r['meret']);
 		$minta = trim($r['minta']);
 		$si = trim($r['si']);
+        $evszak = trim($r['evszak']);
 		if (strtoupper($marka)=='MIND') $marka='';
 		if (strtoupper($meret)=='MIND') $meret='';
 		if (strtoupper($minta)=='MIND') $minta='';
 		if (strtoupper($si)=='MIND') $si='';
+        if (strtoupper($evszak)=='MIND') $evszak='';
+        else $evszak=strtoupper($evszak[0]);
 		$marka=str_replace('\\r','',$marka);
 		$meret=str_replace('\\r','',$meret);		
 		$minta=str_replace('\\r','',$minta);		
 		$si=str_replace('\\r','',$si);
+        $evszak=str_replace('\\r','',$evszak);
 		$where='';
 		if (trim($marka)!='') $where = " MARKA = '$marka' ";
 		if (trim($meret)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MERET,'/',''),' ','') = replace(replace('$meret','/',''),' ','') ";}
 		if (trim($minta)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(replace(replace(MINTA,'/',''),' ',''),'.',''),'*','') = replace(replace(replace(replace('$minta','/',''),' ',''),'.',''),'*','') ";}
 		if (trim($si)!='') 	  {if ($where!='') $where.=' AND ';$where .= " SI = '$si' ";}
+        if (trim($evszak)!='') 	  {if ($where!='') $where.=' AND ';$where .= " EVSZAK = '$evszak' ";}        
 		if ($where!='') $where = ' AND ' .$where;
 
 		$sql=" SELECT DISTINCT MINTA FROM AKHTORZS  WHERE CICSOP STARTING WITH 'A' $where";
@@ -377,19 +395,24 @@
 		$meret = trim($r['meret']);
 		$minta = trim($r['minta']);
 		$si = trim($r['si']);
+        $evszak = trim($r['evszak']);
 		if (strtoupper($marka)=='MIND') $marka='';
 		if (strtoupper($meret)=='MIND') $meret='';
 		if (strtoupper($minta)=='MIND') $minta='';
 		if (strtoupper($si)=='MIND') $si='';
+        if (strtoupper($evszak)=='MIND') $evszak='';
+        else $evszak=strtoupper($evszak[0]);
 		$marka=str_replace('\\r','',$marka);
 		$meret=str_replace('\\r','',$meret);		
 		$minta=str_replace('\\r','',$minta);		
 		$si=str_replace('\\r','',$si);
+        $evszak=str_replace('\\r','',$evszak);
 		$where='';
 		if (trim($marka)!='') $where = " MARKA = '$marka' ";
 		if (trim($meret)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MERET,'/',''),' ','') = replace(replace('$meret','/',''),' ','') ";}
 		if (trim($minta)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(replace(replace(MINTA,'/',''),' ',''),'.',''),'*','') = replace(replace(replace(replace('$minta','/',''),' ',''),'.',''),'*','') ";}
 		if (trim($si)!='') 	  {if ($where!='') $where.=' AND ';$where .= " SI = '$si' ";}
+        if (trim($evszak)!='') 	  {if ($where!='') $where.=' AND ';$where .= " EVSZAK = '$evszak' ";}        
 		if ($where!='') $where = ' AND ' .$where;
 
 		$sql=" SELECT DISTINCT SI FROM AKHTORZS  WHERE CICSOP STARTING WITH 'A' $where";

@@ -191,6 +191,11 @@
 						<option value='6'>6</option>						
 						<option value='7'>7</option>
 				</select>
+                <div class='labelGPEvszak'>Évszak</div>
+				<select id=gpEvszak>
+						<option value='nyári'>Nyári</option>
+						<option value='téli'>Téli</option>
+                </select>
 				<br>
 				
 				<button id=bGPanelClose>Mentés</button>
