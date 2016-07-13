@@ -258,7 +258,7 @@ OBeerk.prototype.selectPosition = function (obj) {
                         if (beerk.currentPosition=='bBHI') ppoz = 7;
                         if (beerk.currentItem=="bGumi") ptip = "A";
                         if (beerk.currentItem=="bFelni") ptip = "F";
-                        if (beerk.currentItem=="bGumiFelni") ptip = "K";
+                        if (beerk.currentItem=="bGumiFelni") ptip = "M";
                     
                     tpl = data.replace(/\[RENDSZPOZ\]/g,rsz+"_"+ppoz+ptip); 
                     tpl += '\r\n';

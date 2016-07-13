@@ -1,0 +1,309 @@
+
+#divclick {
+	position:fixed;
+	top:0px;
+	left:0px;
+	height:1000px;
+	width:1000px;
+	display:none;
+	z-index:999;
+	opacity:0;
+}
+#divheader{
+	background-color:yellow;
+	height:12px;
+	padding:5px;
+ }
+ 
+ #divcontent{
+	background-color:black;
+	height:270px;
+	padding:5px;
+ }
+#tploBeerk {
+	padding:5px;
+	position:fixed;
+	top:5px;
+	left:5px;
+	right:5px;
+}
+
+
+.divlabels {
+    top: 86px;
+    left: 86px;
+    width: 300px;
+    text-align: center;
+    position: absolute;
+}
+.ddrbvart, .ddrbkesz, .ddrbfegu {
+	padding:5px;
+	width:40%;
+	margin:5px 2px;
+	vertical-align:middle;
+}
+.ddrbvart{
+	background-color:yellow;
+	left:0px;
+    position: absolute;	
+}
+.ddrbkesz {
+	background-color:lightgreen;
+	left:136px;
+    position: absolute;	
+}
+.ddrbfegu{
+	background-color:white;
+	left:272px;
+    position: absolute;	
+}
+.dataDrbVart, .dataDrbKesz,.dataDrbFEGU{
+	font-size:17px;
+	font-weight:bold;
+	padding:0px 10px;
+}
+.rszadatok {
+    display: none;
+    position: relative;
+    top: 15px;
+    /* left: 135px; */
+    line-height: 41px;
+    /* background-color: aliceblue; */
+    /* padding: 2px; */
+    width: 420px;
+    /* border: 1px solid black; */
+    /* font-size: 15px; */
+    height: 149px;
+}
+.dcontrol {
+	display:none;
+}
+.dButtons {
+    position: absolute;
+    top: 132px;
+    clear: both;
+    margin: 0px auto;
+    width: 600px;
+}
+.dButtons button, .dButtonsReview button {
+	margin:3px auto;
+} 
+
+.dButtons  .bprint{
+	width:30%;
+} 
+.dButtons  .bnoprint{
+	width:19%;
+} 
+.dButtonsReview {
+    position: absolute;
+    top: 233px;
+    clear: both;
+    margin: 0px auto;
+    width: 600px;
+}
+
+.dButtonsReview #bElteres {
+	background-color:orange;
+	border:1px solid orange;
+	color:black;
+	width:150px;
+	font-size:16px;
+}
+#divreview {
+	display:none;
+	width:301px;
+}
+#divhiany {
+	position: relative;
+    left: 283px;
+    width: 170px;
+    top: 5px;
+}
+.labelHiany{
+	background-color: yellow;
+    padding: 5px;
+    width: 121px;
+    position: absolute;
+}
+.dataHiany {
+	background-color: yellow;
+    padding: 5px;
+    width: 20px;
+    position: absolute;
+    left: 134px;
+    text-align: center;
+}
+.divreviewLeft{
+	position:relative;
+	top:0px;
+	left:10px;
+	background-color:#f1f1f1;
+	width:70px;
+	border-right:1px dashed black;
+	
+}
+
+.divreviewRight {
+	position:absolute;
+	top:32px;
+	left:90px;
+	background-color:white;
+	width:366px;
+}
+#divreview table{
+	display:block;
+	height: 170px;
+	overflow-y: scroll;
+	font-size:17px;
+	position:relative;
+	left:10px;
+}
+
+#divreview  table tbody {
+	overflow:auto;
+}
+
+#divreview  table th {
+	border-bottom:1px solid orange;
+}
+
+#divreview table td {
+	padding:10px;
+	text-align:center;
+}
+.tableReview {
+	/*width:367px;*/
+}
+.tableReview th{
+	font-size:14px;
+}
+.tableReview button {
+	padding:10px;
+	background-color:orange;
+}
+.tdrsz {
+	width:115px;
+}
+
+.rowhighlighted {
+	padding:10px;
+	text-align:center;
+	background-color:#66CC66;
+}
+
+.tableReviewFilter {
+	background-color:#f1f1f1;
+}
+
+
+.divReviewFilter {
+    position: absolute;
+    left: 370px;
+    top: 10px;
+    color: white;
+    width: 75px;
+    font-size: 15px;	
+}
+#divmeres {
+	display:none;
+}
+#bMenu {
+	/* padding:10px 20px; */
+}
+
+.drendszam,.dmszam3,.djarat,.dosszdrb,.dkeszdrb {
+    position: relative;
+}
+#labelRendszam {
+    position: relative;
+    padding: 10px;
+    background-color: #f1f1f1;
+    width: 62px;
+    text-align: center;
+    margin-top: 2px;
+    height: 16px;
+    top: 10px;
+    left: 31px;
+    font-size: 13px;
+}
+#dataRendszam {
+    position: relative;
+    padding: 10px;
+    background-color: white;
+    width: 125px;
+    text-align: center;
+    margin-top: 1px;
+    height: 13px;
+    top: 12px;
+    left: 35px;
+    font-size: 20px;
+    font-weight: bold;
+    /* line-height: 45px; */
+}
+
+.dkeszdrb{
+    left: 172px;
+    top: -43px;
+}
+.rszadatokLabel {
+    position: relative;
+    padding: 10px;
+    background-color: #f1f1f1;
+    width: 62px;
+    text-align: center;
+    margin-top: 2px;
+    height: 16px;
+    top: 10px;
+    left: 31px;
+    font-size: 13px;
+}
+.rszadatokData,.dataRSZ {
+    position: relative;
+    padding: 6px;
+    background-color: white;
+    width: 125px;
+    text-align: center;
+    height: 13px;
+    top: 13px;
+    left: 35px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#labelStatus {
+    position: relative;
+    padding: 10px;
+    width: 250px;
+    text-align: center;
+    margin-top: 1px;
+    height: 14px;
+    top: 10px;
+    left: 110px;
+    font-size: 13px;
+    font-weight: bold;
+}
+.labelStatusOK {
+	background-color:black;
+	color:green;
+	
+}
+.labelStatusERROR {
+	background-color:black;
+	color:red;
+}
+
+/*
+::-webkit-scrollbar {
+    width: 32px;
+}
+ 
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 5px;
+}
+ 
+::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+*/

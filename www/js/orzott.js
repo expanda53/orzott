@@ -1,6 +1,6 @@
 var beerk = null;
 var elrak = null;
-var teszt = false;
+var teszt = true;
 $.support.cors=true;
 $.ajaxSetup({ cache: false });
 function ajaxCall( func, d,asyn,fn) {
@@ -88,6 +88,10 @@ function showMenu() {
 			$('#bleltar').bind('click',function () {
 				app.currentModule='leltar';
 				leltar = new OLeltar();
+			}) 
+			$('#bszortir').bind('click',function () {
+				app.currentModule='szortir';
+				szortir = new OSzortir();
 			}) 
 
 			$('#blogout').bind('click',function () {

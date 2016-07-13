@@ -107,7 +107,7 @@
 		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
 		$stmt->bindParam(':fedb', $fedb, PDO::PARAM_STR);
-        $stmt->bindParam(':evszak', $evszak, PDO::PARAM_STR);
+        $stmt->bindParam(':evszak', utf8_decode($evszak), PDO::PARAM_STR);
 		try { 
 			$stmt->execute();
 			$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -824,6 +824,30 @@
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
+  /* szortir */        
+  case 'szortir.mibizList':
+		$sql="SELECT * FROM PDA_ORZOTTSZORTIR_MIBIZLIST (:biztip)";
+		$stmt = Firebird::prepare($sql);
+		$login=$r['login'];
+		$biztip=$r['biztip'];
+		$stmt->bindParam(':biztip', $biztip, PDO::PARAM_STR);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode(Converter::win2utf_array($res));
+        break;
+  case 'szortir.getRszDetails':
+		$sql="SELECT * FROM PDA_ORZOTTSZORTIR_RSZADATOK (:azon,:rsz)";
+		$stmt = Firebird::prepare($sql);
+		$azon=$r['azon'];
+		$rsz=$r['rsz'];
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode(Converter::win2utf_array($res));
+        break;
+        
     default:
         echo json_encode('unknown command');
   }
