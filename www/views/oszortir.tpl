@@ -9,6 +9,7 @@
 			clickHelp();
 			$('#divreview').hide();
 			$('#divpanel').show();
+            $('#dataRendszam').focus();
             event.handled = true;
         } else {
             return false;
@@ -26,9 +27,7 @@
         }
 		
 	})	
-	$('#bLezar').bind('click',function () {
-		szortir.lezarStart();
-	})	
+
 	$('#bAtnez').bind('click',function () {
 		//showMenu();
 		szortir.showReview();
@@ -110,17 +109,22 @@
 
 		<div id=divreview>
 			<div class=divReviewTables>
-				<div class=divreviewRight>
-					<div class=divTableReview>
-						<table class=tableReview></table>
-					</div>
-				</div>
-				<div class=dButtonsReview>
-					<button id=bFolytMost>Folyt. most</button>
-					<button id=bFolytKesobb>Folyt. később</button>
-					<button id=bLezar>Lezárás</button>
-				</div>			
+
+			<div class=divreviewRight>
+                <div class=divTableReview>
+                <table class=tableReview></table>
+                </div>
 			</div>
+			<div id=divhiany>
+				<div class=labelHiany></div>
+				<div class=dataHiany></div>
+			</div>
+			<div class=dButtonsReview>
+				<button id=bFolytMost>Folyt. most</button>
+                <button id=bFolytKesobb>Folyt. később</button>
+			</div>			
 		</div>
+		
+	</div>
 </div>
 </body>

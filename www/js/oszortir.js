@@ -60,7 +60,6 @@ OSzortir.prototype.selectTask = function() {
 	
 	$("#hAZON").val(szortir.fejazon);
 	$("#hMIBIZ").val(szortir.mibiz);
-	$('#bFolytMost').hide();
 	szortir.rszInit();
 	$('#dataRendszam').bind('change',function (event) {
 		szortir.rszChange();
@@ -104,12 +103,12 @@ OSzortir.prototype.getRszDetails = function (result) {
             //$('.dataRaktarban').html(res.RAKTARBAN);
             $('#dataJarat').html(res.SORREND);
             $('#dataOsszdrb').html(res.ODRB);
-            $('#dataKeszdrb').html(res.ODRB2);
+            //$('#dataKeszdrb').html(res.ODRB2);
             $('.dataRSZ').show();
             $('.rszadatok').show();
             
             fn = 'szortir.rszSave';
-            //ajaxCall(fn,{'azon':this.fejazon, 'login':login_id, 'rsz':rendszam},true, fn);
+            ajaxCall(fn,{'azon':szortir.fejazon, 'login':login_id, 'rsz':rendszam},true, fn);
             
         }
         if (res.RESULT==0) showMessage('Nincs ilyen rendszám a szortír listán!','');
@@ -120,18 +119,33 @@ OSzortir.prototype.getRszDetails = function (result) {
 
 OSzortir.prototype.rszSave = function (result) {
 	/* rendszam mentes eredmenye */
-	for (var i = 0;i < result.length;i++){
+for (var i = 0;i < result.length;i++){
 		res = result[i];
-		rendszam = $('#dataRSZ').html();
-
-		if (res.RESULT==0)	{
-			$('#labelStatus').html(rendszam+': OK');
-			$('#labelStatus').attr('class','labelStatusOK');
+		if (res.RESULTTEXT=='OK') {
+			errormsg = res.RESULTTEXT;
+            $('#dataRendszam').val('');
+            $('#dataKeszdrb').html(res.ODRB2);            
+			showMessage(errormsg,'',1);
 		}
 		else {
-			$('#labelStatus').html(rendszam+': Hiba!');
-			$('#labelStatus').attr('class','labelStatusERROR');
-			alert('Hiba');
+			errormsg='';
+			switch (res.RESULTTEXT) {
+				case 'NOT_FOUND': 
+					errormsg='Nem található ilyen rendszám a szortírozandó abroncsok között!';
+					break;
+				case 'ALREADY_DONE': 
+					errormsg='Ez a pozíció már szortírozva lett!';
+                    $('#dataKeszdrb').html(res.ODRB2);
+					break;
+				case 'UNKNOWN_ERROR': 
+					errormsg='Adatbázis hiba a felírásnál!';
+					break;					
+				default:
+					errormsg = res.RESULTTEXT;
+					
+			}
+			showMessage(errormsg,'dataRendszam');
+			
 		}
 	}
 }
@@ -142,13 +156,6 @@ OSzortir.prototype.rszSave = function (result) {
 OSzortir.prototype.reviewLoad = function(result) {
 	/* atnezo panel filter ajax eredenye (rendszamok)*/
 	sorok = '';
-	fej="<thead>"
-				+"<tr>"
-					+"<th class='tdrsz'>Rendszám</th>"
-					+"<th>Helykód</th>"
-					+"<th></th>"
-				+"</tr>"
-		+"</thead>";
 	
 	$('.tableReview').empty();
 	var hianydb = 0;
@@ -156,15 +163,24 @@ OSzortir.prototype.reviewLoad = function(result) {
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		tdclass='';
-		//if (res.DRB==res.DRB2) tdclass=' rowhighlighted';
 		sorok += '<tr class="'+tdclass+'" id="'+res.RENDSZAM+'">';
-		sorok += '<td class="tdrsz">'+res.RENDSZAM+'</td>';
-		sorok +=  '<td class="tmibiz">'+res.HELYKOD+'</td>'; 
-		sorok +=  '<td class="tmibiz"><button onclick="szortir.delRszInit(\''+res.RENDSZAM+'\')">Törlés</button></td>'; 
+		sorok += '<td class="tdrsz">';
+        sorok += '<span class="reviewData">'+res.RENDSZAM+'</span>';
+		sorok +=  ' Járat:'+'<span class="reviewData">'+res.JARAT+'</span>'; 
+        sorok +=  ' Hiányzik:'+'<span class="reviewData">'+res.HIANY+'</span>'; 
+        sorok +=  '<br>';
+        sorok +=  '<span class="reviewData">'+res.MERETMINTA+'</span>'; 
+        sorok +=  ' Helykód:'+'<span class="reviewData">'+res.HELYKOD+'</span>';
+        sorok += '</td>'; 
 		sorok += '</tr>';
+        hianydb = parseInt(hianydb) + parseInt(res.HIANYDB);
 		
 	}
-	$('.tableReview').html(fej+sorok);
+	if (hianydb!=0){
+		$('.labelHiany').html('Szortírozandó:');
+		$('.dataHiany').html(hianydb);
+	}
+	$('.tableReview').html(sorok);
 }
 
 
@@ -175,26 +191,11 @@ OSzortir.prototype.showReview = function() {
 	azon = this.fejazon;
 	$('#divpanel').hide();
 	fn = 'szortir.reviewLoad';
-	r = ajaxCall(fn,{'fejazon':azon,'login':login_id},true, fn);
+	r = ajaxCall(fn,{'azon':azon,'login':login_id},true, fn);
 	$('#divreview').show();
 	
 }
 
-OSzortir.prototype.delRszInit=function(rendszam){
-	/* atnezon sortorles ajax inditas */
-	fn = 'szortir.delRsz';
-	azon = szortir.fejazon;
-	r = ajaxCall(fn,{'azon':azon,'rendszam':rendszam},true, fn);
-}
-OSzortir.prototype.delRsz = function(result) {
-	/* sortorles ajax eredmenye */
-	for (var i = 0;i < result.length;i++){
-		res = result[i];
-		rendszam = res.RENDSZAM;
-		$('#'+rendszam).hide();
-	}
-
-}
 
 OSzortir.prototype.folytKesobb=function(){
 	/* atnezon folyt kesobb ajax inditas */

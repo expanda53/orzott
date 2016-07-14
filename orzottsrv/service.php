@@ -847,7 +847,35 @@
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		echo json_encode(Converter::win2utf_array($res));
         break;
-        
+  case 'szortir.rszSave':
+		$sql="SELECT * FROM PDA_ORZOTTSZORTIR_SORUPDATE (:azon, :rsz, :login)";
+		$stmt = Firebird::prepare($sql);
+		$login=$r['login'];
+		$azon=$r['azon'];
+		$rsz=$r['rsz'];
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);		
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+        break;
+  case 'szortir.reviewLoad':
+		/* atnezo panel, rendszam szuro eredmeny*/
+
+		$azon = $r['azon'];
+		$login = $r['login'];
+		$sql=" SELECT * FROM PDA_ORZOTTSZORTIR_REVIEWLOAD(:azon,:login)";
+
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+        $stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode(Converter::win2utf_array($res));
+        break;
     default:
         echo json_encode('unknown command');
   }

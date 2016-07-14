@@ -115,10 +115,10 @@
 	width:301px;
 }
 #divhiany {
-	position: relative;
-    left: 283px;
+    position: relative;
+    left: 282px;
     width: 170px;
-    top: 5px;
+    top: 174px;
 }
 .labelHiany{
 	background-color: yellow;
@@ -168,22 +168,30 @@
 	border-bottom:1px solid orange;
 }
 
-#divreview table td {
+/*#divreview table td {
 	padding:10px;
 	text-align:center;
 }
+*/
 .tableReview {
 	/*width:367px;*/
 }
-.tableReview th{
-	font-size:14px;
-}
+
 .tableReview button {
 	padding:10px;
 	background-color:orange;
 }
-.tdrsz {
-	width:115px;
+.tableReview td{
+	/* width:115px; */
+    padding:5px;
+    font-size:13px;
+    margin-bottom:5px;
+    line-height:20px;
+    border-bottom: 1px dashed black;
+}
+.tableReview td span {
+    font-weight:bold;
+    font-style:italic;
 }
 
 .rowhighlighted {
