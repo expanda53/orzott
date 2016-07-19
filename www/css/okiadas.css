@@ -351,6 +351,7 @@
     height: 16px;
     font-style: italic;
 	font-weight:bold;
+    font-size:15px;
     margin: 2px 4px 2px 0px;
 }
 
@@ -372,16 +373,16 @@
 #labelRendszam {
     position: relative;
     float: left;
-    padding: 10px;
+    padding: 10px 10px 10px 3px;
     background-color: #f1f1f1;
-    width: 62px;
+    width: 59px;
     text-align: center;
     margin-top: 2px;
     height: 16px;
     /* left: 31px; */
     font-size: 13px;
     /* top: 69px; */
-    margin: 2px 4px 2px 0px;	
+    margin: 2px 4px 2px 0px;
 }
 #dataRendszam {
     position: relative;
@@ -403,13 +404,13 @@
     float: left;
     padding: 10px;
     background-color: #f1f1f1;
-    width: 70px;
+    width: 80px;
     text-align: center;
     margin-top: 2px;
     height: 16px;
     /* left: 265px; */
     font-style: italic;
-    font-size: 13px;
+    font-size: 15px;
     /* top: 69px; */
     margin: 2px 0px 2px 0px;
 }

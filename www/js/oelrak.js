@@ -197,7 +197,7 @@ OElrak.prototype.rszAdatokGet = function (result){
 						$('#divmeres').show();
 						
 						fn = 'elrak.getMelyseg';
-						ajaxCall(fn,{'poz':elrak.currentPosition, 'login':login_id},true, fn);
+						ajaxCall(fn,{'poz':elrak.currentPosition, 'login':login_id,'tip':elrak.currentItem},true, fn);
 					});
 			}
 		}

@@ -230,6 +230,20 @@ OBeerk.prototype.getPositions=function(result){
 	}
 }
 
+OBeerk.prototype.checkMarka = function (poz){
+  index=-1;
+  result=true;
+  if  (this.currentItem!='bFelni') {
+      if (poz=='bJE' || poz=='bBE')  index=9;
+      if (poz=='bJH' || poz=='bBH')  index=12;
+      if (poz=='bPOT' )  index=15;
+      if (index!=-1) {
+        if (beerk.rszAdatok[index].trim()=='') {showMessage('Az adott tengelyen nincs méret, minta beállítva! Állítsd be!');result=false;}
+      }
+  }
+  return result;
+
+}
 
 OBeerk.prototype.selectPosition = function (obj) {
 	/* nyomtatas inditas + mentes ajax*/
@@ -308,34 +322,39 @@ OBeerk.prototype.selectPosition = function (obj) {
 					poz=beerk.currentPosition;
 
 	}
-	
-	if (drb2>=drb) {
-		showMessage('A beérkezett mennyiség '+drb+' db!');
-	}
-	/* ha a sajcegben a mindenre nyomtat=IGEN, akkor minden gombra nyomtatas van */
-	mindenre_nyomtat = (settings.getItem('ORZOTT_LERAKODAS_MINDENRE_NYOMTAT').toUpperCase() == 'IGEN');
-    
-	if (mindenre_nyomtat || tip!='bGumiFelni' || teszt) {
-		/* print */
-		if(typeof bluetoothSerial != 'undefined') {
-			try {
-				printing=true;
-				bluetoothSerial.isConnected(btPrint, printError);
-			}
-			finally {
-				printing=false;
-			}
-		}
-		else {
-			showMessage('printer not found');
-			if (teszt) btPrint();
-		}
-	}
-	else {
-		/* kerek valasztasnal nincs nyomtatas (mivel mossak oket, es kesobb nyomtatjak)*/
-		fn = 'beerk.rszMent';
-		ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'tip':tip,'poz':poz,'login':login_id},true, fn);
-	}
+	if (this.checkMarka(poz)) {
+        if (drb2>=drb) {
+            showMessage('A beérkezett mennyiség '+drb+' db!');
+        }
+        /* ha a sajcegben a mindenre nyomtat=IGEN, akkor minden gombra nyomtatas van */
+        mindenre_nyomtat = (settings.getItem('ORZOTT_LERAKODAS_MINDENRE_NYOMTAT').toUpperCase() == 'IGEN');
+        
+        if (mindenre_nyomtat || tip!='bGumiFelni' || teszt) {
+            /* print */
+            if(typeof bluetoothSerial != 'undefined') {
+                try {
+                    printing=true;
+                    bluetoothSerial.isConnected(btPrint, printError);
+                }
+                finally {
+                    printing=false;
+                }
+            }
+            else {
+                showMessage('printer not found');
+                if (teszt) btPrint();
+            }
+        }
+        else {
+            /* kerek valasztasnal nincs nyomtatas (mivel mossak oket, es kesobb nyomtatjak)*/
+            fn = 'beerk.rszMent';
+            ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'tip':tip,'poz':poz,'login':login_id},true, fn);
+        }
+    }
+    else {
+      this.showGPanel();
+      $('#bAllapotClose').trigger( "click" );
+    }
 
 
 }
@@ -358,9 +377,9 @@ OBeerk.prototype.rszMent = function(result) {
 				$('#divallapot').show();
 				$('#bAllapotMent').show();
 				$('#bAllapotClose').hide();
-				if (beerk.currentItem=='bGumi' || beerk.currentItem=='bGumiFelni') {
+				if (beerk.currentItem=='bGumi' || beerk.currentItem=='bGumiFelni'  || beerk.currentItem=='bFelni') {
 					fn = 'beerk.getMelyseg';
-					ajaxCall(fn,{'poz':beerk.currentPosition, 'login':login_id},true, fn);
+					ajaxCall(fn,{'poz':beerk.currentPosition, 'login':login_id,'tip':beerk.currentItem},true, fn);
 				}
 			}
             else $('#bAllapotClose').trigger( "click" );
@@ -392,7 +411,8 @@ OBeerk.prototype.allapotMentes=function(){
 	poz = this.currentPosition;
 	melyseg = $('#gstat').val();
 	csereok = $('#gcsok').val();
-	if (this.meresKell && (melyseg=='-' || melyseg=='' || melyseg==null)) showMessage('Mentés elõtt mérd meg a mélységet!');
+    tip=beerk.currentItem;
+	if (this.meresKell && (melyseg=='-' || melyseg=='' || melyseg==null) && tip!='bFelni' ) showMessage('Mentés elõtt mérd meg a mélységet!');
 	else 
 	if (melyseg=='CS' && csereok=="") {
 		showMessage('Csere esetén töltd ki a csere okát!');
@@ -400,7 +420,6 @@ OBeerk.prototype.allapotMentes=function(){
 	else {
 		rsz = $('#rendszam').val();
 		mibiz = $('#hMIBIZ').val();
-		tip=beerk.currentItem;
 		fn='beerk.allapotMent';
 		ajaxCall(fn,{'rsz':rsz,'mibiz':mibiz,'poz':poz,'melyseg':melyseg,'login':login_id,'tip':tip,'csereok':csereok},true, fn);
 	}
@@ -724,7 +743,7 @@ OBeerk.prototype.GPanelFunctions = function(func,src,trg){
 OBeerk.prototype.GPanelClose = function (saveData){
 	if (saveData) {
 			beerk.evszak = $('#gpEvszak option:selected').val();
-            beerk.fedb = $('#gpFelnidb option:selected').val();
+            //beerk.fedb = $('#gpFelnidb option:selected').val();
 			beerk.rszAdatok[7]=$('#gpFelnitip option:selected').val();
 			beerk.rszAdatok[9]=$('#gpMarkaA option:selected').text();
 			beerk.rszAdatok[10]=$('#gpMeretA option:selected').text();

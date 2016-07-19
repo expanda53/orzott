@@ -105,7 +105,7 @@
 			}
 		})
 		$('#gstat').val(newgstat);
-        if ($('#gstat').val()==null) {
+        if ($('#gstat').val()==null && newgstat!='') {
             showMessage('Nincs ilyen választható állapot!');
             $('#gstat').val(defgstat);
         }

@@ -266,7 +266,10 @@
   case 'beerk.getMelyseg':
   case 'elrak.getMelyseg':
 		$login = $r['login'];
-		$sql=" SELECT KOD FROM AKHSTAT WHERE TIPUS='G' ORDER BY KOD3,KOD2,KOD";
+        $tip=$r['tip'];
+        $wherestr="";
+        if ($tip=='bFelni' || $tip=='F') $wherestr=" AND KOD IN ('FS','FCS') ";
+		$sql=" SELECT KOD FROM AKHSTAT WHERE TIPUS='G' $wherestr ORDER BY KOD3,KOD2,KOD";
 		$stmt = Firebird::prepare($sql);
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -874,6 +877,18 @@
         $stmt->bindParam(':login', $login, PDO::PARAM_STR);
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode(Converter::win2utf_array($res));
+        break;
+	case 'szortir.lezarUpdate':
+		$azon = $r['azon'];
+		$login = $r['login'];
+		$sql=" SELECT * FROM PDA_ORZOTTSZORTIR_LEZARCHECK(:azon,:login)  ";
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+        $stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->execute();
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
     default:

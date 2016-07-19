@@ -180,7 +180,8 @@
 						<option value='A'>Alu</option>
 						<option value='L'>Lemez</option>
 				</select>
-				<div class='labelGPdb'>db</div>
+				<!--
+                <div class='labelGPdb'>db</div>
 				<select id=gpFelnidb>
 						<option value='0'>0</option>
 						<option value='1'>1</option>
@@ -191,6 +192,7 @@
 						<option value='6'>6</option>						
 						<option value='7'>7</option>
 				</select>
+                -->
                 <div class='labelGPEvszak'>Évszak</div>
 				<select id=gpEvszak>
 						<option value='nyári'>Nyári</option>

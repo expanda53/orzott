@@ -46,6 +46,9 @@ OSzortir.prototype.mibizList = function(result) {
 		})
 	//alert(JSON.stringify(res));
 	}
+    else {
+        showMessage('Nincs élõ szortírlista a rendszerben!','',1.5)
+    }
 	
 	
 
@@ -119,6 +122,7 @@ OSzortir.prototype.getRszDetails = function (result) {
 
 OSzortir.prototype.rszSave = function (result) {
 	/* rendszam mentes eredmenye */
+        emptyobj='dataRendszam';
 for (var i = 0;i < result.length;i++){
 		res = result[i];
 		if (res.RESULTTEXT=='OK') {
@@ -137,6 +141,10 @@ for (var i = 0;i < result.length;i++){
 					errormsg='Ez a pozíció már szortírozva lett!';
                     $('#dataKeszdrb').html(res.ODRB2);
 					break;
+				case 'AUTOCLOSE_DONE': 
+					errormsg='Az összes tétel szortirozva lett, lista lezárva.';
+                    emptyobj='';
+					break;                    
 				case 'UNKNOWN_ERROR': 
 					errormsg='Adatbázis hiba a felírásnál!';
 					break;					
@@ -144,7 +152,8 @@ for (var i = 0;i < result.length;i++){
 					errormsg = res.RESULTTEXT;
 					
 			}
-			showMessage(errormsg,'dataRendszam');
+			showMessage(errormsg,emptyobj);
+            if (emptyobj=='') showMenu();
 			
 		}
 	}
@@ -199,29 +208,43 @@ OSzortir.prototype.showReview = function() {
 
 OSzortir.prototype.folytKesobb=function(){
 	/* atnezon folyt kesobb ajax inditas */
-	fn = 'szortir.folytUpdate';
-	azon = szortir.fejazon;
-	r = ajaxCall(fn,{'azon':azon,'login':login_id},true, fn);
-}
-OSzortir.prototype.folytUpdate=function(result){
-	/* atnezon folyt kesobb ajax eredmenye */
 	$('#divreview').hide();
 	//app.BTDisabled();
-	showMenu();
+	szortir.lezarStart();
 }
 
 OSzortir.prototype.lezarStart = function(){
-	/* atnezon lezaras ajax inditas */
+	/* atnezon automatikus lezaras ajax inditas */
 	azon=szortir.fejazon;
 	fn = 'szortir.lezarUpdate';
 	ajaxCall(fn,{'azon':azon,'login':login_id},true, fn);
 }
 
-
-OSzortir.prototype.lezarUpdate =function(result){
-	/* atnezon lezaras ajax eredmenye */
-	szortir.folytUpdate(result);
+OSzortir.prototype.lezarUpdate= function(result) {
+	for (var i = 0;i < result.length;i++){
+		res = result[i];    
+        errormsg='';
+        switch (res.RESULTTEXT) {
+				case 'NOTREADY': 
+					errormsg='';
+					break;
+				case 'OK': 
+					errormsg='Az összes tétel szortirozva lett, lista lezárva.';
+					break;
+				case 'UNKNOWN_ERROR': 
+					errormsg='Adatbázis hiba a lezárásnál!';
+					break;					
+				default:
+					errormsg = res.RESULTTEXT;
+					
+		}
+		if (errormsg!='') showMessage(errormsg,'');
+    }
+    showMenu();
 }
+
+
+
 /* atnezo panel eddig */
 
 
