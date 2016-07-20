@@ -20,6 +20,11 @@ var depthMeterDialog = {
 	},
 	createTable:function(){
 				sorok = "";
+                var connected = function(){
+                    showMessage('Mélységmérõ OK.','',2)
+                    app.getPrinters();
+                }
+                
 				app.depthMeters.forEach(function(meter){
 					sorok+="<tr>";
 					sorok+="<td class=printerid>"+meter.id+"</td>";
@@ -37,14 +42,16 @@ var depthMeterDialog = {
 					$("#tableprinter tbody").html(sorok);
 					$('#tableprinter tr').bind('click',function(){
 						tr = $(this);
-						if (app.depthMeterConnected) app.manageConnection2(false);
+						if (app.depthMeterConnected) app.manageConnection2(false,null);
 						app.depthMeterId = tr.find(".printerid").html();
 						app.depthMeterName = tr.find(".printername").html();
+                        $('#btNext').attr('disabled','disabled');
+                        $('#tableprinter').attr('disabled','disabled');
 						try {
-							app.BT2Enabled();						
+							app.BT2Enabled(connected);						
 						}
 						finally {
-							app.getPrinters();
+							//app.getPrinters();
 						}
 					})
 				}

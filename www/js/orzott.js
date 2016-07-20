@@ -1,6 +1,6 @@
 var beerk = null;
 var elrak = null;
-var teszt = true;
+var teszt = false;
 $.support.cors=true;
 $.ajaxSetup({ cache: false });
 function ajaxCall( func, d,asyn,fn) {
@@ -46,18 +46,6 @@ function ajaxError(func){
 }
 
 
-showMessage =function (msg, clearObj,timeout ){
-    timeout = typeof timeout !== 'undefined' ? timeout : 3; //default paramétert csak igy eszi meg.
-	$('#dmsg .msgtxt').html(msg);
-	$('#dmsg').show();
-
-	window.setTimeout(function(){
-		$('#dmsg').hide();
-		if (clearObj!='') {
-			$('#'+clearObj).val('');
-		}
-	},timeout*1000);
-}
 
 
 function showMenu() {
@@ -111,6 +99,7 @@ function showMenu() {
 function showLogin() {
 	app.BT2Disabled();
 	app.BTDisabled();
+    app.currentModule='';
 	panelName = 'login';
 	$.get( "css/"+panelName+".css", function( data ) {
 		css = '<head><style>' + data + '</style></head>';

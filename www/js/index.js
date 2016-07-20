@@ -17,6 +17,25 @@
  * under the License.
  */
  console.log('orzott start');
+ console.debug('orzott debug');
+
+showMessage =function (msg, clearObj,timeout ){
+    timeout = typeof timeout !== 'undefined' ? timeout : 3; //default paramétert csak igy eszi meg.
+	$('#dmsg .msgtxt').html(msg);
+	$('#dmsg').show();
+    if (timeout>0) {
+        window.setTimeout(function(){
+            messageHide();
+            if (clearObj!='') {
+                $('#'+clearObj).val('');
+            }
+        },timeout*1000);
+    }
+}
+messageHide = function(){
+    $('#dmsg').hide();
+}
+
 function printer (pid,pname) {
 	this.id =pid;
 	this.name = pname;
@@ -67,6 +86,7 @@ var app = {
     },	
 	/* bt */
 	getPrinters:function(){
+        //alert('getprinters');
 		if(typeof bluetoothSerial != 'undefined'){ 
 				bluetoothSerial.list(function(devices) {
 					app.printers.length=0;
@@ -84,13 +104,18 @@ var app = {
 			
 		}
 		else {
-			alert('bt serial undefined');
+			showMessage('bt serial undefined');
 			printerDialog.show();
 		}	
 		
 	},
 	getDepthMeters:function(){
+        //alert('getmeters');
 		if(typeof bluetoothSerial2 != 'undefined'){ 
+                if ($('#btimg')) {
+                    $("#btimg").attr("src","img/bluetooth.png");
+                }
+
 				bluetoothSerial2.list(function(devices) {
 					app.depthMeters.length=0;
 					devices.forEach(function(device) {
@@ -107,12 +132,13 @@ var app = {
 			
 		}
 		else {
-			alert('bt2 serial undefined');
+			showMessage('bt2 serial undefined');
 			depthMeterDialog.show();
 		}	
 		
 	},	
 	BTEnabled:function(delayedFunc){
+        //alert('printer btenabled');
 		if(typeof bluetoothSerial != 'undefined'){ 
             //alert('btenabled start');
 			var btAssign = function() {
@@ -120,40 +146,42 @@ var app = {
 			}
 			bluetoothSerial.isEnabled(
 				btAssign,
-				function(){alert('bluetooth not enabled')}
+				function(){showMessage('bluetooth to printer not enabled')}
 			); 
 
 		}
 		else {
-			alert('bt serial undefined');
+			showMessage('bt serial undefined');
 		}
 	},
-	BT2Enabled:function(){
-	
-	
+	BT2Enabled:function(delayedFunc){
+        //alert('meter btenabled 1');	
 		if(typeof bluetoothSerial2 != 'undefined'){ 
-			var btAssign2 = function() {
-				app.manageConnection2(true);
+			var btAssign = function() {
+                //alert('meter btenabled 3');	
+				app.manageConnection2(true,delayedFunc);
 			}
+            //alert('meter btenabled 2');	
 			bluetoothSerial2.isEnabled(
-				btAssign2,
-				function(){alert('bluetooth2 not enabled')}
+				btAssign,
+				function(){showMessage('bluetooth to depthmeter not enabled')}
 			); 
 
 		}
 		else {
-			alert('bt2 serial undefined');
+			showMessage('bt2 serial undefined');
 		}
 	},
 	BTDisabled:function(){
-		app.manageConnection(false);
+		app.manageConnection(false,null);
 	},
 	BT2Disabled:function(){
-		app.manageConnection2(false);
+		app.manageConnection2(false,null);
 	},
 	
    manageConnection: function(needConnect,delayedFunc) {
 	    /* printer */
+        //alert('printer managecon');
 		if(typeof bluetoothSerial != 'undefined') {
 			// connect() will get called only if isConnected() (below)
 			// returns failure. In other words, if not connected, then connect:
@@ -182,17 +210,19 @@ var app = {
 			else bluetoothSerial.isConnected(disconnect,null);
 		}
     },
-   manageConnection2: function(needConnect) {
+   manageConnection2: function(needConnect,delayedFunc) {
 	   /* depthmeter */
+       //alert('meter managecon 1');
 	   try {
 		if(typeof bluetoothSerial2 != 'undefined') {
 			// connect() will get called only if isConnected() (below)
 			// returns failure. In other words, if not connected, then connect:
 			var connect = function () {
 				// attempt to connect:
+                //alert('meter managecon 3');
 				bluetoothSerial2.connect(
 					app.depthMeterId,  // device to connect to
-					app.openPort2,    // start listening if you succeed
+					app.openPort2(delayedFunc),    // start listening if you succeed
 					app.showErrorDepthMeter    // show the error if you fail
 				);
 				
@@ -207,9 +237,10 @@ var app = {
 				
 				
 			};
-
+            //alert('meter managecon 2');
+            //alert(needConnect);
 			// here's the real action of the manageConnection function:
-			if (needConnect) bluetoothSerial2.isConnected(null, connect);
+			if (needConnect) bluetoothSerial2.isConnected(delayedFunc, connect);
 			else bluetoothSerial2.isConnected(disconnect,null);
 		}
 	   }
@@ -222,6 +253,20 @@ var app = {
     and changes the button:
 */
     openPort: function(delayedFunc) {
+        //alert('printer openport');
+        var pconnected = function(){
+            //alert('connected');
+            app.printerConnected=true;
+            //alert('printer connected');
+            app.btRefresh();
+            //messageHide();
+        }
+        var pnotconnected = function(){
+            app.printerConnected=false;
+            //alert('printer not connected');
+            app.btRefresh();
+            //messageHide();
+        }        
         // if you get a good Bluetooth serial connection:
         console.log("Connected to: " + app.printerId);
         //alert('openport start');
@@ -234,7 +279,9 @@ var app = {
 			//alert('subscribe ok:'+data);
 			//alert(data);
         });
-        app.printerConnected=true;
+        
+        showMessage('Nyomtató csatlakoztatás...','',0);
+        bluetoothSerial.isConnected(pconnected,pnotconnected);
         if (delayedFunc!=null) {
             window.setTimeout(
                 function() {bluetoothSerial.isConnected(delayedFunc,null)}
@@ -242,15 +289,35 @@ var app = {
             );            
         }
     },
-    openPort2: function() {
+    openPort2: function(delayedFunc) {
+        //alert('meter openport 1');
         // if you get a good Bluetooth serial connection:
         console.log("Connected to: " + app.depthMeterId);
-		app.depthMeterConnected=true;
+        var dconnected = function(){
+            
+            app.depthMeterConnected=true;
+            app.btRefresh();
+        }
+        var dnotconnected = function(){
+            app.depthMeterConnected=false;
+            //alert('printer not connected');
+            app.btRefresh();
+        }        
+		
         // set up a listener to listen for newlines
         // and display any new data that's come in since
         // the last newline:
+        
         bluetoothSerial2.subscribe('\n', app.onData);
-		
+        //alert('meter openport 2');
+        showMessage('Mélységmérõ csatlakoztatás...','',0);
+        bluetoothSerial2.isConnected(dconnected,dnotconnected);
+        if (delayedFunc!=null) {
+            window.setTimeout(
+                function() {bluetoothSerial2.isConnected(delayedFunc,null)}
+                ,5000
+            );            
+        }		
     },
 	onData: function(data) {
             console.log(data);
@@ -262,7 +329,7 @@ var app = {
 					$('#gstat').trigger('change');
 				}
 			}
-			else alert(data);
+			else showMessage(data);
 	},
 
 /*
@@ -298,14 +365,60 @@ var app = {
     appends @error to the message div:
 */
     showErrorPrinter: function(error) {
-		console.log("printer bluetooth error:"+error);
+        messageHide();
+		showMessage('Nyomtató csatlakoztatás nem sikerült. '+error);
+        console.log("printer bluetooth error:"+error);
+        $('#btNext').removeAttr('disabled');
+        $('#tableprinter').removeAttr('disabled');
+        
 		this.printerConnected = false;
+        if ($('#btimg')) {
+            $("#btimg").attr("src","img/bluetooth-red.png");
+        }
         //alert("bluetooth error:"+error);
     },
     showErrorDepthMeter: function(error) {
+        messageHide();
+        showMessage('Mélységmérõ csatlakoztatás nem sikerült.'+error);
+        $('#btNext').removeAttr('disabled');
+        $('#tableprinter').removeAttr('disabled');
+
+        if ($('#btimg')) {
+            $("#btimg").attr("src","img/bluetooth-red.png");
+        }
 		console.log("depthmeter bluetooth error:"+error);
 		this.depthMeterConnected = false;
         //alert("bluetooth error:"+error);
+    },
+    btRefresh: function(){
+        //alert('btrefresh');
+
+
+                if ($("#btimg")) $("#btimg").attr("src","img/bluetooth.png");        
+                var dmnotconnected = function(){
+                    if ($("#btimg")) $("#btimg").attr("src","img/bluetooth-red.png");
+                    app.depthMeterConnected=false;
+                }
+                var pnotconnected = function(){
+                    if ($("#btimg")) $("#btimg").attr("src","img/bluetooth-red.png");
+                    app.printerConnected=false;
+                }
+                var dmconnected = function(){
+                    app.depthMeterConnected=true;
+                }
+                var pconnected = function(){
+                    app.printerConnected=true;
+                }
+                           
+                if(typeof bluetoothSerial2 != 'undefined'){ 
+                    bluetoothSerial2.isConnected(dmconnected, dmnotconnected);
+                }
+                if(typeof bluetoothSerial != 'undefined'){ 
+                    bluetoothSerial.isConnected(pconnected, pnotconnected);
+                }    
+                else pnotconnected();    
+
+        
     }
 	
 	

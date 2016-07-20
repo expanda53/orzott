@@ -182,6 +182,7 @@ OBeerk.prototype.showPozPanel = function(obj) {
 /* allapot panel */
 OBeerk.prototype.showAllapotPanel = function(obj){
 	this.currentItem = obj.attr('id'); 
+
 	$('#bAllapotClose').show();
 	if (this.meresKell || beerk.currentItem=="bGumi") {
 		/* ha meressel kerte, vagy meres nelkul de gumit valasztott */
@@ -203,6 +204,9 @@ OBeerk.prototype.showAllapotPanel = function(obj){
                 muvelet += beerk.szlevAllapot;
 				beerk.currentPosition = '';
 				$('#muvelet').html(muvelet);
+                
+                app.btRefresh();
+                
 				fn='beerk.getPositions';
 				ajaxCall(fn,{'rsz':rsz,'mibiz':mibiz,'login':login_id},true, fn);
 				
@@ -218,6 +222,7 @@ OBeerk.prototype.showAllapotPanel = function(obj){
 	}
 }
 			
+
 OBeerk.prototype.getPositions=function(result){
 	/* mar kivalasztott poziciok: JE:A:13  (pozicio:tipus:melyseg)*/
 	if (result[0].RESULT!='') {
@@ -255,10 +260,16 @@ OBeerk.prototype.selectPosition = function (obj) {
 	}
 	else poz=obj.attr('id');
 	this.currentPosition = poz;
-	
+	var btPrintInit = function() {
+        showMessage('Nyomtató OK.');
+        btPrint();
+    }
 	var btPrint = function() {
 		//tip = beerk.currentItem;
+        app.btRefresh();
         if (app.printerConnected || teszt){
+            
+            //alert('1');
             //alert('printer connected');
             rsz = $('#rendszam').val();
             $.get( "views/prn_rendszam_lerak.tpl", function( data ) {
@@ -282,6 +293,7 @@ OBeerk.prototype.selectPosition = function (obj) {
                         r = ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'tip':beerk.currentItem, 'poz':beerk.currentPosition, 'login':login_id},true, fn);
                     }
                     var writeError = function(){
+                        //alert('writeError');
                         console.log('btprint write error:'+beerk.currentItem+':'+beerk.currentPosition);
                         //alert('btprint write error:'+beerk.currentItem+':'+beerk.currentPosition);
                     }
@@ -289,12 +301,16 @@ OBeerk.prototype.selectPosition = function (obj) {
                     mindenre_nyomtat = (mindenre =='IGEN');
                     //alert(mindenre);
                     //alert(mindenre_nyomtat);
+                    //alert('2');
                     if (!teszt && (beerk.currentItem!='bGumiFelni' || mindenre_nyomtat)) bluetoothSerial.write(tpl,writeOk,writeError);
                     if (teszt || (beerk.currentItem=='bGumiFelni' && !mindenre_nyomtat)) writeOk();
                     
             })
         }
-		
+        else {
+            $("#btimg").attr("src","img/bluetooth-red.png");
+        }
+		printing=false;
 		
 	}
 	var printError = function(){
@@ -303,9 +319,13 @@ OBeerk.prototype.selectPosition = function (obj) {
 		app.printerConnected=false;
         //alert(app.printerId);
         if (app.printerId!="") {
-            app.BTEnabled(btPrint);
+            app.BTEnabled(btPrintInit);
         }
-		if (app.printerConnected==false) alert('Nyomtatási hiba');
+		if (app.printerConnected==false) {
+            $("#btimg").attr("src","img/bluetooth-red.png");
+            showMessage('Nyomtatási hiba');
+        }
+        printing=false;
 	}
 	azon = $('#hAZON').val();
 	sorsz = $('#hSORSZ').val();	
@@ -334,14 +354,17 @@ OBeerk.prototype.selectPosition = function (obj) {
             if(typeof bluetoothSerial != 'undefined') {
                 try {
                     printing=true;
+                    //alert('0');
+                    //alert(app.printerConnected);
                     bluetoothSerial.isConnected(btPrint, printError);
                 }
                 finally {
-                    printing=false;
+                    
                 }
             }
             else {
                 showMessage('printer not found');
+                $("#btimg").attr("src","img/bluetooth-red.png");
                 if (teszt) btPrint();
             }
         }
@@ -361,6 +384,9 @@ OBeerk.prototype.selectPosition = function (obj) {
 
 OBeerk.prototype.rszMent = function(result) {
 	/* mentes ajax eredmenye */
+    //alert('0');
+    app.btRefresh();
+    //alert('1');
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		if (res.RESULT!=-1)	{
@@ -375,7 +401,34 @@ OBeerk.prototype.rszMent = function(result) {
 				$('#muvelet').append(' ('+beerk.currentPosition.substring(1)+')');
 				$('#divpozicio').hide();
 				$('#divallapot').show();
-				$('#bAllapotMent').show();
+                var dmOk = function(){
+                    showMessage('Mélységmérõ OK.');
+                }
+
+                var dmreconnect = function(){
+                    //alert('btprint printerror');
+                    console.log('depthmeter connection error:'+beerk.currentItem+':'+beerk.currentPosition);
+                    depthMeterConnected=false;
+                    //alert(app.printerId);
+                    if (app.depthMeterId!="") {
+                        app.BT2Enabled(dmOk);
+                    }
+                    if (app.depthMeterConnected==false) {
+                        showMessage('Mélységmérõ hiba');
+                        $("#btimg").attr("src","img/bluetooth-red.png");
+                    }
+                    
+                }
+                var dmconnected = function(){
+                    app.btRefresh();
+                }
+                
+                
+                if(typeof bluetoothSerial2 != 'undefined'){ 
+                    bluetoothSerial2.isConnected(dmconnected, dmreconnect);
+                }
+				//alert('2');
+                $('#bAllapotMent').show();
 				$('#bAllapotClose').hide();
 				if (beerk.currentItem=='bGumi' || beerk.currentItem=='bGumiFelni'  || beerk.currentItem=='bFelni') {
 					fn = 'beerk.getMelyseg';

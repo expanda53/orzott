@@ -47,6 +47,14 @@
     left: 357px;
     width: 160px;
 }
+#bSettings {
+    position: absolute;
+    top: 181px;
+    left: 10px;
+    width: 60px;
+    background: white;
+    padding: 10px;
+    height: 53px;}
 #divcsok {
 	
 	width:320px;

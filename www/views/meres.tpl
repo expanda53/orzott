@@ -15,6 +15,10 @@
     if (beerk.currentItem=='bFelni') {
         $('#cbcs').attr('disabled',true);	
     }
+    
+    $('#bSettings').bind('click',function () {
+        app.getDepthMeters();
+    })
 	
 	$('#bAllapotClose').bind('click',function () {
 		$('#divmeres').hide();
@@ -149,6 +153,7 @@
 		
 	</div>
 </div>
+<button id=bSettings><img id=btimg src='img/bluetooth.png'></button>
 <button id=bAllapotMent>Mentés</button>
 <button id=bAllapotClose>Bezár</button>
 <button id=bAllapotJavitas>Javítás</button>

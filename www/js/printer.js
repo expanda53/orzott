@@ -19,6 +19,11 @@ var printerDialog = {
 	},
 	createTable:function(){
 				sorok = "";
+                var connected = function(){
+                    showMessage('nyomtató ok','',2);
+                    printerDialog.showNext();
+                        
+                }
 				app.printers.forEach(function(printer){
 					sorok+="<tr>";
 					sorok+="<td class=printerid>"+printer.id+"</td>";
@@ -37,11 +42,14 @@ var printerDialog = {
 						if (app.printerConnected) app.manageConnection(false,null);
 						app.printerId = tr.find(".printerid").html();
 						app.printerName = tr.find(".printername").html();
+                        $('#btNext').attr('disabled','disabled');
+                        $('#tableprinter').attr('disabled','disabled');
+                        
 						try {
-							app.BTEnabled(null,null);
+							app.BTEnabled(connected);
 						}
 						finally {
-							printerDialog.showNext();
+							
 						}
 						
 					})

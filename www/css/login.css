@@ -32,8 +32,8 @@ button {
 }
 
 .divinput {
-width: 350px;
-    height: 40px;
+    width: 350px;
+    height: 20px;
     padding: 10px;
     font-size: 30px;
     font-weight: bold;
@@ -43,25 +43,25 @@ width: 350px;
     text-shadow: -1px 0 yellow, 0 1px yellow, 1px 0 yellow, 0 -1px yellow;
 }
 .divnumbuttons{
-	margin:0px auto;
-	width:380px;
-	height:100px;
+    margin: 0px auto;
+    width: 483px;
+    height: 130px;
 }
-.bnum,.bbacksp,.blogin {
-	padding: 17px;
-	background-color:orange;
-	color:black;
-	font-size:17px;
-	font-weight:bold;
-	width:70px;
-	margin-bottom:5px;
-	border:1px solid orange;
+.bnum {
+    padding: 19px;
+    background-color: orange;
+    color: black;
+    font-size: 21px;
+    font-weight: bold;
+    width: 93px;
+    margin-bottom: 5px;
+    border: 1px solid orange;
 }
 .divfnbuttons {
-	margin:0px auto;
-	width:380px;
-	height:100px;
-	margin-top:16px;
+    margin: 0px auto;
+    width: 380px;
+    height: 100px;
+    margin-top:5px;
 }
 
 .bbacksp,.blogin {
@@ -71,6 +71,7 @@ width: 350px;
 	width:180px;
 	margin-top:10px;
 	border:1px solid yellow;
+    color: black;
 }
  
  
