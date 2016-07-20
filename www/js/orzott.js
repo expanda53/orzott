@@ -119,10 +119,14 @@ function orzottLogin(){
 		ajaxCall(fn,{'user':user},true, fn);
 }
 function checkLogin(result){
-	if (result!='undefined' && result[0].RCOUNT==0) {
-		alert('Nem megfelelõ felhasználói kód!');
+	if (result!='undefined' && (result[0].RCOUNT==0 || result[0].RCOUNT=='')) {
+		showMessage('Nem megfelelõ felhasználói kód!');
 	}
-	else {
+    else
+    if (result!='undefined' && (result[0].TELEP=='')) {
+		showMessage('Nincs a kezelõhöz telep rendelve!');
+	}
+	else {	
 		login_id=$('.divinput').text();
 		login_id = login_id.replace(/(?:\r\n|\r|\n|\t)+/g, '');
 		fn = 'loadSettings';

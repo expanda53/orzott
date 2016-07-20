@@ -209,7 +209,7 @@ OElrak.prototype.rszChange = function (){
 	/* rendszam valasztas ajax indito */
 	rsz = $('#dataRendszam').val();
 	fn = 'elrak.rszAdatokGet';
-	ajaxCall(fn,{'rsz':rsz},true, fn);
+	ajaxCall(fn,{'rsz':rsz,'login':login_id},true, fn);
 	
 }
 

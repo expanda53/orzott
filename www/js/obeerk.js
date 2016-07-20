@@ -1,5 +1,4 @@
 /* beerkezes */
-/* beerkezes */
 markaUpdate = false;
 meretUpdate = false;
 mintaUpdate = false;
@@ -59,6 +58,7 @@ OBeerk.prototype.initMibizList = function(){
 OBeerk.prototype.mibizList = function(result) {
 	/* feladat lista ajax eredménye */
 	panelName = 'obeerk';
+    if (result.length>0) {
 	sor = '';
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
@@ -93,6 +93,10 @@ OBeerk.prototype.mibizList = function(result) {
 		});
 		
 	})
+    }
+    else {
+        showMessage('Nincs élõ bevét lista a rendszerben!','',1.5)
+    }
 
 }
 OBeerk.prototype.selectTask = function(mibiz,mszam3) {

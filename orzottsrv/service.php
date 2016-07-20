@@ -20,7 +20,7 @@
   switch ($func) {
   
   case 'checkLogin':
-		$sql="select count(1) RCOUNT from pda_kezelok where kezelo=:login";
+		$sql="select kezelo RCOUNT,telep from pda_kezelok where kezelo=:login";
 		$stmt = Firebird::prepare($sql);
 		$login=trim($r['user']);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
@@ -41,11 +41,9 @@
   
   /* lerakodas */
   case 'beerk.mibizList':
-		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTLERAK2 (:biztip, :login)";
+		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTLERAK2 (:login)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
-		$biztip=$r['biztip'];
-		$stmt->bindParam(':biztip', $biztip, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -429,8 +427,10 @@
   
   /* elrakodas */
   case 'elrak.getRszInProgress':
-	$sql=" SELECT * FROM PDA_ORZOTTHKOD_GETRSZSTARTED ";
+    $login = $r['login'];
+	$sql=" SELECT * FROM PDA_ORZOTTHKOD_GETRSZSTARTED (:login) ";
 	$stmt = Firebird::prepare($sql);
+    $stmt->bindParam(':login', $login, PDO::PARAM_STR);
 	$stmt->execute();
 	$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	echo json_encode(Converter::win2utf_array($res));
@@ -439,9 +439,11 @@
   case 'elrak.rszAdatokGet':
 	/* elrakodasnal rendszam adatok + adott rendszambol mennyi van kiszedve*/
 	$rsz = $r['rsz'];
+    $login = $r['login'];
 	$sql=" SELECT * FROM PDA_ORZOTTHKOD_GETRSZ(:rsz) ";
 	$stmt = Firebird::prepare($sql);
 	$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
+    $stmt->bindParam(':login', $login, PDO::PARAM_STR);
 	$stmt->execute();
 	$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	Firebird::commit();
@@ -504,7 +506,7 @@
 		$login = $r['login'];
 		$sql=" SELECT DISTINCT LEFT(BSOR.TAPADO,2) RENDSZAM
 				FROM BSOR
-				WHERE BSOR.BIZTIP='MO06' AND DRB=DRB2
+				WHERE BSOR.BIZTIP=(SELECT OBEVET_BIZTIP FROM PDA_LOGINDATA(:login)) AND DRB=DRB2
 				";
 
 		$stmt = Firebird::prepare($sql);
@@ -515,6 +517,7 @@
         break;
   case 'elrak.reviewRszGet':
 		/* atnezo panel, rendszam szuro eredmeny*/
+       
 		$filter = $r['filter'];
 		$filterStr='';
 		if ($filter!='*') {
@@ -524,7 +527,7 @@
 		$login = $r['login'];
 		$sql=" SELECT BSOR.TAPADO RENDSZAM, CAST(DRB AS INTEGER) DRB, CAST(DRB2 AS INTEGER) DRB2,CAST(ROGDRB AS INTEGER) ROGDRB
 				FROM BSOR
-				WHERE BSOR.BIZTIP='MO06' AND DRB=DRB2 $filterStr
+				WHERE BSOR.BIZTIP=(SELECT OBEVET_BIZTIP FROM PDA_LOGINDATA(:login)) AND DRB=DRB2 $filterStr
 				";
 
 		$stmt = Firebird::prepare($sql);
@@ -535,11 +538,9 @@
         break;
   /* orzott leltar */
   case 'leltar.mibizList':
-		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTLELTAR (:biztip, :login)";
+		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTLELTAR (:login)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
-		$biztip=$r['biztip'];
-		$stmt->bindParam(':biztip', $biztip, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -618,12 +619,10 @@
         break;
   /* orzott kiadas */
   case 'kiadas.raktarList':
-		$sql="SELECT * FROM PDA_ORZOTTKI_RAKTARLIST (:login,:akttip, :biztip)";
+		$sql="SELECT * FROM PDA_ORZOTTKI_RAKTARLIST (:login,:akttip)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
-		$biztip=$r['biztip'];
         $akttip=$r['akttip'];
-		$stmt->bindParam(':biztip', $biztip, PDO::PARAM_STR);
         $stmt->bindParam(':akttip', $akttip, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
 		$stmt->execute();
@@ -633,13 +632,11 @@
 		echo json_encode(Converter::win2utf_array($res));
         break;
   case 'kiadas.telepList':
-		$sql="SELECT * FROM PDA_ORZOTTKI_TELEPLIST (:login,:akttip, :biztip ,:aktraktar)";
+		$sql="SELECT * FROM PDA_ORZOTTKI_TELEPLIST (:login,:akttip, :aktraktar)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
-		$biztip=$r['biztip'];
         $akttip=$r['akttip'];
         $aktraktar=$r['aktraktar'];
-		$stmt->bindParam(':biztip', $biztip, PDO::PARAM_STR);
         $stmt->bindParam(':akttip', $akttip, PDO::PARAM_STR);
         $stmt->bindParam(':aktraktar', $aktraktar, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
@@ -650,14 +647,12 @@
 		echo json_encode(Converter::win2utf_array($res));
         break;
   case 'kiadas.mibizList':
-		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTKI (:biztip, :login,:akttip,:raktar,:cegazon)";
+		$sql="SELECT * FROM PDA_MIBIZLIST_ORZOTTKI (:login,:akttip,:raktar,:cegazon)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
-		$biztip=$r['biztip'];
         $akttip=$r['akttip'];
         $raktar=$r['raktar'];
         $cegazon=$r['cegazon'];
-		$stmt->bindParam(':biztip', $biztip, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
         $stmt->bindParam(':akttip', $akttip, PDO::PARAM_STR);
         $stmt->bindParam(':raktar', $raktar, PDO::PARAM_STR);
@@ -829,11 +824,9 @@
         break;
   /* szortir */        
   case 'szortir.mibizList':
-		$sql="SELECT * FROM PDA_ORZOTTSZORTIR_MIBIZLIST (:biztip)";
+		$sql="SELECT * FROM PDA_ORZOTTSZORTIR_MIBIZLIST (:login)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
-		$biztip=$r['biztip'];
-		$stmt->bindParam(':biztip', $biztip, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
 		$stmt->execute();
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
