@@ -78,7 +78,7 @@ OElrak.prototype.panelInit = function () {
 				}
 			})
 			fn = 'elrak.getRszInProgress';
-			ajaxCall(fn,{},true, fn);
+			ajaxCall(fn,{'login':login_id},true, fn);
             $('#dataRendszam').focus();
 			
 		})
@@ -276,7 +276,7 @@ OElrak.prototype.showHkod=function(){
 OElrak.prototype.hideHkod=function(){
 	$('.dhkod').hide();
     fn = 'elrak.getRszInProgress';
-	ajaxCall(fn,{},true, fn);
+	ajaxCall(fn,{'login':login_id},true, fn);
 
    
 }

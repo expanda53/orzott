@@ -7,14 +7,29 @@
   $p     = explode("/", $request);
   $func = $p[1];
   $r = $_REQUEST;
-  
+  function _log($szoveg){
+       //return false;
+	   
+       $dat=date('y.m.d H:i:s');
+	   $datd=date('y.m.d');
+	   $dats=str_replace('.','',$datd);
+	   $ip = strip_tags($_SERVER['REMOTE_ADDR']);
+	   $fnev = str_replace('.','',$ip).'_'.$dats.'.log';
+	   @mkdir("log", 0777);
+       $fnev="log/$fnev";
+       $fp = fopen($fnev, 'a');
+       $szoveg1='###'.$dat." $ip:";
+       $return=" \r\n";
+       fwrite($fp, $szoveg1.$szoveg.$return);
+       fclose($fp);
+    }         
   function _debug($stmt,$r) {
     $sql = $stmt->queryString;
     foreach ($r as $key => $value) {
         $field=$key;
         $sql = str_replace(':'.$field,addslashes($value),$sql);
     }
-    echo 'sql:'.$sql;
+    return 'sql:'.$sql.' r:'.json_encode($r);
   }
   
   switch ($func) {
@@ -432,6 +447,8 @@
 	$stmt = Firebird::prepare($sql);
     $stmt->bindParam(':login', $login, PDO::PARAM_STR);
 	$stmt->execute();
+    
+    _log(_debug($stmt,$r));
 	$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	echo json_encode(Converter::win2utf_array($res));
     break;
@@ -440,11 +457,13 @@
 	/* elrakodasnal rendszam adatok + adott rendszambol mennyi van kiszedve*/
 	$rsz = $r['rsz'];
     $login = $r['login'];
-	$sql=" SELECT * FROM PDA_ORZOTTHKOD_GETRSZ(:rsz) ";
+    //if ($login=='') $login=100;
+	$sql=" SELECT * FROM PDA_ORZOTTHKOD_GETRSZ(:rsz,:login) ";
 	$stmt = Firebird::prepare($sql);
 	$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
     $stmt->bindParam(':login', $login, PDO::PARAM_STR);
 	$stmt->execute();
+    _log(_debug($stmt,$r));
 	$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	Firebird::commit();
 	echo json_encode(Converter::win2utf_array($res));
@@ -461,6 +480,7 @@
 	$stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);
 	$stmt->bindParam(':login', $login, PDO::PARAM_STR);
 	$stmt->execute();
+    _log(_debug($stmt,$r));
 	$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	Firebird::commit();
 	echo json_encode(Converter::win2utf_array($res));
@@ -481,6 +501,7 @@
 	$stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);
 	$stmt->bindParam(':login', $login, PDO::PARAM_STR);
 	$stmt->execute();
+    _log(_debug($stmt,$r));
 	$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	Firebird::commit();
 	echo json_encode(Converter::win2utf_array($res));
@@ -496,6 +517,7 @@
 	$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
 	$stmt->bindParam(':login', $login, PDO::PARAM_STR);
 	$stmt->execute();
+    _log(_debug($stmt,$r));    
 	$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	Firebird::commit();
 	echo json_encode(Converter::win2utf_array($res));	
