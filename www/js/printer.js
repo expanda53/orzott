@@ -21,7 +21,7 @@ var printerDialog = {
 				sorok = "";
                 var connected = function(){
                     showMessage('nyomtató ok','',2);
-                    printerDialog.showNext();
+                    printerDialog.setOrientation();
                         
                 }
 				app.printers.forEach(function(printer){
@@ -57,6 +57,15 @@ var printerDialog = {
 				
 
 	},
+    setOrientation:function(){
+        app.printerTplPrefix="_portrait";
+        if(confirm("Fektetve(IGEN) vagy állítva nyomtat(NEM)?")) {
+            app.printerTplPrefix="";
+        }
+        printerDialog.showNext();
+        
+    },
+        
     showNext:function(){
         if (app.currentModule=='') showMenu();
         else {
@@ -66,3 +75,6 @@ var printerDialog = {
     }
         
 }
+
+/*
+  show->createTable->(index.js)app.BTEnabled->connected->setOrientation->showNext->(orzott.js)showMenu/panel elrejtés*/

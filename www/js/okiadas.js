@@ -597,9 +597,7 @@ OKiadas.prototype.setLabelData = function(result){
 OKiadas.prototype.printLabel = function(aktbutton){
 	rszprint = aktbutton.attr('val');
 	var btPrint = function() {
-		$.get( "views/prn_rendszam_lerak.tpl", function( data ) {
-
-				
+		$.get( "views/prn_rendszam_lerak"+app.printerTplPrefix+".tpl", function( data ) {
 				tpl = data.replace(/\[RENDSZPOZ\]/g,rszprint); 
 				tpl += '\r\n';
 				var writeOk = function(){
@@ -609,7 +607,6 @@ OKiadas.prototype.printLabel = function(aktbutton){
 				}
 				if (!teszt) bluetoothSerial.write(tpl,writeOk,writeError);
 				if (teszt) writeOk();
-				
 		})
 	}
 	

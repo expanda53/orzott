@@ -1,6 +1,6 @@
 var beerk = null;
 var elrak = null;
-var teszt = false;
+var teszt = true;
 $.support.cors=true;
 $.ajaxSetup({ cache: false });
 function ajaxCall( func, d,asyn,fn) {
@@ -8,7 +8,7 @@ function ajaxCall( func, d,asyn,fn) {
   console.debug('ajax:'+func+' data:'+JSON.stringify(d));
   $.ajax({
         type: "POST",
-		url: "http://redmine.akh.hu/orzott_api/service.php/" + func, /* akh eles */
+		url: "http://redmine.akh.hu/orzott_api/service.php/" + func, 
         data: d,
 		async: asyn,
         dataType: "json",
@@ -32,7 +32,6 @@ function ajaxCall( func, d,asyn,fn) {
         },
         error: function(data) {
             console.debug('ajax error:'+func+' data:'+JSON.stringify(data));
-			//alert('ajax error:'+func+' data:'+JSON.stringify(data));
 			res='ERROR';
             ajaxError(func);
         }
@@ -97,7 +96,9 @@ function showMenu() {
 }
 
 function showLogin() {
-	app.BT2Disabled();
+	/* depthmeter */
+    app.BT2Disabled();
+    /* printer */
 	app.BTDisabled();
     app.currentModule='';
 	panelName = 'login';
@@ -147,3 +148,6 @@ if (teszt) {
     })
 }
 
+/*
+    showLogin->orzottLogin->checkLogin->loadSettings, (index.js)app.getDepthMeters->(depthmeter.js)depthmeterDialog.show  ((printer.js)printerDialog.show) ->showMenu
+*/

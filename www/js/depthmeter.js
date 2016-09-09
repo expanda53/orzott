@@ -60,3 +60,6 @@ var depthMeterDialog = {
 
 	}
 }
+/*
+  show->createTable->(index.js)app.BT2Enabled->connected->getPrinters
+*/
