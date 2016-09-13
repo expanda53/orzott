@@ -48,18 +48,6 @@ OKiadas.prototype.panelInit = function () {
 			$('#dataRendszam').bind('focus',function (event) {
 				$(this).val("");
 			})	
-			/*
-			$('#dataHkod').bind('focus',function (event) {
-				$(this).val("");
-				kiadas.hideRsz();
-			})	
-			*/
-			
-			/*
-			$('#dataHkod').bind('change',function (event) {
-				kiadas.hkodChange();
-			})
-			*/
 					
 			$('#bMenu, #bMenu1').bind('click',function () {
 				showMenu();
@@ -88,7 +76,6 @@ OKiadas.prototype.panelInit = function () {
 					$('#divpanel').show();
 					event.handled = true;
 					if ($('#dataRendszam').is(":visible")) $('#dataRendszam').focus();
-					//else $('#dataHkod').focus();
 				} else {
 					return false;
 				}
@@ -106,7 +93,7 @@ OKiadas.prototype.panelInit = function () {
 				akttip = $('#kiadastip').val();
                 if (akttip=='H') /* teleptolto */ {
                     aktraktar = $(this).val();
-                    fn = 'kiadas.telepList';
+                    fn = 'kiadas.telepList'; /* PDA_ORZOTTKI_TELEPLIST */
                     ajaxCall(fn,{'login':login_id,'biztip':kiadas.aktbiztip,'akttip':akttip,'aktraktar':aktraktar},true, fn);
                 }
                 else {
@@ -116,7 +103,7 @@ OKiadas.prototype.panelInit = function () {
 				
 			})                
 			$('#btStart').bind('click',function(){
-				fn = 'kiadas.mibizList';
+				fn = 'kiadas.mibizList'; /*  PDA_MIBIZLIST_ORZOTTKI */
 				akttip = $('#kiadastip').val();
 				raktar = $('#raktarlist').val();
                 if (akttip=='H') cegazon = $("#teleplist").val();
@@ -125,7 +112,6 @@ OKiadas.prototype.panelInit = function () {
 
 			})
 			
-			//$('#dataHkod').focus();
 			$('#kiadastip').trigger('change');
 		})
 
@@ -156,26 +142,24 @@ OKiadas.prototype.telepList = function (result){
 
 OKiadas.prototype.mibizList = function (result){
 	/* bfej.azon kiolvasasa, eltarolasa */
-	//for (var i = 0;i < result.length;i++){
-		res = result[0];
-		kiadas.fejazon = res.FEJAZON;
+	res = result[0];
+	kiadas.fejazon = res.FEJAZON;
 		
-		$('#dataSofor').html(res.FUVAR);
-		$('#dataJarat').html($('#kiadastip option:selected').text());
-		$('#dataRaktar').html(res.RAKTAR);
+	$('#dataSofor').html(res.FUVAR);
+	$('#dataJarat').html($('#kiadastip option:selected').text());
+	$('#dataRaktar').html(res.RAKTAR);
 		
-		/* kovetkezo kiszedendo helykod betoltese */
-		fn = 'kiadas.nextHkodGet';
-		ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon,'hkod':kiadas.currentHkod},true, fn);
+	/* kovetkezo kiszedendo helykod betoltese */
+	fn = 'kiadas.nextHkodGet'; /* PDA_ORZOTTKI_HKOD */
+	ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon,'hkod':kiadas.currentHkod},true, fn);
 		
-		$('#divmibizlist').hide();
-		$('#divpanel').show();		
-	//}
+	$('#divmibizlist').hide();
+	$('#divpanel').show();		
+
 
 }
 OKiadas.prototype.nextHkodGet = function (result){
 	/* elso kiszedendo helykod betoltese */
-	//$('#dataHkod').val("");
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
         if (res.HKOD=='NOTFOUND') {
@@ -200,27 +184,17 @@ OKiadas.prototype.nextHkodGet = function (result){
 /* hkod innen */
 OKiadas.prototype.showHkod=function(){
 	$('.dhkod').show();
-	//$('#dataHkod').val("");
-	//$('#dataHkod').focus();
 }
 OKiadas.prototype.hideHkod=function(){
-	//$('#dataHkod').val("");
 	$('.dhkod').hide();
 }
 OKiadas.prototype.hkodChange=function(){
-	
-	//if ($('#dataHkod').val() == this.currentHkod) {
-		$('.drendszam').show();
-		$('#dataRendszam').empty();
-		/* kovetkezo kiszedendo rendszam betoltese */
-		fn = 'kiadas.nextRszGet';
-		ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon,'hkod':kiadas.currentHkod,'rsz':kiadas.currentRsz},true, fn);
-		
-		
-	//}
-	//else showMessage('Nem megfelelõ helykód!','dataHkod');
+	$('.drendszam').show();
+	$('#dataRendszam').empty();
+	/* kovetkezo kiszedendo rendszam betoltese */
+	fn = 'kiadas.nextRszGet'; /* PDA_ORZOTTKI_RSZ */
+	ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon,'hkod':kiadas.currentHkod,'rsz':kiadas.currentRsz},true, fn);
 }
-
 
 /* hkod eddig */
 
@@ -228,6 +202,14 @@ OKiadas.prototype.hkodChange=function(){
 OKiadas.prototype.hideRsz=function(){
 	$('.drendszam').hide();
 }
+OKiadas.prototype.nextRszGet = function (result){
+	/* elso kiszedendo rendszam betoltese */
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		kiadas.setNextRsz(res);
+	}
+}
+
 OKiadas.prototype.setNextRsz = function (rszRec){
 		if (rszRec.RSZ!=undefined) rsz = rszRec.RSZ;
 		if (rszRec.NEXTRSZ!=undefined) rsz = rszRec.NEXTRSZ;
@@ -244,18 +226,12 @@ OKiadas.prototype.setNextRsz = function (rszRec){
 		$('#dataRendszam').focus();
 }
 
-OKiadas.prototype.nextRszGet = function (result){
-	/* elso kiszedendo rendszam betoltese */
-	for (var i = 0;i < result.length;i++){
-		res = result[i];
-		kiadas.setNextRsz(res);
-	}
-}
+
 OKiadas.prototype.rszChange = function (){
 	/* rendszam valasztas ajax indito */
 	rsz = $('#dataRendszam').val();
 	if (rsz.indexOf(kiadas.currentRsz)!=-1) {
-		fn = 'kiadas.rszSave';
+		fn = 'kiadas.rszSave'; /* PDA_ORZOTTKI_SORUPDATE */
 		ajaxCall(fn,{'rsz':rsz,'rszshort':kiadas.currentRsz,'azon':kiadas.fejazon,'login':login_id,'hkod':kiadas.currentHkod,'lastrsz':kiadas.lastRsz},true, fn);
 	}
 	else {
@@ -278,7 +254,7 @@ OKiadas.prototype.rszSave = function (result){
 					errormsg='Mentés rendben, HELYKÓD VÁLTÁS!';
 					showMessage(errormsg,'dataRendszam');
 					kiadas.hideRsz();
-					fn = 'kiadas.nextHkodGet';
+					fn = 'kiadas.nextHkodGet'; /* PDA_ORZOTTKI_HKOD */
 					ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon,'hkod':kiadas.currentHkod},true, fn);
 					
 					
@@ -322,7 +298,7 @@ OKiadas.prototype.rszSave = function (result){
 
 OKiadas.prototype.rszNotFound = function(){
     if (confirm("Biztos nincs meg?")) {
-		fn = 'kiadas.rszEmpty';
+		fn = 'kiadas.rszEmpty'; /* PDA_ORZOTTKI_SORVISSZA */
 		ajaxCall(fn,{'rszshort':kiadas.currentRsz,'azon':kiadas.fejazon,'login':login_id,'hkod':kiadas.currentHkod},true, fn);
     }
     else $('#dataRendszam').focus();
@@ -333,6 +309,8 @@ OKiadas.prototype.rszEmpty = function(result){
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		if (res.RESULTTEXT=='OKTOVABB' || res.RESULTTEXT=='OKVISSZA') {
+            //OKTOVABB: nem kell uzenet a visszarakasrol, mert nem volt belole kiszedes
+            //OKVISSZA: volt belole kiszedes, vissza kell rakni
             if (res.RESULTTEXT=='OKVISSZA') {
                 hkod = $('#labelHkodVart').html();
                 alert('Ne felejtsd el a kiszedett abroncsokat visszarakni a helyére: '+hkod+' !');
@@ -345,7 +323,7 @@ OKiadas.prototype.rszEmpty = function(result){
 					errormsg='Mentés rendben, HELYKÓD VÁLTÁS!';
 					showMessage(errormsg,'dataRendszam');
 					kiadas.hideRsz();
-					fn = 'kiadas.nextHkodGet';
+					fn = 'kiadas.nextHkodGet'; /* PDA_ORZOTTKI_HKOD */
 					ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon,'hkod':kiadas.currentHkod},true, fn);
 					
 					
@@ -392,6 +370,47 @@ OKiadas.prototype.rszEmpty = function(result){
 
 /* atnezo panel */
 
+OKiadas.prototype.showReview = function() {
+	/* atnezo panel ajax inditas */
+	$('#divreview').hide();
+	$('bFolytMost').show();
+	$('#divpanel').hide();
+	fn = 'kiadas.reviewRszFilter'; /* query */
+	r = ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon},true, fn);
+	$('#divreview').show();
+	
+}
+
+
+OKiadas.prototype.reviewRszFilter = function(result) {
+	/* atnezo panel filter ajax eredenye (rsz szures)*/
+	sorok = '';
+	$('.tableReviewFilter tbody').empty();
+	sorok='<tbody>'
+	var hianydb = 0;
+	sorok += '<tr >';
+	sorok += '<td id="rszall">*</td>';
+	sorok += '</tr>';
+
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		sorok += '<tr >';
+		sorok += '<td id="'+res.RENDSZAM+'">'+res.RENDSZAM+'</td>';
+		sorok += '</tr>';
+		
+	}
+	sorok+='</tbody>'
+	$('.tableReviewFilter tbody').append(sorok);
+	$('.tableReviewFilter tbody td').bind('click',function(){
+		curTD = $(this);
+		filter = curTD.html();
+		fn = 'kiadas.reviewRszGet'; /* query */
+		r = ajaxCall(fn,{'filter':filter,'login':login_id,'azon':kiadas.fejazon},true, fn);
+	})
+
+	$('#rszall').trigger('click');
+	
+}
 
 OKiadas.prototype.reviewRszGet = function(result) {
 	/* atnezo panel filter ajax eredenye (rendszamok)*/
@@ -424,48 +443,6 @@ OKiadas.prototype.reviewRszGet = function(result) {
 
 }
 
-OKiadas.prototype.reviewRszFilter = function(result) {
-	/* atnezo panel filter ajax eredenye (rsz szures)*/
-	sorok = '';
-	$('.tableReviewFilter tbody').empty();
-	sorok='<tbody>'
-	var hianydb = 0;
-	sorok += '<tr >';
-	sorok += '<td id="rszall">*</td>';
-	sorok += '</tr>';
-
-	for (var i = 0;i < result.length;i++){
-		res = result[i];
-		sorok += '<tr >';
-		sorok += '<td id="'+res.RENDSZAM+'">'+res.RENDSZAM+'</td>';
-		sorok += '</tr>';
-		
-	}
-	sorok+='</tbody>'
-	$('.tableReviewFilter tbody').append(sorok);
-	$('.tableReviewFilter tbody td').bind('click',function(){
-		curTD = $(this);
-		filter = curTD.html();
-		fn = 'kiadas.reviewRszGet';
-		r = ajaxCall(fn,{'filter':filter,'login':login_id,'azon':kiadas.fejazon},true, fn);
-	})
-
-	$('#rszall').trigger('click');
-	
-}
-
-
-OKiadas.prototype.showReview = function() {
-	/* atnezo panel ajax inditas */
-	$('#divreview').hide();
-	$('bFolytMost').show();
-	$('#divpanel').hide();
-	fn = 'kiadas.reviewRszFilter';
-	r = ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon},true, fn);
-	$('#divreview').show();
-	
-}
-
 OKiadas.prototype.reviewFilter = function() {
 	/* eltérés/összes sor mutatása*/
 	showAll = true;
@@ -495,7 +472,7 @@ OKiadas.prototype.reviewFilter = function() {
 			/* "nincs meg" esetén fut csak, "nincs meg" jelzes torles */
 			if (confirm("Mégis szedhetõ?")) {
 				rsz = rszTD.html();
-				fn = 'kiadas.rszReset';
+				fn = 'kiadas.rszReset'; /* PDA_ORZOTTKI_RSZRESET */
 				r = ajaxCall(fn,{'rsz':rsz,'azon':kiadas.fejazon,'login':login_id},true, fn);
 			}
 		}
@@ -519,7 +496,7 @@ OKiadas.prototype.rszReset = function(result){
 
 OKiadas.prototype.lezarInit = function() {
 	if (confirm("Zárható?")) {
-		fn = 'kiadas.closeCheck';
+		fn = 'kiadas.closeCheck'; /* PDA_ORZOTTKI_CLOSECHECK */
 		ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon},true, fn);
 	}
 	
@@ -529,7 +506,7 @@ OKiadas.prototype.closeCheck = function(result){
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		if (res.RESULTTEXT=='OK') {
-			fn = 'kiadas.closeIt';
+			fn = 'kiadas.closeIt'; /* PDA_ORZOTTKI_CLOSE */
 			ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon},true, fn);
 		}
 		else {
@@ -578,7 +555,7 @@ OKiadas.prototype.closeIt = function(result){
 OKiadas.prototype.showCimkePanel = function(){
 	$('#divpanel').hide();
 	$('#divcimke').show();
-	fn = 'kiadas.setLabelData';
+	fn = 'kiadas.setLabelData'; /* PDA_ORZOTTKI_CIMKEADATOK */
 	ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon,'rsz':this.currentRsz},true, fn);
 
 }
@@ -638,4 +615,20 @@ OKiadas.prototype.printLabel = function(aktbutton){
 /* kiadas eddig */
 
 
-//pingPrinter();
+/*
+panelInit->(#kiadastip.change)->raktarList->(#raktarlist.change)->[(akttip='H' teleptolto)->telepList]->(#btStart.click)->mibizList->nextHkodGet->
+                                                                                                                                            (van tetel)->hkodChange->nextRszGet->setNextRsz->(#dataRendszam.change)->rszChange->rszSave->
+                                                                                                                                                            ->(nincs több rsz a helykódon)->nextHkodGet
+                                                                                                                                                            ->(köv. rendszám a helykódról)->setNextRsz
+                                                                                                                                            (nincs tetel)->showReview
+    
+//nincs meg:
+rszNotFound->rszEmpty->rsz/hkod valtas (ld fent)
+
+    
+//lezaras:
+lezarInit->closeCheck->closeIt
+    
+//átnézõ: 
+showReview->reviewRszFilter->reviewRszGet->reviewFilter->(stat3=X:rszReset - "nincs meg" torles->showReview)
+*/

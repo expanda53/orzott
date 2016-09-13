@@ -50,7 +50,7 @@ OElrak.prototype.panelInit = function () {
 	
 			
 			$('#dataHkod').bind('change',function (event) {
-				elrak.hkodChange();
+				elrak.hkodSaveInit();
 			})	
 
 			$('#bHkodTorol').bind('click',function () {			
@@ -77,7 +77,7 @@ OElrak.prototype.panelInit = function () {
 					return false;
 				}
 			})
-			fn = 'elrak.getRszInProgress';
+			fn = 'elrak.getRszInProgress'; /*  PDA_ORZOTTHKOD_GETRSZSTARTED */
 			ajaxCall(fn,{'login':login_id},true, fn);
             $('#dataRendszam').focus();
 			
@@ -103,6 +103,16 @@ OElrak.prototype.getRszInProgress = function (result){
         
     }
 }
+
+OElrak.prototype.rszChange = function (){
+	/* rendszam valasztas ajax indito */
+	rsz = $('#dataRendszam').val();
+	fn = 'elrak.rszAdatokGet'; /* PDA_ORZOTTHKOD_GETRSZ */
+	ajaxCall(fn,{'rsz':rsz,'login':login_id},true, fn);
+	
+}
+
+
 OElrak.prototype.rszAdatokGet = function (result){
 	/* rendszam valasztas ajax eredmenye, rszChange indítja */
     /* ha van mar hkod es nem kell merni, akkor mentheto. Ha meg nincs hkod, akkor lonie kell hkodot */
@@ -110,12 +120,15 @@ OElrak.prototype.rszAdatokGet = function (result){
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		if (res.RESULT=='OK') {
+                /* volt melysegmeres*/
 				$('#dataHkod').val('');
                 if (res.HKOD!='') {
+                    /* mar volt hkod love, mentheto */
                     $('#dataHkod').val(res.HKOD);
-                    elrak.hkodChange();
+                    elrak.hkodSaveInit();
                 }                
                 else {
+                    /* meg nincs hkod love, be kell loni */
                     elrak.showHkod();
                 }
 				
@@ -153,10 +166,9 @@ OElrak.prototype.rszAdatokGet = function (result){
 					break;
 				case 'ALREADY_DONE': 
 					errormsg='Ez a gumi már el lett pakolva! helykód:'+res.ERRORTEXT;
-					showMessage(errormsg);
-					$('#dataHkod').val(res.ERRORTEXT);
-					//elrak.showHkod();
-                    showHkod=true;
+					showMessage(errormsg,clearObj);
+					//$('#dataHkod').val(res.ERRORTEXT);
+                    //showHkod=true;
 					break;
 				case 'ALREADY_STARTED': 
 					errormsg='Már van egy elkezdett garnitúra:<BR>'+res.ERRORTEXT;
@@ -164,7 +176,7 @@ OElrak.prototype.rszAdatokGet = function (result){
 					break;
 				default:
 					errormsg = res.RESULTTEXT;
-                    showHkod = true;
+                    //showHkod = true;
 					
 			}
 			$('#hAZON').val(res.FEJAZON);
@@ -186,17 +198,13 @@ OElrak.prototype.rszAdatokGet = function (result){
 			elrak.currentPosition='b'+res.RSZPOZ;
 			if (meresKell) {
 					/* ha merni kell */
-                    //$('#dataRszWork').hide();
-                    //$('#labelRszWork').hide();
 					panelName='elrak_meres';
 					$.get( "views/"+panelName+".tpl", function( data ) { 
 						rsz = $('#rendszam').val();
 						mibiz = $('#hMIBIZ').val();
 						$('#divmeres').html(data);
-						//$('#divpanel').hide();
 						$('#divmeres').show();
-						
-						fn = 'elrak.getMelyseg';
+						fn = 'elrak.getMelyseg'; /* query */
 						ajaxCall(fn,{'poz':elrak.currentPosition, 'login':login_id,'tip':elrak.currentItem},true, fn);
 					});
 			}
@@ -205,24 +213,10 @@ OElrak.prototype.rszAdatokGet = function (result){
 
 }
 
-OElrak.prototype.rszChange = function (){
-	/* rendszam valasztas ajax indito */
-	rsz = $('#dataRendszam').val();
-	fn = 'elrak.rszAdatokGet';
-	ajaxCall(fn,{'rsz':rsz,'login':login_id},true, fn);
-	
-}
-
-
-
 OElrak.prototype.showPozPanel = function(obj) {
 	this.showAllapotPanel(obj);
 }
-
-
 /* fopanel eddig */
-
-
 
 /* allapot panel */
 
@@ -246,7 +240,7 @@ OElrak.prototype.allapotMentes=function(){
 	rsz = $('#rendszam').val();
 	mibiz = $('#hMIBIZ').val();
 	tip=elrak.currentItem;
-	fn='elrak.allapotMent';
+	fn='elrak.allapotMent'; /*PDA_ORZOTTLERAK_ALLAPOTMENT*/
 
 	csereok = $('#gcsok').val();
 	if ((melyseg=='-' || melyseg=='' || melyseg==null)) showMessage('Mentés elõtt mérd meg a mélységet!');
@@ -261,27 +255,22 @@ OElrak.prototype.allapotMentes=function(){
 }
 OElrak.prototype.allapotMent=function(result){
 	$('#bAllapotClose').trigger( "click" );
-    if ($('#dataHkodWork').val()!='NINCS') elrak.hkodChange();
+    if ($('#dataHkodWork').val()!='NINCS') elrak.hkodSaveInit();
 	else elrak.showHkod();
 }
 /* allapot panel eddig */
 
 /* hkod innen */
 OElrak.prototype.showHkod=function(){
-    //$('#dataRszWork').hide();
-    //$('#labelRszWork').hide();
 	$('.dhkod').show();
 	$('#dataHkod').focus();
 }
 OElrak.prototype.hideHkod=function(){
 	$('.dhkod').hide();
-    fn = 'elrak.getRszInProgress';
+    fn = 'elrak.getRszInProgress'; /* PDA_ORZOTTHKOD_GETRSZSTARTED */
 	ajaxCall(fn,{'login':login_id},true, fn);
 
    
-}
-OElrak.prototype.hkodChange=function(){
-	this.hkodSaveInit();
 }
 OElrak.prototype.hkodDelInit=function(){
 	/* hkod torles start */
@@ -290,7 +279,7 @@ OElrak.prototype.hkodDelInit=function(){
 	
 	azon = $('#hAZON').val();
 	rendszam = $('#rendszam').val();
-	fn = 'elrak.hkodDel';
+	fn = 'elrak.hkodDel'; /* PDA_ORZOTTHKOD_HKODDEL */
 	ajaxCall(fn,{'rsz':rendszam,'azon':azon,'login':login_id},true, fn);
 }
 OElrak.prototype.hkodDel=function(result){
@@ -300,11 +289,6 @@ OElrak.prototype.hkodDel=function(result){
 		if (res.RESULT=='OK') {
 			showMessage('Törlés rendben');
             $('#dataRendszam').focus();
-            /*
-            fn = 'elrak.getRszInProgress';
-            ajaxCall(fn,{},true, fn);
-            */
-
 		}
 		else {
 			errormsg='';
@@ -322,16 +306,7 @@ OElrak.prototype.hkodDel=function(result){
 					errormsg = res.RESULTTEXT;
 					
 			}
-			/*
-			$('#hAZON').val(res.FEJAZON);
-			$('#hSORSZ').val(res.SORSZ);	
-			$('#rendszam').val(res.RENDSZAM);
-			$('#hMIBIZ').val(res.MIBIZ);	
-			elrak.currentItem=res.RSZTIP;
-			elrak.currentPosition='b'+res.RSZPOZ;
-			*/
-			showMessage(errormsg);
-			
+            showMessage(errormsg);
 		}
 	
 	}
@@ -341,7 +316,7 @@ OElrak.prototype.hkodSaveInit=function(){
 	rsz = $('#dataRendszam').val();
 	hkod = $('#dataHkod').val();
     if (hkod!='') {
-        fn = 'elrak.hkodSaveCheck';
+        fn = 'elrak.hkodSaveCheck'; /* PDA_ORZOTTHKOD_HKODCHECK */
         ajaxCall(fn,{'rsz':rsz,'hkod':hkod,'login':login_id},true, fn);
     }
     else {
@@ -364,7 +339,7 @@ OElrak.prototype.hkodSaveCheck = function (result){
 			azon = res.FEJAZON;
 			sorsz = res.SORSZ;	
 
-			fn = 'elrak.hkodSave';
+			fn = 'elrak.hkodSave'; /* PDA_ORZOTTHKOD_HKODSAVE */
 			ajaxCall(fn,{'azon':azon, 'sorsz':sorsz,'rsz':rsz,'hkod':hkod,'login':login_id},true, fn);
 		}
 		else {
@@ -408,7 +383,7 @@ OElrak.prototype.hkodSave = function (result){
 		if (res.RESULT=='OK') {
             showMessage('OK');
             //munkaban levo rsz lekerdezese
-            fn = 'elrak.getRszInProgress';
+            fn = 'elrak.getRszInProgress';/* PDA_ORZOTTHKOD_GETRSZSTARTED */
             ajaxCall(fn,{},true, fn);
 
 			window.setTimeout(function(){
@@ -438,15 +413,51 @@ OElrak.prototype.hkodSave = function (result){
 			
 		}
 	}
-		
-
-
-	//alert(JSON.stringify(result));
 }
 /* hkod eddig */
 
 /* atnezo panel */
+OElrak.prototype.showReview = function() {
+	/* atnezo panel ajax inditas */
+	$('#divreview').hide();
+	$('bFolytMost').show();
+	$('#divpanel').hide();
+	fn = 'elrak.reviewRszFilter'; /* query */
+	r = ajaxCall(fn,{'login':login_id},true, fn);
+	$('#divreview').show();
+}
 
+
+
+OElrak.prototype.reviewRszFilter = function(result) {
+	/* atnezo panel filter ajax eredenye (rsz szures)*/
+	sorok = '';
+	$('.tableReviewFilter tbody').empty();
+	sorok='<tbody>'
+	var hianydb = 0;
+	sorok += '<tr >';
+	sorok += '<td id="rszall">*</td>';
+	sorok += '</tr>';
+
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		sorok += '<tr >';
+		sorok += '<td id="'+res.RENDSZAM+'">'+res.RENDSZAM+'</td>';
+		sorok += '</tr>';
+		
+	}
+	sorok+='</tbody>'
+	$('.tableReviewFilter tbody').append(sorok);
+	$('.tableReviewFilter tbody td').bind('click',function(){
+		curTD = $(this);
+		filter = curTD.html();
+		fn = 'elrak.reviewRszGet'; /* query */
+		r = ajaxCall(fn,{'filter':filter,'login':login_id},true, fn);
+	})
+
+	$('#rszall').trigger('click');
+	
+}
 
 OElrak.prototype.reviewRszGet = function(result) {
 	/* atnezo panel filter ajax eredenye (rendszamok)*/
@@ -485,47 +496,6 @@ OElrak.prototype.reviewRszGet = function(result) {
 
 }
 
-OElrak.prototype.reviewRszFilter = function(result) {
-	/* atnezo panel filter ajax eredenye (rsz szures)*/
-	sorok = '';
-	$('.tableReviewFilter tbody').empty();
-	sorok='<tbody>'
-	var hianydb = 0;
-	sorok += '<tr >';
-	sorok += '<td id="rszall">*</td>';
-	sorok += '</tr>';
-
-	for (var i = 0;i < result.length;i++){
-		res = result[i];
-		sorok += '<tr >';
-		sorok += '<td id="'+res.RENDSZAM+'">'+res.RENDSZAM+'</td>';
-		sorok += '</tr>';
-		
-	}
-	sorok+='</tbody>'
-	$('.tableReviewFilter tbody').append(sorok);
-	$('.tableReviewFilter tbody td').bind('click',function(){
-		curTD = $(this);
-		filter = curTD.html();
-		fn = 'elrak.reviewRszGet';
-		r = ajaxCall(fn,{'filter':filter,'login':login_id},true, fn);
-	})
-
-	$('#rszall').trigger('click');
-	
-}
-
-
-OElrak.prototype.showReview = function() {
-	/* atnezo panel ajax inditas */
-	$('#divreview').hide();
-	$('bFolytMost').show();
-	$('#divpanel').hide();
-	fn = 'elrak.reviewRszFilter';
-	r = ajaxCall(fn,{'login':login_id},true, fn);
-	$('#divreview').show();
-	
-}
 
 OElrak.prototype.reviewFilter = function() {
 	/* eltérés/összes sor mutatása*/
@@ -558,5 +528,13 @@ OElrak.prototype.reviewFilter = function() {
 
 
 /* elrakodas eddig */
-
+/*
+panelInit->getRszInProgress->(#datarendszam.change)->rszChange()->rszAdatokGet->(meres volt, hkod van)hkodSaveInit->hkodSaveCheck->hkodSave->getRszInProgress
+                                                                              ->(meres volt, hkod nincs)showHkod->hkodSaveInit->hkodSaveCheck->hkodSave->getRszInProgress
+                                                                              ->(meres nem volt)->getMelyseg->allapotMentes->allapotMent->(ha van hkod mar)->hkodSaveInit->hkodSaveCheck->hkodSave->getRszInProgress
+                                                                                                                                        ->(ha meg nincs hkod)->showHkod->hkodSaveInit->hkodSaveCheck->hkodSave->getRszInProgress
+                                                                              
+                                                                              
+átnézõ: showReview->reviewRszFilter->reviewRszGet->reviewFilter
+*/
 

@@ -116,7 +116,7 @@ function showLogin() {
 
 function orzottLogin(){
 		user = $('.divinput').text();
-		fn='checkLogin'
+		fn='checkLogin'; /* query */
 		ajaxCall(fn,{'user':user},true, fn);
 }
 function checkLogin(result){
@@ -130,7 +130,7 @@ function checkLogin(result){
 	else {	
 		login_id=$('.divinput').text();
 		login_id = login_id.replace(/(?:\r\n|\r|\n|\t)+/g, '');
-		fn = 'loadSettings';
+		fn = 'loadSettings'; /* query */
 		r = ajaxCall(fn,{},true, fn);
 
 		app.getDepthMeters();

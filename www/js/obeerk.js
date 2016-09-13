@@ -51,8 +51,8 @@ var OBeerk = function(){
 }
 /* feladat valasztas */
 OBeerk.prototype.initMibizList = function(){
-	fn = 'beerk.mibizList';
-	r = ajaxCall(fn,{'biztip':'MO06', 'login':login_id},true, fn);
+	fn = 'beerk.mibizList'; /* PDA_MIBIZLIST_ORZOTTLERAK2 */
+	r = ajaxCall(fn,{'login':login_id},true, fn);
 	/* obeerk.tpl beolvas, tr click -re mibiz átadása selectTask-nak. tr click az obeerk.tpl-ben van*/
 }
 OBeerk.prototype.mibizList = function(result) {
@@ -62,8 +62,7 @@ OBeerk.prototype.mibizList = function(result) {
 	sor = '';
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
-		//alert(JSON.stringify(res));
-		sor += '<tr id="'+res.MIBIZ+'">';
+        sor += '<tr id="'+res.MIBIZ+'">';
 		sor += '<td  class="tmszam3">'+res.FUVAR+'</td>'; 
 		sor +=  '<td class="tkezelo">'+res.KEZELOK+'</td>'; 
 		sor +=  '<td class="tdrbsum">'+res.DRBSUM+'</td>'; 
@@ -202,7 +201,7 @@ OBeerk.prototype.selectTask = function(mibiz,mszam3) {
 	}
 	ajaxCall('beerk.taskReg',{'mibiz':mibiz, 'login':login_id},true, '');
 	$('#divmibizlist').hide();
-	fn = 'beerk.panelInit'; 
+	fn = 'beerk.panelInit'; /* query */
 	r = ajaxCall(fn,{'mibiz':mibiz, 'login':login_id},true, fn);
 
 }
@@ -222,8 +221,6 @@ OBeerk.prototype.panelInit = function (result) {
 /* feladat valasztas eddig */
 
 /* fopanel */
-
-
 
 OBeerk.prototype.rszJav = function (result) {
 	/* mennyiseg javitas ajax eredmenye */
@@ -250,20 +247,16 @@ OBeerk.prototype.rszJavitas = function () {
 		rsz = $('#rendszam').val();
 		drb2 = $('.dataDrbKesz').html();
 		if (drb2>0) {
-		  fn = 'beerk.rszJav';
+		  fn = 'beerk.rszJav'; /* PDA_ORZOTTLERAK_JAVITAS */
 		  r = ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'rsz':rsz,'login':login_id},true, fn);
 		}
-	} else {
-
 	}	
-
 }
 
 
 OBeerk.prototype.showPozPanel = function(obj) {
 	this.showAllapotPanel(obj);
 }
-
 
 /* fopanel eddig */
 
@@ -297,7 +290,7 @@ OBeerk.prototype.showAllapotPanel = function(obj){
                 
                 app.btRefresh();
                 
-				fn='beerk.getPositions';
+				fn='beerk.getPositions'; /* PDA_ORZOTTLERAK_GETPOZ */
 				ajaxCall(fn,{'rsz':rsz,'mibiz':mibiz,'login':login_id},true, fn);
 				
 			});
@@ -374,7 +367,7 @@ OBeerk.prototype.selectPosition = function (obj) {
                     tpl = data.replace(/\[RENDSZPOZ\]/g,rsz+"_"+ppoz+ptip); 
                     tpl += '\r\n';
                     var writeOk = function(){
-                        fn = 'beerk.rszMent';
+                        fn = 'beerk.rszMent'; /* PDA_ORZOTTLERAK_SORUPDATE */
                         r = ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'tip':beerk.currentItem, 'poz':beerk.currentPosition, 'login':login_id},true, fn);
                     }
                     var writeError = function(){
@@ -499,7 +492,7 @@ OBeerk.prototype.rszMent = function(result) {
                 $('#bAllapotMent').show();
 				$('#bAllapotClose').hide();
 				if (beerk.currentItem=='bGumi' || beerk.currentItem=='bGumiFelni'  || beerk.currentItem=='bFelni') {
-					fn = 'beerk.getMelyseg';
+					fn = 'beerk.getMelyseg'; /* query */
 					ajaxCall(fn,{'poz':beerk.currentPosition, 'login':login_id,'tip':beerk.currentItem},true, fn);
 				}
 			}
@@ -541,7 +534,7 @@ OBeerk.prototype.allapotMentes=function(){
 	else {
 		rsz = $('#rendszam').val();
 		mibiz = $('#hMIBIZ').val();
-		fn='beerk.allapotMent';
+		fn='beerk.allapotMent'; /* PDA_ORZOTTLERAK_ALLAPOTMENT */
 		ajaxCall(fn,{'rsz':rsz,'mibiz':mibiz,'poz':poz,'melyseg':melyseg,'login':login_id,'tip':tip,'csereok':csereok},true, fn);
 	}
 }
@@ -556,7 +549,7 @@ OBeerk.prototype.showReview = function() {
 	$('bFolytMost').show();
 	azon = $('#hAZON').val();
 	$('#divpanel').hide();
-	fn = 'beerk.reviewRszFilter';
+	fn = 'beerk.reviewRszFilter'; /* query */
 	r = ajaxCall(fn,{'azon':azon,'login':login_id},true, fn);
 	$('#divreview').show();
 	
@@ -584,7 +577,7 @@ OBeerk.prototype.reviewRszFilter = function(result) {
 		curTD = $(this);
 		filter = curTD.html();
 		azon = $('#hAZON').val();
-		fn = 'beerk.reviewRszGet';
+		fn = 'beerk.reviewRszGet'; /* query */
 		r = ajaxCall(fn,{'filter':filter,'azon':azon,'login':login_id},true, fn);
 	})
 
@@ -683,7 +676,7 @@ OBeerk.prototype.rszChange = function (){
 	rsz = $('#rendszam').val();
 	if (rsz!='-') {
 		azon = $('#hAZON').val();
-		fn = 'beerk.rszAdatokGet';
+		fn = 'beerk.rszAdatokGet'; /* query */
 		ajaxCall(fn,{'rsz':rsz,'azon':azon},true, fn);
 	}
 	else {
@@ -724,7 +717,7 @@ OBeerk.prototype.rszAdatokGet = function (result){
 
 OBeerk.prototype.folytKesobb=function(){
 	/* atnezon folyt kesobb ajax inditas */
-	fn = 'beerk.folytUpdate';
+	fn = 'beerk.folytUpdate'; /* update */
 	azon = $('#hAZON').val();
 	r = ajaxCall(fn,{'azon':azon,'login':login_id},true, fn);
 }
@@ -746,7 +739,7 @@ OBeerk.prototype.lezarStart = function(){
 	if (mehet) {
 		showMessage('hiany:'+hianydb+' stat:'+stat);
 		mibiz=$("#hMIBIZ").val();
-		fn = 'beerk.lezarUpdate';
+		fn = 'beerk.lezarUpdate'; /* PDA_LERAKODAS_LEZAR */
 		ajaxCall(fn,{'mibiz':mibiz,'stat':stat,'login':login_id},true, fn);
 	}
 }
@@ -814,23 +807,23 @@ OBeerk.prototype.GPanelOptions = function (saveData){
 }
 OBeerk.prototype.GPanelFunctions = function(func,src,trg){
 	if (func=='copy') {
-		fn='getMarka';
+		fn='getMarka'; /* query */
 		ajaxCall(fn,{'marka':$('#gpMarka'+src).val(),'meret':$('#gpMeret'+src).val(),'minta':'mind','si':$('#gpSI'+src).val()},false, fn+trg);
 		def = $('#gpMarka'+src).val();
 		$('#gpMarka'+trg+' option[value='+def+']').prop('selected', 'selected');
 		
-		fn='getMinta';
+		fn='getMinta';/* query */
 		ajaxCall(fn,{'marka':$('#gpMarka'+src).val(),'meret':$('#gpMeret'+src).val(),'minta':'mind','si':$('#gpSI'+src).val()},false, fn+trg);
 		def = $('#gpMinta'+src).val();
 		$('#gpMinta'+trg+' option[value='+def+']').prop('selected', 'selected');
 		
-		fn='getMeret';
+		fn='getMeret';/* query */
 		ajaxCall(fn,{'marka':$('#gpMarka'+src).val(),'meret':$('#gpMeret'+src).val(),'minta':'mind','si':$('#gpSI'+src).val()},false, fn+trg);
 		def = $('#gpMeret'+src).val();
 		$('#gpMeret'+trg+' option[value='+def+']').prop('selected', 'selected');
 
 	
-		fn='getSI';
+		fn='getSI';/* query */
 		ajaxCall(fn,{'marka':$('#gpMarka'+src).val(),'meret':$('#gpMeret'+src).val(),'minta':'mind','si':$('#gpSI'+src).val()},false, fn+trg);
 		def = $('#gpSI'+src).val();
 		$('#gpSI'+trg+' option[value='+def+']').prop('selected', 'selected');
@@ -893,7 +886,7 @@ OBeerk.prototype.GPanelClose = function (saveData){
 			if (newContent.indexOf('+')==0) {
 				newContent = newContent.replace('+','').trim();
 			}
-			fn='beerk.rszAdatokSet';
+			fn='beerk.rszAdatokSet'; /* PDA_ORZOTTLERAK_RSZUPDATE */
 			rsz = $('#rendszam').val();
 			azon = $('#hAZON').val();				
 			ajaxCall(fn,{'rsz':rsz,'azon':azon,'fedb':beerk.fedb,'data':JSON.stringify(beerk.rszAdatok),'evszak':beerk.evszak,'login':login_id},true, fn);
@@ -923,11 +916,11 @@ OBeerk.prototype.showGPanel =function(){
             beerk.GPanelFunctions('del','P','');
         });
 		/* marka */
-		fn='getMarka';
+		fn='getMarka'; /* query */
 		obj='gpMarka';
 		tengely='A';
 		$('#'+obj+tengely).focus(function(){ 
-			fn='getMarka';
+			fn='getMarka'; /* query */
 			tengely='A';
 			ajaxCall(fn,{'marka':'mind','meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val(),'evszak':$('#gpEvszak').val()},false, fn+tengely);
 		});
@@ -937,7 +930,7 @@ OBeerk.prototype.showGPanel =function(){
 
 		tengely='B';
 		$('#'+obj+tengely).focus(function(){ 
-			fn='getMarka';
+			fn='getMarka'; /* query */
 			tengely='B';
 			ajaxCall(fn,{'marka':'mind','meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val(),'evszak':$('#gpEvszak').val()},false, fn+tengely);
 		});
@@ -946,7 +939,7 @@ OBeerk.prototype.showGPanel =function(){
 		}
 		tengely='P';
 		$('#'+obj+tengely).focus(function(){ 
-			fn='getMarka';
+			fn='getMarka'; /* query */
 			tengely='P';
 			ajaxCall(fn,{'marka':'mind','meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val(),'evszak':'mind'},false, fn+tengely);
 		});
@@ -955,11 +948,11 @@ OBeerk.prototype.showGPanel =function(){
 		}
 
 		/* meret */
-		fn='getMeret';
+		fn='getMeret'; /* query */
 		obj='gpMeret';
 		tengely='A';
 		$('#'+obj+tengely).focus(function(){ 
-			fn='getMeret';
+			fn='getMeret'; /* query */
 			tengely='A';
 			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':'mind','minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val(),'evszak':$('#gpEvszak').val()},false, fn+tengely);
 		});
@@ -969,7 +962,7 @@ OBeerk.prototype.showGPanel =function(){
 
 		tengely='B';
 		$('#'+obj+tengely).focus(function(){ 
-			fn='getMeret';
+			fn='getMeret'; /* query */
 			tengely='B';
 			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':'mind','minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val(),'evszak':$('#gpEvszak').val()},false, fn+tengely);
 		});
@@ -979,7 +972,7 @@ OBeerk.prototype.showGPanel =function(){
 
 		tengely='P';
 		$('#'+obj+tengely).focus(function(){ 
-			fn='getMeret';
+			fn='getMeret'; /* query */
 			tengely='P';
 			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':'mind','minta':$('#gpMinta'+tengely).val(),'si':$('#gpSI'+tengely).val(),'evszak':'mind'},false, fn+tengely);
 		});
@@ -988,11 +981,11 @@ OBeerk.prototype.showGPanel =function(){
 		}
 
 		/* minta */
-		fn='getMinta';
+		fn='getMinta'; /* query */
 		obj='gpMinta';
 		tengely='A';
 		$('#'+obj+tengely).focus(function(){ 
-			fn='getMinta';
+			fn='getMinta'; /* query */
 			tengely='A';
 			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':'mind','si':$('#gpSI'+tengely).val(),'evszak':$('#gpEvszak').val()},false, fn+tengely);
 		});
@@ -1002,7 +995,7 @@ OBeerk.prototype.showGPanel =function(){
 		
 		tengely='B';
 		$('#'+obj+tengely).focus(function(){ 
-			fn='getMinta';
+			fn='getMinta'; /* query */
 			tengely='B';
 			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':'mind','si':$('#gpSI'+tengely).val(),'evszak':$('#gpEvszak').val()},false, fn+tengely);
 		});
@@ -1012,7 +1005,7 @@ OBeerk.prototype.showGPanel =function(){
 		
 		tengely='P';
 		$('#'+obj+tengely).focus(function(){ 
-			fn='getMinta';
+			fn='getMinta'; /* query */
 			tengely='P';
 			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':'mind','si':$('#gpSI'+tengely).val(),'evszak':'mind'},false, fn+tengely);
 		});
@@ -1021,11 +1014,11 @@ OBeerk.prototype.showGPanel =function(){
 		}
 
 		/* si */
-		fn='getSI';
+		fn='getSI'; /* query */
 		obj='gpSI';
 		tengely='A';
 		$('#'+obj+tengely).focus(function(){ 
-			fn='getSI';
+			fn='getSI'; /* query */
 			tengely='A';
 			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':'mind','evszak':$('#gpEvszak').val()},false, fn+tengely);
 		});
@@ -1035,7 +1028,7 @@ OBeerk.prototype.showGPanel =function(){
 		
 		tengely='B';
 		$('#'+obj+tengely).focus(function(){ 
-			fn='getSI';
+			fn='getSI'; /* query */
 			tengely='B';
 			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':'mind','evszak':$('#gpEvszak').val()},false, fn+tengely);
 		});
@@ -1045,7 +1038,7 @@ OBeerk.prototype.showGPanel =function(){
 		
 		tengely='P';
 		$('#'+obj+tengely).focus(function(){ 
-			fn='getSI';
+			fn='getSI'; /* query */
 			tengely='P';
 			ajaxCall(fn,{'marka':$('#gpMarka'+tengely).val(),'meret':$('#gpMeret'+tengely).val(),'minta':$('#gpMinta'+tengely).val(),'si':'mind','evszak':'mind'},false, fn+tengely);
 		});
@@ -1059,7 +1052,6 @@ OBeerk.prototype.showGPanel =function(){
 		$('#gpFelnitip option[value='+felnidef+']').prop('selected', 'selected');
 		$('#gpFelnidb option[value='+beerk.fedb+']').prop('selected', 'selected');
 		$('#divgpanel').show();
-	
 }
 
 function getMarka(result,tengely){
