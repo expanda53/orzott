@@ -7,6 +7,7 @@ var depthMeterDialog = {
 				tpl = data; 
 				$('#divSettings').html(css + tpl);
 				$('#divSettings').show();
+                $('#divheaderS').html('Mélységmérõ csatlakoztatás');
                 $('#divContent').hide();
 				depthMeterDialog.createTable();				
 				

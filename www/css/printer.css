@@ -4,6 +4,13 @@
 	height:12px;
 	padding:5px;
  }
+#divheaderS{
+	background-color:yellow;
+	height:12px;
+	padding:5px;
+    margin-left: 10px;
+    width: 100%;    
+ }
  
  #divcontent{
 	background-color:black;

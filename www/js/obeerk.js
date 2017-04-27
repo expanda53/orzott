@@ -185,7 +185,9 @@ OBeerk.prototype.mibizList = function(result) {
 	})
     }
     else {
-        showMessage('Nincs élõ bevét lista a rendszerben!','',1.5)
+        showMessage('Nincs élõ bevét lista a rendszerben!','',1.5);
+        showMenu();
+        
     }
 
 }
@@ -624,10 +626,10 @@ OBeerk.prototype.reviewRszGet = function(result) {
 
 	})
 
-	if (hianydb!=0){
+	//if (hianydb!=0){
 		$('.labelHiany').html('Hiányzó mennyiség:');
 		$('.dataHiany').html(hianydb);
-	}
+	//}
 	beerk.reviewFilter();
 
 }

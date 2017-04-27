@@ -48,7 +48,7 @@ var app = {
 	printerId:"",
 	printerName:"",
 	printerConnected:false,
-    printerTplPrefix:"",
+    printerTplPrefix:"none",
 	printers : [],
 
 	depthMeterId:"",
@@ -92,7 +92,7 @@ var app = {
 				bluetoothSerial.list(function(devices) {
 					app.printers.length=0;
 					devices.forEach(function(device) {
-						//alert(JSON.stringify(device));
+						 // alert(JSON.stringify(device));
 						if (device.class=='1664') {//7936 melysegmero, 1664 nyomtato
 							p = new printer(device.id,device.name); 
 							app.printers.push(p);
@@ -126,8 +126,7 @@ var app = {
 					})
 					depthMeterDialog.show();
 				})
-				
-			
+		
 		}
 		else {
 			showMessage('bt2 serial undefined');
@@ -176,12 +175,12 @@ var app = {
 	    /* printer */
 		if(typeof bluetoothSerial != 'undefined') {
 			var connect = function () {
+                showMessage('Nyomtató csatlakoztatás...','',0);                                
 				bluetoothSerial.connect(
 					app.printerId,  // device to connect to
-					app.openPort(delayedFunc),    // start listening if you succeed
+					function(sett){app.openPort(sett,delayedFunc)},    // start listening if you succeed
 					app.showErrorPrinter    // show the error if you fail
 				);
-				
 			};
 
 			var disconnect = function () {
@@ -227,8 +226,14 @@ var app = {
 /*
     subscribes to a Bluetooth serial listener for newline
 */
-    openPort: function(delayedFunc) {
+    openPort: function(sett,delayedFunc) {
         /* printer */
+        
+        //Zebra RW 220 - allo
+        //Zebra RW 420 - fekvo
+        if (sett.indexOf("220")>=0)  app.printerTplPrefix="_portrait"; //220
+        else app.printerTplPrefix=""; //420
+        
         var pconnected = function(){
             app.printerConnected=true;
             app.btRefresh();

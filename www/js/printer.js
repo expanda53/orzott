@@ -8,6 +8,7 @@ var printerDialog = {
 				$('#divSettings').html(css + tpl);
                 $('#divContent').hide();
 				$('#divSettings').show();
+                $('#divheaderS').html('Nyomtató csatlakoztatás');
 				printerDialog.createTable();				
 				$('#btNext').bind('click', function() {
 					printerDialog.showNext();
@@ -20,8 +21,13 @@ var printerDialog = {
 	createTable:function(){
 				sorok = "";
                 var connected = function(){
-                    showMessage('nyomtató ok','',2);
-                    printerDialog.setOrientation();
+                    //showMessage('nyomtató ok','',2);
+                    if (app.printerTplPrefix=="_portrait") {showMessage("Nyomtató csatlakoztatva. Nyomtatás állítva (RW220)","",2);printerDialog.showNext();}
+                    else
+                    if (app.printerTplPrefix=="") {showMessage("Nyomtató csatlakoztatva. Nyomtatás fektetve (RW420)","",2);printerDialog.showNext();}
+                    else printerDialog.setOrientation();
+                
+                    
                         
                 }
 				app.printers.forEach(function(printer){
@@ -59,7 +65,7 @@ var printerDialog = {
 	},
     setOrientation:function(){
         app.printerTplPrefix="_portrait";
-        if(confirm("Fektetve(IGEN) vagy állítva nyomtat(NEM)?")) {
+        if(confirm("Fektetve(OK) vagy állítva nyomtat(Mégse)?")) {
             app.printerTplPrefix="";
         }
         printerDialog.showNext();
