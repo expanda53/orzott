@@ -313,7 +313,7 @@ OBeerk.prototype.getPositions=function(result){
 	if (result[0].RESULT!='') {
 		res = result[0].RESULT.split(',');
 		for (var i = 0;i < res.length;i++){
-			p = res[i].split(':');
+			p = res[i].split('#');
 			id='b' + p[0];
 			$('#'+id).attr('disabled','disabled');
 		}

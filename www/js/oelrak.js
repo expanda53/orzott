@@ -315,6 +315,7 @@ OElrak.prototype.hkodSaveInit=function(){
 	/* helykod mentes */
 	rsz = $('#dataRendszam').val();
 	hkod = $('#dataHkod').val();
+    showMessage(hkod);
     if (hkod!='') {
         fn = 'elrak.hkodSaveCheck'; /* PDA_ORZOTTHKOD_HKODCHECK */
         ajaxCall(fn,{'rsz':rsz,'hkod':hkod,'login':login_id},true, fn);
