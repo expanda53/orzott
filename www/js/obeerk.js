@@ -760,19 +760,6 @@ OBeerk.prototype.lezarUpdate =function(result){
 
 
 /* gumipanel */
-function checkParam(str) {
-	var res = str;
-	if (str!=null) {
-		res = str.replace(/\//g,'');
-		res = res.replace(/\ /g,'');
-		res = res.replace(/\./g,'');
-		res = res.replace(/\*/g,'');
-		res = res.replace(/(?:\r\n|\r|\n)+/g, '');
-		
-	}
-	return res;
-	
-}
 OBeerk.prototype.rszAdatokSet = function (result){
 	//alert(JSON.stringify(result));
 }
@@ -804,7 +791,9 @@ OBeerk.prototype.GPanelOptions = function (saveData){
   $('#bdelP').bind('click',function(){
 		beerk.GPanelFunctions('del','P','');
   })
-  
+  $('#bxcAB').bind('click',function(){
+		beerk.GPanelFunctions('xc','A','B');
+  })  
   
 }
 OBeerk.prototype.GPanelFunctions = function(func,src,trg){
@@ -842,6 +831,28 @@ OBeerk.prototype.GPanelFunctions = function(func,src,trg){
 		$('#gpSI'+src).empty();
         $('#gpSI'+src).val('');
 	}
+	else
+	if (func=='xc') {
+        mezo='gpMarka';
+        temp=$('#'+mezo+src).val();
+        $('#'+mezo+src).val( $('#'+mezo+trg).val() );
+        $('#'+mezo+trg).val(temp);
+        
+        mezo='gpMeret';
+        temp=$('#'+mezo+src).val();
+        $('#'+mezo+src).val( $('#'+mezo+trg).val() );
+        $('#'+mezo+trg).val(temp);
+        
+        mezo='gpMinta';
+        temp=$('#'+mezo+src).val();
+        $('#'+mezo+src).val( $('#'+mezo+trg).val() );
+        $('#'+mezo+trg).val(temp);        
+        
+        mezo='gpSI';
+        temp=$('#'+mezo+src).val();
+        $('#'+mezo+src).val( $('#'+mezo+trg).val() );
+        $('#'+mezo+trg).val(temp);        
+    }
 	$('#divGPOptions').hide();
 		
 }

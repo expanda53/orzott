@@ -52,37 +52,33 @@
 		<div id=divpanel>
 			<button id=bAtnez>Átnézés</button>
 			<div class='dhkod'>
-				<span id=labelHkod>Helykód</span>
+				<div id=labelHkod>Helykód</div>
 				<input id=dataHkod>
 			</div>
 
 			<div class='drendszam'>
-				<span id=labelRendszam>Rendszám</span>
+				<div id=labelRendszam>Rendszám</div>
 				<input id=dataRendszam>
 				<span id='labelStatus'></span>
 			</div>
-			<div class='rszadatok'>
-				<!--
-				<div class='dceg'>
-					<span class='labelCeg'>Cég:</span>
-					<span class='dataCeg'></span>
-				</div>
-				-->
-				<div class='drsz'>
-					<span class='dataRSZ'></span>
-				</div>
-				<div class='dmeretminta'>
-					<span class='dataMeret'></span>
-				</div>
-				<div class='dfegu'>
-					<span class='labelFelniGumi'>Felni/Gumi:</span>
-					<span class='dataFegu'></span>
-					<span class='dataFeall'></span>
-				</div>
-			</div>
 		</div>
-		<!-- panel end -->
 
+        <div class='rszadatok'>
+            <div class='dmeretminta'>
+                <span class='dataMeret'></span>
+            </div>
+            <div class='dfegu'>
+                <span class='labelFelniGumi'>Felni/Gumi:</span>
+                <span class='dataFegu'></span>
+                <span class='dataFeall'></span>
+            </div>
+        </div>
+        <div id=gpanelcontainer></div>
+		<!-- panel end -->
+		<!-- melysegmeres panel -->
+		<div id=divmeres>
+		</div>
+		<!-- melysegmeres panel end -->
 		<div id=divreview>
 			<div class=divReviewTables>
 				<div class=divreviewRight>

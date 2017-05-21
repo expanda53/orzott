@@ -51,6 +51,7 @@
 						<button id=bdelA>A törlése</button>
 						<button id=bdelB>B törlése</button>
 						<button id=bdelP>P törlése</button><br>
+                        <button id=bxcAB>A<->B</button>
 						<button id=boptclose>Bezár</button>
 					
 				</div>

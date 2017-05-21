@@ -279,7 +279,39 @@
     left: 223px;
 
 }
+.dhkod {
+    position: absolute;
+    width: 400px;
+    margin-top: 2px;
+	top: 90px;
 
+}
+#labelHkod {
+    position: relative;
+    padding: 10px;
+    background-color: #f1f1f1;
+    width: 62px;
+    text-align: center;
+    margin-top: 2px;
+    height: 16px;
+    top: 10px;
+    left: 23px;
+    float: left;
+}
+#dataHkod {
+    position: relative;
+    padding: 10px;
+    background-color: white;
+    width: 125px;
+    text-align: center;
+    margin-top: 1px;
+    height: 14px;
+    top: 10px;
+    left: 25px;
+    font-size: 20px;
+    font-weight: bold;
+    float: left;
+}
 .drendszam {
 	display:none;
     position: absolute;
@@ -300,6 +332,7 @@
     top: 10px;
     left: 31px;
     font-size: 13px;
+    float: left;
 }
 #dataRendszam {
     position: relative;
@@ -310,9 +343,10 @@
     margin-top: 1px;
     height: 14px;
     top: 10px;
-    left: 93px;
+    left: 33px;
     font-size: 20px;
     font-weight: bold;
+    float:left;
 }
 #labelStatus {
     position: relative;
@@ -335,38 +369,119 @@
 	background-color:black;
 	color:red;
 }
-
-.dhkod {
-    position: absolute;
-    width: 400px;
-    margin-top: 2px;
-	top: 90px;
-
-}
-#labelHkod {
+#bRszMentes{
     position: relative;
+    padding: 10px;
+    width: 120px;
+    height: 50px;
+    text-align: center;
+    top: 28px;
+    left: 367px;
+    display:none;
+}
+
+/* meres panel */
+#divmeres {
+    display: none;
+    position: absolute;
+    left: 32px;
+    top: 182px;
+    color: black;
+    width: 400px;
+}
+#labelGstat {
+    position: absolute;
     padding: 10px;
     background-color: #f1f1f1;
     width: 62px;
     text-align: center;
     margin-top: 2px;
     height: 16px;
-    top: 10px;
-    left: 23px;
+    top: 0px;
+    left: 0px;
 }
-#dataHkod {
-    position: relative;
-    padding: 10px;
-    background-color: white;
-    width: 125px;
+#gstat {
+    position: absolute;
+    padding: 4px;
+    width: 147px;
     text-align: center;
-    margin-top: 1px;
-    height: 14px;
-    top: 10px;
-    left: 106px;
-    font-size: 20px;
-    font-weight: bold;
+    height: 36px;
+    top: 0px;
+    left: 85px;
 }
+
+.meres button {
+	padding:16px 20px;
+	margin:5px;
+	font-size:15px;
+	width:90px;
+}
+
+
+#divallapot,#divgstat,#bAllapotMent {
+	/*display:none;*/
+}
+#bAllapotClose {
+position: absolute;
+    top: 55px;
+    left: 350px;
+    background-color: orange;
+    width: 131px;
+    color: black;
+}
+#bAllapotJavitas {
+    position: absolute;
+    top: 12px;
+    left: 250px;
+    background-color: yellow;
+    width: 160px;
+    color: black;
+}
+#bAllapotMent {
+    position: absolute;
+    top: 55px;
+    left: 234px;
+    width: 112px;
+}
+#divcsok {
+	position: absolute;
+	top:42px;
+	width:297px;
+	height:130px;
+}
+.divcb {
+	padding:5px;
+	background-color:white;
+	width:48px;
+	float:left;
+	height:30px;
+	text-align:center;
+	margin-top:3px;
+}
+.divcb input {
+
+	height:30px;
+    vertical-align:middle;
+}	
+.divgcsok {
+	display:none;
+}	
+	
+.divgcsok select{
+	width:232px;
+}
+#labelcsok {
+	width:222px;
+	height:14px;
+	padding:5px;
+	float:left;
+	background-color:yellow;
+	margin-right:9px;
+	text-align:center
+}
+/* meres panel eddig*/
+
+
 /*
 ::-webkit-scrollbar {
     width: 32px;

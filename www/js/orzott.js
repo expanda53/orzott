@@ -1,6 +1,6 @@
 var beerk = null;
 var elrak = null;
-var teszt = false;
+var teszt = true;
 $.support.cors=true;
 $.ajaxSetup({ cache: false });
 function ajaxCall( func, d,asyn,fn) {
@@ -141,6 +141,19 @@ function loadSettings(result) {
 	if (settings.items==null) settings.setItems(result);
 }
 
+function checkParam(str) {
+	var res = str;
+	if (str!=null) {
+		res = str.replace(/\//g,'');
+		res = res.replace(/\ /g,'');
+		res = res.replace(/\./g,'');
+		res = res.replace(/\*/g,'');
+		res = res.replace(/(?:\r\n|\r|\n)+/g, '');
+		
+	}
+	return res;
+	
+}
 
 if (teszt) {
     $(document).ready(function () {

@@ -1,4 +1,4 @@
-/* leltarezes */
+/* leltarazas */
 markaUpdate = false;
 meretUpdate = false;
 mintaUpdate = false;
@@ -19,6 +19,7 @@ var OLeltar = function(){
 }
 /* feladat valasztas */
 OLeltar.prototype.initMibizList = function(){
+    gpanel = new OGPanel();
 	fn = 'leltar.mibizList';
 	r = ajaxCall(fn,{'biztip':'MO12', 'login':login_id},true, fn);
 	/* OLeltar.tpl beolvas, tr click -re mibiz átadása selectTask-nak. tr click az OLeltar.tpl-ben van*/
@@ -42,6 +43,25 @@ OLeltar.prototype.mibizList = function(result) {
                 $('#divheader').bind('click',function(){
                     app.getDepthMeters();
                 })
+                    
+                $('.rszadatok').bind('click',function (event) {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    if(event.handled !== true) {
+                        clickHelp();
+                        $.get( "views/gpanel.tpl", function( data ) { 
+                                    css='';
+                                    tpl = data; 
+                                    $('#gpanelcontainer').html(css + tpl);
+                                    fn = 'leltar.rszAdatokSet';
+                                    gpanel.showGPanel(leltar.rszAdatok,fn);
+                        });
+                        event.handled = true;
+                    } else {
+                        return false;
+                    }
+
+                })	                    
                 
 			});
 			
@@ -54,7 +74,7 @@ OLeltar.prototype.mibizList = function(result) {
 }
 OLeltar.prototype.selectTask = function() {
 	/* feladat valaszto ajax inditas */
-	app.BTEnabled(null);						
+	//app.BTEnabled(null);						
 
 	$('#divheader').html('Õrzött leltár');
 	//ajaxCall('leltar.taskReg',{'mibiz':this.mibiz, 'login':login_id},true, '');
@@ -86,13 +106,72 @@ OLeltar.prototype.rszInit = function() {
 }
 
 OLeltar.prototype.rszChange = function() {
-	/* rendszam lelove, mentes inditasa */
+	/* rendszam lelove, rendszam adatok lekerese */
+	rendszam = $('#dataRendszam').val();
+	azon = leltar.fejazon;
+	fn = 'leltar.rszAdatokGet';
+	ajaxCall(fn,{'rendszam':rendszam,'fejazon':azon},true, fn);
+}
+
+OLeltar.prototype.rszAdatokGet = function(result) {
+	/* rendszam valasztas ajax eredmenye */
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+        if (res.RESULT==0) {
+            //$(".dataCeg").html(res.CEGNEV);
+            $('.dataMeret').html(res.MARKA+' '+res.MERET+' '+res.MINTA+' '+res.SI);
+            $('.dataFegu').html(res.FE+'/'+res.GU);
+            $('.dataFeall').html(res.FEALL);
+            
+            leltar.currentItem=res.TIP;
+            leltar.currentPosition=res.POZ;
+            
+            leltar.rszAdatok = res;
+            feall='';
+            if (checkParam(res.FEALL)=='L' && res.FE>0) feall='Lemez';
+            if (checkParam(res.FEALL)=='A' && res.FE>0) feall='Alu';
+            $(".dataFeall").html(feall);
+            
+            $('.rszadatok').show();
+            $('.dcontrol').show();
+            
+            panelName='leltar_meres';
+            $.get( "views/"+panelName+".tpl", function( data ) { 
+                rsz = $('#rendszam').val();
+                mibiz = $('#hMIBIZ').val();
+                $('#divmeres').html(data);
+                $('#divmeres').show();
+                fn = 'leltar.getMelyseg'; /* query */
+                ajaxCall(fn,{'poz':leltar.currentPosition, 'login':login_id,'tip':leltar.currentItem},true, fn);
+            });        
+        }
+        else {
+            alert('Nem található ilyen rendszám!');
+        }
+	}
+
+    
+    
+}
+OLeltar.prototype.rszAdatokSet = function(rszadatok) {
+    leltar.rszAdatok = rszadatok;
+    fn = 'leltar.rszAdatokUpdate';
+	ajaxCall(fn,{'rendszam':rendszam,'fejazon':azon,'rszadatok':JSON.stringify(rszadatok),'login':login_id},true, fn);
+    
+}
+OLeltar.prototype.rszAdatokUpdate = function(result) {
+    alert('rszadatok update');
+}
+/*
+OLeltar.prototype.rszChange = function() {
+	// rendszam lelove, mentes inditasa
 	rendszam = $('#dataRendszam').val();
 	hkod = $('#dataHkod').val();
 	fn = 'leltar.rszSave';
 	ajaxCall(fn,{'fejazon':this.fejazon, 'login':login_id, 'rendszam':rendszam, 'hkod':hkod},true, fn);
 }
-
+*/
+    
 OLeltar.prototype.rszSave = function (result) {
 	/* rendszam mentes eredmenye, rsz adatok */
 	for (var i = 0;i < result.length;i++){
@@ -117,6 +196,47 @@ OLeltar.prototype.rszSave = function (result) {
 }
 /* rendszam eddig*/
 
+/* allapot panel */
+
+OLeltar.prototype.getMelyseg=function(result){
+	$("#gstat").html('');
+	$("#gstat").append('<option value="" disabled selected>Válasszon</option>');
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		$("#gstat").append('<option value='+res.KOD+'>'+res.KOD+'</option>');
+	}
+	manualChoice = settings.getItem('ORZOTT_MELYSEGMERES_KEZZEL_IS')!=null && settings.getItem('ORZOTT_MELYSEGMERES_KEZZEL_IS').toUpperCase()=='IGEN';
+	if (!manualChoice) $('#gstat').attr('disabled',true);
+	$('#divgstat').show();
+	
+}
+
+OLeltar.prototype.allapotMentes=function(){
+	poz = this.currentPosition;
+	melyseg = $('#gstat').val();
+	
+	rsz = $('#rendszam').val();
+	mibiz = $('#hMIBIZ').val();
+	tip=elrak.currentItem;
+	fn='leltar.allapotMent'; /*PDA_ORZOTTLERAK_ALLAPOTMENT*/
+
+	csereok = $('#gcsok').val();
+	if ((melyseg=='-' || melyseg=='' || melyseg==null)) showMessage('Mentés elõtt mérd meg a mélységet!');
+	else 
+	if (melyseg=='CS' && csereok=="") {
+		showMessage('Csere esetén töltd ki a csere okát!');
+	}
+	else {
+		ajaxCall(fn,{'rsz':rsz,'mibiz':mibiz,'poz':poz,'melyseg':melyseg,'login':login_id,'tip':tip,'csereok':csereok},true, fn);
+	}
+
+}
+OLeltar.prototype.allapotMent=function(result){
+	$('#bAllapotClose').trigger( "click" );
+    //if ($('#dataHkodWork').html()!='NINCS') elrak.hkodSaveInit();
+	//else elrak.showHkod();
+}
+/* allapot panel eddig */
 
 /* atnezo panel */
 OLeltar.prototype.reviewLoad = function(result) {
@@ -185,7 +305,7 @@ OLeltar.prototype.folytKesobb=function(){
 OLeltar.prototype.folytUpdate=function(result){
 	/* atnezon folyt kesobb ajax eredmenye */
 	$('#divreview').hide();
-	app.BTDisabled();
+	//app.BTDisabled();
 	showMenu();
 }
 

@@ -2,7 +2,7 @@
   error_reporting(0);
   require_once 'firebird.php';
   require_once 'converter.php';
-  header('Access-Control-Allow-Origin: *');  
+//  header('Access-Control-Allow-Origin: *');  
   $request  = strstr($_SERVER['REQUEST_URI'],".php");
   $p     = explode("/", $request);
   $func = $p[1];
@@ -299,6 +299,7 @@
         break;
   
   case 'beerk.getMelyseg':
+  case 'leltar.getMelyseg':
   case 'elrak.getMelyseg':
 		$login = $r['login'];
         $tip=$r['tip'];
@@ -314,6 +315,7 @@
         break;
    case 'beerk.allapotMent':
    case 'elrak.allapotMent':
+   case 'leltar.allapotMent':       
 		$rsz = $r['rsz'];
 		$mibiz = $r['mibiz'];
 		$login = $r['login'];
@@ -598,6 +600,37 @@
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
+  case 'leltar.rszAdatokGet':
+		$rsz = $r['rendszam'];
+        $fejazon=$r['fejazon'];
+		$sql=" select * from pda_orzottleltar_rszadatok(:rsz,:fejazon)";
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
+        $stmt->bindParam(':fejazon', $fejazon, PDO::PARAM_STR);
+		$stmt->execute();
+        _log(_debug($stmt,$r));
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode(Converter::win2utf_array($res));
+        break;
+
+  case 'leltar.rszAdatokUpdate':
+		$sql="SELECT * FROM PDA_ORZOTTLELTAR_RSZUPDATE (:fejazon, :rendszam, :rszadatok,:login)";
+		$stmt = Firebird::prepare($sql);
+		$login=$r['login'];
+		$fejazon=$r['fejazon'];
+		$rszadatok=utf8_decode($r['rszadatok']);
+		$rendszam=$r['rendszam'];
+		$stmt->bindParam(':fejazon', $fejazon, PDO::PARAM_STR);
+		$stmt->bindParam(':rszadatok', $rszadatok, PDO::PARAM_STR);
+		$stmt->bindParam(':rendszam', $rendszam, PDO::PARAM_STR);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->execute();
+        _log(_debug($stmt,$r));
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+        break;
+
   case 'leltar.rszSave':
 		$sql="SELECT * FROM PDA_ORZOTTLELTAR_SORUPDATE (:login,:fejazon, :hkod, :rendszam)";
 		$stmt = Firebird::prepare($sql);
