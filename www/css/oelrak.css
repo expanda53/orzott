@@ -362,6 +362,33 @@
     font-size: 15px;
     /* font-weight: bold; */
 }
+#labelDrbWork {
+    position: absolute;
+    padding: 4px 10px 16px 10px;
+    background-color: #D4CACA;
+    width: 76px;
+    text-align: center;
+    margin-top: 2px;
+    height: 5px;
+    top: 108px;
+    left: 322px;
+    font-size: 12px;
+    line-height: 18px;
+}
+#dataDrbWork {
+    position: absolute;
+    padding: 10px;
+    background-color: white;
+    width: 76px;
+    text-align: center;
+    margin-top: 1px;
+    height: 5px;
+    top: 109px;
+    left: 421px;
+    font-size: 13px;
+    line-height: 7px;
+    /* font-weight: bold; */
+}
 /* hkod */
 .dhkod {
     display: none;
@@ -397,7 +424,7 @@
 }
 #bHkodTorol {
     position: absolute;
-    top: 21px;
+    top: 50px;
     left: 318px;
     background-color: yellow;
     width: 198px;

@@ -20,11 +20,15 @@
 	$('#bAllapotClose').bind('click',function () {
 		$('#divmeres').hide();
 		$('#divpanel').show();
+        $('.rszadatok').hide();
+        $('.dcontrol').hide();
         
-        //fn = 'elrak.getRszInProgress';
-        //ajaxCall(fn,{},true, fn);
-        
-        
+        leltar.currentPosition="";
+        leltar.currentItem="";
+        leltar.currentRsz = "";                    
+        $("#dataRendszam").prop('disabled', false);
+        $('#dataRendszam').val('');
+        $('#dataRendszam').focus();
 	})
 	$('#bAllapotMent').bind('click',function () {
 		leltar.allapotMentes();
@@ -146,5 +150,4 @@
 </div>
 <button id=bAllapotMent>Mentés</button>
 <button id=bAllapotClose>Bezár</button>
-<!--<button id=bAllapotJavitas>Javítás</button>-->
 </div>

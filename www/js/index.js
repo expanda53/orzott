@@ -32,6 +32,7 @@ showMessage =function (msg, clearObj,timeout ){
         },timeout*1000);
     }
 }
+
 messageHide = function(){
     $('#dmsg').hide();
 }
@@ -175,9 +176,10 @@ var app = {
 	    /* printer */
 		if(typeof bluetoothSerial != 'undefined') {
 			var connect = function () {
-                showMessage('Nyomtató csatlakoztatás...','',0);                                
+                showMessage('Nyomtató csatlakoztatás...','',0);
+                d=[app.printerId,'abcd'];
 				bluetoothSerial.connect(
-					app.printerId,  // device to connect to
+                app.printerId,  // device to connect to, read printer display
 					function(sett){app.openPort(sett,delayedFunc)},    // start listening if you succeed
 					app.showErrorPrinter    // show the error if you fail
 				);
@@ -293,9 +295,12 @@ var app = {
 	onData: function(data) {
         /* depthmeter */
             console.log(data);
-			app.depthMeterData=data;
-			app.depthMeterData = Math.round(app.depthMeterData.replace('T',''));
-			if (app.currentModule=='beerk' || app.currentModule=='elrak') {
+			app.depthMeterData=data.replace('T','');
+            frac =  Number('0.' + app.depthMeterData.split('.')[1]);
+            /* data<=0.7 -> 0; data>0.7 -> 1*/
+            if (frac>0.7) app.depthMeterData = Math.round(app.depthMeterData);
+			else app.depthMeterData = Math.trunc(app.depthMeterData);
+			if (app.currentModule=='beerk' || app.currentModule=='elrak' || app.currentModule=='leltar') {
 				if ( $('#gstat').is(":visible") ){
 					$('#gstat').val(app.depthMeterData);				
 					$('#gstat').trigger('change');

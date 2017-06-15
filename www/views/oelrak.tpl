@@ -18,6 +18,9 @@
                 <div id=dataRszWork></div>
                 <div id=labelHkodWork>Hkód munkában</div>
                 <div id=dataHkodWork></div>
+                <div id=labelDrbWork>Elpakolva</div>
+                <div id=dataDrbWork></div>
+                
             </div>
 
 			<div class='drendszam'>

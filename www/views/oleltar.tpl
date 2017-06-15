@@ -3,16 +3,7 @@
 
 	
 	$('#bFolytMost').bind('click',function (event) {
-		event.stopPropagation();
-        event.preventDefault();
-        if(event.handled !== true) {
-			clickHelp();
-			$('#divreview').hide();
-			$('#divpanel').show();
-            event.handled = true;
-        } else {
-            return false;
-        }
+        leltar.folytMost(event);
 	})
 	$('#bFolytKesobb').bind('click',function (event) {
 		event.stopPropagation();
@@ -54,12 +45,12 @@
 			<div class='dhkod'>
 				<div id=labelHkod>Helykód</div>
 				<input id=dataHkod>
+                <button id=bUjHkod>Új helykód</button>
 			</div>
 
 			<div class='drendszam'>
 				<div id=labelRendszam>Rendszám</div>
 				<input id=dataRendszam>
-				<span id='labelStatus'></span>
 			</div>
 		</div>
 
@@ -88,7 +79,7 @@
 				</div>
 				<div class=dButtonsReview>
 					<button id=bFolytMost>Folyt. most</button>
-					<button id=bFolytKesobb>Folyt. később</button>
+					<!-- <button id=bFolytKesobb>Folyt. később</button> -->
 					<button id=bLezar>Lezárás</button>
 				</div>			
 			</div>

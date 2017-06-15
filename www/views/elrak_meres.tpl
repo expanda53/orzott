@@ -18,13 +18,8 @@
     
     
 	$('#bAllapotClose').bind('click',function () {
-		$('#divmeres').hide();
-		$('#divpanel').show();
-        
-        fn = 'elrak.getRszInProgress';
-        ajaxCall(fn,{},true, fn);
-        
-        
+        elrak.allapotClose(true);
+
 	})
 	$('#bAllapotMent').bind('click',function () {
 		elrak.allapotMentes();

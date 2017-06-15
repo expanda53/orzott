@@ -315,7 +315,6 @@
         break;
    case 'beerk.allapotMent':
    case 'elrak.allapotMent':
-   case 'leltar.allapotMent':       
 		$rsz = $r['rsz'];
 		$mibiz = $r['mibiz'];
 		$login = $r['login'];
@@ -603,10 +602,12 @@
   case 'leltar.rszAdatokGet':
 		$rsz = $r['rendszam'];
         $fejazon=$r['fejazon'];
-		$sql=" select * from pda_orzottleltar_rszadatok(:rsz,:fejazon)";
+        $hkod=$r['hkod'];
+		$sql=" select * from pda_orzottleltar_rszadatok(:rsz,:fejazon,:hkod)";
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
         $stmt->bindParam(':fejazon', $fejazon, PDO::PARAM_STR);
+        $stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);
 		$stmt->execute();
         _log(_debug($stmt,$r));
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -632,19 +633,23 @@
         break;
 
   case 'leltar.rszSave':
-		$sql="SELECT * FROM PDA_ORZOTTLELTAR_SORUPDATE (:login,:fejazon, :hkod, :rendszam)";
+		$sql="SELECT * FROM PDA_ORZOTTLELTAR_SORUPDATE (:login,:fejazon, :hkod, :rendszam,:melyseg, :csereok)";
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
 		$fejazon=$r['fejazon'];
 		$hkod=$r['hkod'];
 		$rendszam=$r['rendszam'];
+		$melyseg = $r['melyseg'];
+        $csereok = $r['csereok'];
 		$stmt->bindParam(':fejazon', $fejazon, PDO::PARAM_STR);
 		$stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);
 		$stmt->bindParam(':rendszam', $rendszam, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+		$stmt->bindParam(':melyseg', $melyseg, PDO::PARAM_STR);
+        $stmt->bindParam(':csereok', utf8_decode($csereok), PDO::PARAM_STR);
 		$stmt->execute();
+        _log(_debug($stmt,$r));
 		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
@@ -678,19 +683,23 @@
         break;
   case 'leltar.lezarUpdate':
 		$azon = $r['azon'];
-		$sql=" UPDATE BFEJ SET STAT3='Z' WHERE AZON=:azon  ";
+		// $sql=" UPDATE BFEJ SET STAT3='Z' WHERE AZON=:azon  ";
+        $sql="SELECT * FROM PDA_ORZOTTLELTAR_LEZAR (:login,:fejazon)";
 		$stmt = Firebird::prepare($sql);
-		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$login=$r['login'];
+		$fejazon=$r['fejazon'];
+		$stmt->bindParam(':fejazon', $fejazon, PDO::PARAM_STR);
+		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
+        _log(_debug($stmt,$r));
 		$stmt->execute();
-		$res=array();
-		$res[0]['STATUS']='OK';
+		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
   case 'leltar.delRsz':
 		$azon = $r['azon'];
 		$rendszam = $r['rendszam'];
-		$sql=" DELETE FROM BSOR WHERE BFEJ=:azon and cikk=:rendszam ";
+		$sql=" DELETE FROM BSOR WHERE BFEJ=:azon and tapado=:rendszam ";
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
 		$stmt->bindParam(':rendszam', $rendszam, PDO::PARAM_STR);
@@ -700,6 +709,7 @@
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
+
   /* orzott kiadas */
   case 'kiadas.raktarList':
 		$sql="SELECT * FROM PDA_ORZOTTKI_RAKTARLIST (:login,:akttip)";

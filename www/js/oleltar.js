@@ -16,6 +16,8 @@ var OLeltar = function(){
 	this.fejazon = 0;
 	this.currentItem = "";
 	this.currentPosition = '';
+    this.currentRsz = '';
+    this.meresVisible = false;
 }
 /* feladat valasztas */
 OLeltar.prototype.initMibizList = function(){
@@ -43,18 +45,37 @@ OLeltar.prototype.mibizList = function(result) {
                 $('#divheader').bind('click',function(){
                     app.getDepthMeters();
                 })
+                $('#bUjHkod').bind('click',function(){
+                    $('#divmeres').hide();
+                    $('.rszadatok').hide();
+                    $('.dcontrol').hide();
+                    $('.drendszam').hide();
+                    $("#dataRendszam").prop('disabled', false);
+                    $('#dataRendszam').val('');
+                    leltar.currentPosition="";
+                    leltar.currentItem="";
+                    leltar.currentRsz = "";  
+                    $('#dataHkod').removeAttr('disabled');
+                    $('#dataHkod').val('');
+                    $('#bUjHkod').hide();
+                    $('#dataHkod').focus();
+                     
+                })
                     
                 $('.rszadatok').bind('click',function (event) {
                     event.stopPropagation();
                     event.preventDefault();
                     if(event.handled !== true) {
                         clickHelp();
+                        leltar.meresVisible = $('#divmeres').is(":visible");
+                        if (leltar.meresVisible) $('#divmeres').hide();
                         $.get( "views/gpanel.tpl", function( data ) { 
                                     css='';
                                     tpl = data; 
                                     $('#gpanelcontainer').html(css + tpl);
-                                    fn = 'leltar.rszAdatokSet';
-                                    gpanel.showGPanel(leltar.rszAdatok,fn);
+                                    fnSave = 'leltar.rszAdatokSet';
+                                    fnCancel = 'leltar.rszAdatokBack';
+                                    gpanel.showGPanel(leltar.rszAdatok,fnSave,fnCancel);
                         });
                         event.handled = true;
                     } else {
@@ -101,6 +122,7 @@ OLeltar.prototype.rszInit = function() {
 	/* hkod lelove, rendszam bevitelre valtas */
 	$('#dataHkod').attr('disabled','disabled');
 	$('#dataRendszam').val('');
+    $('#bUjHkod').show();
 	$('.drendszam').show();
 	$('#dataRendszam').focus();
 }
@@ -108,92 +130,104 @@ OLeltar.prototype.rszInit = function() {
 OLeltar.prototype.rszChange = function() {
 	/* rendszam lelove, rendszam adatok lekerese */
 	rendszam = $('#dataRendszam').val();
+    hkod = $('#dataHkod').val();
 	azon = leltar.fejazon;
 	fn = 'leltar.rszAdatokGet';
-	ajaxCall(fn,{'rendszam':rendszam,'fejazon':azon},true, fn);
+	ajaxCall(fn,{'rendszam':rendszam,'fejazon':azon,'hkod':hkod},true, fn);
 }
 
 OLeltar.prototype.rszAdatokGet = function(result) {
 	/* rendszam valasztas ajax eredmenye */
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
-        if (res.RESULT==0) {
-            //$(".dataCeg").html(res.CEGNEV);
-            $('.dataMeret').html(res.MARKA+' '+res.MERET+' '+res.MINTA+' '+res.SI);
-            $('.dataFegu').html(res.FE+'/'+res.GU);
-            $('.dataFeall').html(res.FEALL);
-            
-            leltar.currentItem=res.TIP;
-            leltar.currentPosition=res.POZ;
-            
-            leltar.rszAdatok = res;
-            feall='';
-            if (checkParam(res.FEALL)=='L' && res.FE>0) feall='Lemez';
-            if (checkParam(res.FEALL)=='A' && res.FE>0) feall='Alu';
-            $(".dataFeall").html(feall);
-            
-            $('.rszadatok').show();
-            $('.dcontrol').show();
-            
-            panelName='leltar_meres';
-            $.get( "views/"+panelName+".tpl", function( data ) { 
-                rsz = $('#rendszam').val();
-                mibiz = $('#hMIBIZ').val();
-                $('#divmeres').html(data);
-                $('#divmeres').show();
-                fn = 'leltar.getMelyseg'; /* query */
-                ajaxCall(fn,{'poz':leltar.currentPosition, 'login':login_id,'tip':leltar.currentItem},true, fn);
-            });        
+        switch (res.RESULT) {
+            case '0':
+                //$(".dataCeg").html(res.CEGNEV);
+                $("#dataRendszam").prop('disabled', true);
+                $('.dataMeret').html(res.MARKA+' '+res.MERET+' '+res.MINTA+' '+res.SI);
+                $('.dataFegu').html(res.FE+'/'+res.GU);
+                $('.dataFeall').html(res.FEALL);
+                leltar.currentRsz=res.SHORTRSZ;
+                leltar.currentItem=res.TIP;
+                leltar.currentPosition=res.POZ;
+                
+                leltar.rszAdatok = res;
+                feall='';
+                if (checkParam(res.FEALL)=='L' && res.FE>0) feall='Lemez';
+                if (checkParam(res.FEALL)=='A' && res.FE>0) feall='Alu';
+                $(".dataFeall").html(feall);
+                
+                $('.rszadatok').show();
+                $('.dcontrol').show();
+                panelName='leltar_meres';
+                $.get( "views/"+panelName+".tpl", function( data ) { 
+                    rsz = $('#dataRendszam').val();
+                    mibiz = $('#hMIBIZ').val();
+                    $('#divmeres').html(data);
+                    $('#divmeres').show();
+                    fn = 'leltar.getMelyseg'; /* query */
+                    ajaxCall(fn,{'poz':leltar.currentPosition, 'login':login_id,'tip':leltar.currentItem},true, fn);
+                });                        
+                break;
+            case '1':
+                rendszam = $('#dataRendszam').val();
+                showMessage('Nem található ilyen rendszám! ' + rendszam);
+                $('#dataRendszam').val("");
+                $('#dataRendszam').focus();
+                leltar.currentPosition="";
+                leltar.currentItem="";
+                leltar.currentRsz = "";
+                break;
+            case '2':
+                rendszam = $('#dataRendszam').val();
+                showMessage(rendszam+': Már leltározva lett!');
+                $('#divmeres').hide();
+                $('.rszadatok').hide();
+                $('.dcontrol').hide();
+                $('#dataRendszam').val('');
+                $('#dataRendszam').focus();
+                leltar.currentPosition="";
+                leltar.currentItem="";
+                leltar.currentRsz = "";  
+                break;
+            case '3':
+                rendszam = $('#dataRendszam').val();
+                showMessage(rendszam+': Nem rakható más helykódra, mint a többi! Helykód:' + res.RESULTTEXT);
+                $('#divmeres').hide();
+                $('.rszadatok').hide();
+                $('.dcontrol').hide();
+                $('#dataRendszam').val('');
+                $('#dataRendszam').focus();
+                leltar.currentPosition="";
+                leltar.currentItem="";
+                leltar.currentRsz = "";  
+                break;
+            default:
+                showMessage(rendszam+': Ismeretlen hiba!');
+                //alert(JSON.stringify(result));
         }
-        else {
-            alert('Nem található ilyen rendszám!');
-        }
-	}
-
-    
-    
+    }
 }
+
 OLeltar.prototype.rszAdatokSet = function(rszadatok) {
     leltar.rszAdatok = rszadatok;
     fn = 'leltar.rszAdatokUpdate';
+    rendszam = $('#dataRendszam').val();
 	ajaxCall(fn,{'rendszam':rendszam,'fejazon':azon,'rszadatok':JSON.stringify(rszadatok),'login':login_id},true, fn);
     
 }
 OLeltar.prototype.rszAdatokUpdate = function(result) {
-    alert('rszadatok update');
+    leltar.rszAdatokBack();
+    showMessage("Gumi adatok frissítve.");
+        
 }
-/*
-OLeltar.prototype.rszChange = function() {
-	// rendszam lelove, mentes inditasa
-	rendszam = $('#dataRendszam').val();
-	hkod = $('#dataHkod').val();
-	fn = 'leltar.rszSave';
-	ajaxCall(fn,{'fejazon':this.fejazon, 'login':login_id, 'rendszam':rendszam, 'hkod':hkod},true, fn);
+OLeltar.prototype.rszAdatokBack = function() {
+    //if (leltar.meresVisible) 
+        $('#divmeres').show();    
 }
-*/
+
     
-OLeltar.prototype.rszSave = function (result) {
-	/* rendszam mentes eredmenye, rsz adatok */
-	for (var i = 0;i < result.length;i++){
-		res = result[i];
-		rendszam = $('#dataRendszam').val();
-		$('.dataRSZ').html(rendszam);
-		$('#dataRendszam').val('');
-		$('.dataMeret').html(res.MARKA+' '+res.MERET+' '+res.MINTA+' '+res.SI);
-		$('.dataFegu').html(res.FE+'/'+res.GU);
-		$('.dataFeall').html(res.FEALL);
-		$('.rszadatok').show();
-		if (res.RESULT==0)	{
-			$('#labelStatus').html(rendszam+': OK');
-			$('#labelStatus').attr('class','labelStatusOK');
-		}
-		else {
-			$('#labelStatus').html(rendszam+': Hiba!');
-			$('#labelStatus').attr('class','labelStatusERROR');
-			alert('Hiba');
-		}
-	}
-}
+
 /* rendszam eddig*/
 
 /* allapot panel */
@@ -212,13 +246,10 @@ OLeltar.prototype.getMelyseg=function(result){
 }
 
 OLeltar.prototype.allapotMentes=function(){
-	poz = this.currentPosition;
 	melyseg = $('#gstat').val();
-	
-	rsz = $('#rendszam').val();
-	mibiz = $('#hMIBIZ').val();
-	tip=elrak.currentItem;
-	fn='leltar.allapotMent'; /*PDA_ORZOTTLERAK_ALLAPOTMENT*/
+	hkod = $('#dataHkod').val();
+	rsz =  $('#dataRendszam').val();
+	fn='leltar.rszSave';  /*PDA_ORZOTTLERAK_SORUPDATE*/
 
 	csereok = $('#gcsok').val();
 	if ((melyseg=='-' || melyseg=='' || melyseg==null)) showMessage('Mentés elõtt mérd meg a mélységet!');
@@ -227,9 +258,49 @@ OLeltar.prototype.allapotMentes=function(){
 		showMessage('Csere esetén töltd ki a csere okát!');
 	}
 	else {
-		ajaxCall(fn,{'rsz':rsz,'mibiz':mibiz,'poz':poz,'melyseg':melyseg,'login':login_id,'tip':tip,'csereok':csereok},true, fn);
+        ajaxCall(fn,{'fejazon':leltar.fejazon, 'login':login_id, 'rendszam':rendszam, 'hkod':hkod,'csereok':csereok,'melyseg':melyseg},true, fn);
 	}
 
+}
+OLeltar.prototype.rszSave = function (result) {
+	/* rendszam mentes eredmenye, rsz adatok */
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		rendszam = $('#dataRendszam').val();
+        switch (res.RESULTTEXT) {
+				case 'OK': 		
+                    showMessage(rendszam+': OK!');
+                    $('#divmeres').hide();
+                    $('.rszadatok').hide();
+                    $('.dcontrol').hide();
+                    $("#dataRendszam").prop('disabled', false);
+                    $('#dataRendszam').val('');
+                    $('#dataRendszam').focus();
+                    leltar.currentPosition="";
+                    leltar.currentItem="";
+                    leltar.currentRsz = "";
+                    break;
+                case 'EXISTS':
+                    showMessage(rendszam+': Már leltározva lett!');
+                    $('#divmeres').hide();
+                    $('.rszadatok').hide();
+                    $('.dcontrol').hide();
+                    $("#dataRendszam").prop('disabled', false);
+                    $('#dataRendszam').val('');
+                    $('#dataRendszam').focus();
+                    leltar.currentPosition="";
+                    leltar.currentItem="";
+                    leltar.currentRsz = "";                    
+                    break;
+                default:
+                    showMessage(rendszam+': Ismeretlen hiba!');
+                    $("#dataRendszam").prop('disabled', false);
+                    $('#dataRendszam').val('');
+                    $('#dataRendszam').focus();
+                    
+		}
+
+	}
 }
 OLeltar.prototype.allapotMent=function(result){
 	$('#bAllapotClose').trigger( "click" );
@@ -257,10 +328,11 @@ OLeltar.prototype.reviewLoad = function(result) {
 		res = result[i];
 		tdclass='';
 		//if (res.DRB==res.DRB2) tdclass=' rowhighlighted';
-		sorok += '<tr class="'+tdclass+'" id="'+res.RENDSZAM+'">';
-		sorok += '<td class="tdrsz">'+res.RENDSZAM+'</td>';
-		sorok +=  '<td class="tmibiz">'+res.HELYKOD+'</td>'; 
-		sorok +=  '<td class="tmibiz"><button onclick="leltar.delRszInit(\''+res.RENDSZAM+'\')">Törlés</button></td>'; 
+		sorok += '<tr class="'+tdclass+'" id="'+res.RSZSHORT+'">';
+		sorok += '<td class="tdrsz">'+res.RSZSHORT+'<br><div class="tpoz">JE:'+res.JE+' BE:'+res.BE+' JH:'+res.JH+' BH:'+res.BH+' POT:'+res.POT+'</div></td>';
+		sorok +=  '<td class="tmibiz">'+res.HELY+'</td>'; 
+		//sorok +=  '<td class="tpoz">JE:'+res.JE+' BE:'+res.BE+' JH:'+res.JH+' BH:'+res.BH+' POT:'+res.POT+'</td>'; 
+		sorok +=  '<td class="tmibiz"><button onclick="leltar.delRszInit(\''+res.RSZSHORT+'\')">Törlés</button></td>'; 
 		sorok += '</tr>';
 		
 	}
@@ -272,8 +344,12 @@ OLeltar.prototype.reviewLoad = function(result) {
 OLeltar.prototype.showReview = function() {
 	/* atnezo panel ajax inditas */
 	$('#bFolytMost').show();
-	azon = this.fejazon;
+	azon = leltar.fejazon;
+    leltar.meresVisible = $('#divmeres').is(":visible");
 	$('#divpanel').hide();
+	$('#gpanelcontainer').hide();
+	$('#divmeres').hide();
+    
 	fn = 'leltar.reviewLoad';
 	r = ajaxCall(fn,{'fejazon':azon,'login':login_id},true, fn);
 	$('#divreview').show();
@@ -282,9 +358,12 @@ OLeltar.prototype.showReview = function() {
 
 OLeltar.prototype.delRszInit=function(rendszam){
 	/* atnezon sortorles ajax inditas */
-	fn = 'leltar.delRsz';
-	azon = leltar.fejazon;
-	r = ajaxCall(fn,{'azon':azon,'rendszam':rendszam},true, fn);
+  	torles = confirm(rendszam+": Biztos törli a rendszámot a leltárból?");
+	if (torles) {
+        fn = 'leltar.delRsz';
+        azon = leltar.fejazon;
+        r = ajaxCall(fn,{'azon':azon,'rendszam':rendszam},true, fn);
+    }
 }
 OLeltar.prototype.delRsz = function(result) {
 	/* sortorles ajax eredmenye */
@@ -320,6 +399,23 @@ OLeltar.prototype.lezarStart = function(){
 OLeltar.prototype.lezarUpdate =function(result){
 	/* atnezon lezaras ajax eredmenye */
 	leltar.folytUpdate(result);
+}
+OLeltar.prototype.folytMost =function(event){
+		event.stopPropagation();
+        event.preventDefault();
+        if(event.handled !== true) {
+			clickHelp();
+			$('#divreview').hide();
+			$('#divpanel').show();
+            if (leltar.meresVisible) $('#divmeres').show();    
+            $('#gpanelcontainer').show();
+            if ($('#dataRendszam').is(":visible")) $('#dataRendszam').focus();
+            else if ($('#dataHkod').is(":visible")) $('#dataHkod').focus();
+            
+            event.handled = true;
+        } else {
+            return false;
+        }
 }
 /* atnezo panel eddig */
 

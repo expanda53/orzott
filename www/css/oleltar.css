@@ -70,15 +70,16 @@
 }
 .rszadatok {
 	display:none;
-	position:fixed;
-	top:38px;
-	left:135px;
-	line-height:20px;
-	background-color:aliceblue;
-	padding:2px;
-	width:420px;
-	border:1px solid black;
-	font-size:15px;
+    position: fixed;
+    top: 38px;
+    left: 148px;
+    line-height: 23px;
+    background-color: aliceblue;
+    padding: 2px;
+    /*width: 420px;*/
+    width: 100%;
+    border: 1px solid black;
+    font-size: 15px;
 }
 .dcontrol {
 	display:none;
@@ -152,17 +153,17 @@
 .divreviewRight {
 	position:absolute;
 	top:32px;
-	left:90px;
+	/* left:90px; */
 	background-color:white;
-	width:366px;
+	width:456px;
 }
 #divreview table{
-	display:block;
-	height: 170px;
-	overflow-y: scroll;
-	font-size:17px;
-	position:relative;
-	left:10px;
+    display: block;
+    height: 197px;
+    overflow-y: scroll;
+    font-size: 17px;
+    position: relative;
+    left: 10px;
 }
 
 #divreview  table tbody {
@@ -174,8 +175,8 @@
 }
 
 #divreview table td {
-	padding:10px;
-	text-align:center;
+	padding:5px;
+	/* text-align:center; */
 }
 .tableReview {
 	/*width:367px;*/
@@ -188,7 +189,7 @@
 	background-color:orange;
 }
 .tdrsz {
-	width:115px;
+	width:200px;
 }
 
 .rowhighlighted {
@@ -209,6 +210,9 @@
     color: white;
     width: 75px;
     font-size: 15px;	
+}
+.tpoz {
+    font-size:12px;
 }
 #divmeres {
 	display:none;
@@ -298,6 +302,15 @@
     left: 23px;
     float: left;
 }
+#bUjHkod {
+    display:none;
+    left: 30px;
+    position: relative;
+    top: 5px;
+    height: 48px;
+    padding: 12px 31px !important;    
+    width: 169px;
+}
 #dataHkod {
     position: relative;
     padding: 10px;
@@ -348,27 +361,7 @@
     font-weight: bold;
     float:left;
 }
-#labelStatus {
-    position: relative;
-    padding: 10px;
-    width: 250px;
-    text-align: center;
-    margin-top: 1px;
-    height: 14px;
-    top: 10px;
-    left: 110px;
-    font-size: 13px;
-    font-weight: bold;
-}
-.labelStatusOK {
-	background-color:black;
-	color:green;
-	
-}
-.labelStatusERROR {
-	background-color:black;
-	color:red;
-}
+
 #bRszMentes{
     position: relative;
     padding: 10px;
@@ -411,10 +404,8 @@
 }
 
 .meres button {
-	padding:16px 20px;
 	margin:5px;
-	font-size:15px;
-	width:90px;
+	/*font-size:15px;*/
 }
 
 
@@ -422,12 +413,15 @@
 	/*display:none;*/
 }
 #bAllapotClose {
-position: absolute;
-    top: 55px;
-    left: 350px;
+    position: absolute;
+    top: 12px;
+    left: 233px;
     background-color: orange;
-    width: 131px;
+    width: 169px;
     color: black;
+    height: 48px;
+    padding: 12px 31px !important;    
+    
 }
 #bAllapotJavitas {
     position: absolute;
@@ -439,9 +433,12 @@ position: absolute;
 }
 #bAllapotMent {
     position: absolute;
-    top: 55px;
+    top: -39px;
     left: 234px;
-    width: 112px;
+    width: 169px;
+    height: 48px;
+    padding: 12px 31px !important;    
+    background-color: yellow;
 }
 #divcsok {
 	position: absolute;
@@ -450,17 +447,17 @@ position: absolute;
 	height:130px;
 }
 .divcb {
-	padding:5px;
-	background-color:white;
-	width:48px;
-	float:left;
-	height:30px;
-	text-align:center;
-	margin-top:3px;
+    padding: 5px;
+    background-color: white;
+    width: 48px;
+    float: left;
+    height: 36px;
+    text-align: center;
+    margin-top: 3px;
 }
 .divcb input {
 
-	height:30px;
+	height:32px;
     vertical-align:middle;
 }	
 .divgcsok {
@@ -468,7 +465,10 @@ position: absolute;
 }	
 	
 .divgcsok select{
-	width:232px;
+width: 232px;
+    position: relative;
+    left: 236px;
+    top: -48px;
 }
 #labelcsok {
 	width:222px;

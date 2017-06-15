@@ -101,14 +101,21 @@ OElrak.prototype.getRszInProgress = function (result){
         $('#dataHkodWork').show();
         $('#labelHkodWork').show();
         
+        $('#dataDrbWork').html(res.DRB+"/"+res.DRB2);
     }
 }
 
 OElrak.prototype.rszChange = function (){
 	/* rendszam valasztas ajax indito */
 	rsz = $('#dataRendszam').val();
-	fn = 'elrak.rszAdatokGet'; /* PDA_ORZOTTHKOD_GETRSZ */
-	ajaxCall(fn,{'rsz':rsz,'login':login_id},true, fn);
+    if (rsz.length>13) {
+        clearObj='dataRendszam';
+        showMessage("A rendszám nem lehet hosszabb, mint 13 karakter!",clearObj);
+    }
+    else {
+        fn = 'elrak.rszAdatokGet'; /* PDA_ORZOTTHKOD_GETRSZ */
+        ajaxCall(fn,{'rsz':rsz,'login':login_id},true, fn);
+    }
 	
 }
 
@@ -141,38 +148,38 @@ OElrak.prototype.rszAdatokGet = function (result){
 			switch (res.RESULTTEXT) {
 				case 'TYPE': 
 					errormsg='Nem megfelelõ típus a pozíción!';
-					showMessage(errormsg,clearObj);
+					showMessage(errormsg,clearObj,2);
 					break;
 				case 'NOT_FOUND': 
 					errormsg='Nem található ilyen rendszám a lerakodott abroncsok között!';
-					showMessage(errormsg,clearObj);
+					showMessage(errormsg,clearObj,2);
 					break;
 				case 'DEEP': 
 					errormsg='Mélységmérés nem lett elvégezve!';
-					showMessage(errormsg);
+					showMessage(errormsg,'',2);
 					meresKell=true;
 					break;
 				case 'POSITION_NOT_FOUND': 
 					errormsg='Lelõtt pozíción nem található abroncs a rendszámhoz!';
-					showMessage(errormsg,clearObj);
+					showMessage(errormsg,clearObj,2);
 					break;
 				case 'EMPTY_POSITION': 
 					errormsg='A rendszámhoz tartozó pozíciók üresek!';
-					showMessage(errormsg,clearObj);
+					showMessage(errormsg,clearObj,2);
 					break;
 				case 'QUANTITY': 
 					errormsg='Nem egyezik a várt és a lerakodott mennyiség! '+res.ERRORTEXT;
-					showMessage(errormsg,clearObj);
+					showMessage(errormsg,clearObj,2);
 					break;
 				case 'ALREADY_DONE': 
 					errormsg='Ez a gumi már el lett pakolva! helykód:'+res.ERRORTEXT;
-					showMessage(errormsg,clearObj);
+					showMessage(errormsg,clearObj,2);
 					//$('#dataHkod').val(res.ERRORTEXT);
                     //showHkod=true;
 					break;
 				case 'ALREADY_STARTED': 
 					errormsg='Már van egy elkezdett garnitúra:<BR>'+res.ERRORTEXT;
-					showMessage(errormsg,clearObj);
+					showMessage(errormsg,clearObj,2);
 					break;
 				default:
 					errormsg = res.RESULTTEXT;
@@ -221,6 +228,7 @@ OElrak.prototype.showPozPanel = function(obj) {
 /* allapot panel */
 
 OElrak.prototype.getMelyseg=function(result){
+    $("#dataRendszam").prop('disabled', true);
 	$("#gstat").html('');
 	$("#gstat").append('<option value="" disabled selected>Válasszon</option>');
 	for (var i = 0;i < result.length;i++){
@@ -230,6 +238,7 @@ OElrak.prototype.getMelyseg=function(result){
 	manualChoice = settings.getItem('ORZOTT_MELYSEGMERES_KEZZEL_IS')!=null && settings.getItem('ORZOTT_MELYSEGMERES_KEZZEL_IS').toUpperCase()=='IGEN';
 	if (!manualChoice) $('#gstat').attr('disabled',true);
 	$('#divgstat').show();
+    // app.onData("7.651");
 	
 }
 
@@ -253,8 +262,18 @@ OElrak.prototype.allapotMentes=function(){
 	}
 
 }
+OElrak.prototype.allapotClose=function(focusRendszam){
+		$('#divmeres').hide();
+		$('#divpanel').show();
+        fn = 'elrak.getRszInProgress';
+        ajaxCall(fn,{},true, fn);
+        if (focusRendszam) {
+            $("#dataRendszam").prop('disabled', false);
+            $('#dataRendszam').focus();        
+        }
+}
 OElrak.prototype.allapotMent=function(result){
-	$('#bAllapotClose').trigger( "click" );
+    elrak.allapotClose(false);
     if ($('#dataHkodWork').html()!='NINCS') elrak.hkodSaveInit();
 	else elrak.showHkod();
 }
@@ -262,6 +281,7 @@ OElrak.prototype.allapotMent=function(result){
 
 /* hkod innen */
 OElrak.prototype.showHkod=function(){
+    $("#dataRendszam").prop('disabled', true);
 	$('.dhkod').show();
 	$('#dataHkod').focus();
 }
@@ -288,6 +308,7 @@ OElrak.prototype.hkodDel=function(result){
 		res = result[i];
 		if (res.RESULT=='OK') {
 			showMessage('Törlés rendben');
+            $("#dataRendszam").prop('disabled', false);
             $('#dataRendszam').focus();
 		}
 		else {
@@ -315,7 +336,7 @@ OElrak.prototype.hkodSaveInit=function(){
 	/* helykod mentes */
 	rsz = $('#dataRendszam').val();
 	hkod = $('#dataHkod').val();
-    showMessage(hkod);
+    //showMessage(hkod);
     if (hkod!='') {
         fn = 'elrak.hkodSaveCheck'; /* PDA_ORZOTTHKOD_HKODCHECK */
         ajaxCall(fn,{'rsz':rsz,'hkod':hkod,'login':login_id},true, fn);
@@ -379,10 +400,11 @@ OElrak.prototype.hkodSaveCheck = function (result){
 }
 
 OElrak.prototype.hkodSave = function (result){
+    $("#dataRendszam").prop('disabled', false);
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		if (res.RESULT=='OK') {
-            showMessage('OK');
+            showMessage('OK','',1);
             //munkaban levo rsz lekerdezese
             fn = 'elrak.getRszInProgress';/* PDA_ORZOTTHKOD_GETRSZSTARTED */
             ajaxCall(fn,{},true, fn);
@@ -390,7 +412,7 @@ OElrak.prototype.hkodSave = function (result){
 			window.setTimeout(function(){
 				$('#dataRendszam').focus();
 
-			},2*1000);
+			},500);
 			
 		}
 		else {

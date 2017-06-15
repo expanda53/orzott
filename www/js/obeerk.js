@@ -48,6 +48,8 @@ var OBeerk = function(){
 	this.initMibizList();
 	this.currentItem = ""; //bGumi,bFelni,bGumiFelni
 	this.currentPosition = '';
+    this.kerekPozvalasztas=true; //korabban ugy volt, hogy a kerek megy mosasra, es utana nyomtatnak. Ez ugy tunik nem igy van, de berakok egy konfigot, ha megis...
+    //gpanel = new OGPanel();
 }
 /* feladat valasztas */
 OBeerk.prototype.initMibizList = function(){
@@ -269,8 +271,8 @@ OBeerk.prototype.showAllapotPanel = function(obj){
 	this.currentItem = obj.attr('id'); 
 
 	$('#bAllapotClose').show();
-	if (this.meresKell || beerk.currentItem=="bGumi") {
-		/* ha meressel kerte, vagy meres nelkul de gumit valasztott */
+	if (this.meresKell || beerk.currentItem=="bGumi" || (this.kerekPozvalasztas && beerk.currentItem=="bGumiFelni")) {
+		/* ha meressel kerte, vagy meres nelkul de gumit (vagy kereket) valasztott */
 		panelName='meres';
 		$.get( "css/"+panelName+".css", function( data ) {
 			css = '<head><style>' + data + '</style></head>';
@@ -342,6 +344,7 @@ OBeerk.prototype.selectPosition = function (obj) {
 	var poz = "";
 	if (obj == null) {
 		/* felni vagy kerek meres nelkul, automatikus pozicio meghatarozassal, a mar belott drbszam alapjan. 0 -> JE, 1->BE, 2->JH,3->BH,4->POT,5->JHI, 6->BHI */
+        //kereknel ha van nyomtatas, akkor kell poziciot valasztani
 		poz='auto';
 	}
 	else poz=obj.attr('id');
