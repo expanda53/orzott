@@ -32,6 +32,10 @@ showMessage =function (msg, clearObj,timeout ){
         },timeout*1000);
     }
 }
+serverLog= function (log){
+   ajaxCall('log',{'log':log},true, '');
+}
+
 
 messageHide = function(){
     $('#dmsg').hide();
@@ -46,6 +50,7 @@ function depthMeter (pid,pname) {
 	this.name = pname;
 	}
 var app = {
+    version:"v1.170823",
 	printerId:"",
 	printerName:"",
 	printerConnected:false,
@@ -70,6 +75,7 @@ var app = {
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
         document.addEventListener("backbutton", this.onBackKeyDown, false);
+        
     },
     // deviceready Event Handler
     //
@@ -81,6 +87,7 @@ var app = {
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         /* login view */
+            serverLog('received event : '+id);
         showLogin();
         //console.log('Received Event: ' + id);
 		
@@ -294,16 +301,34 @@ var app = {
     },
 	onData: function(data) {
         /* depthmeter */
-            console.log(data);
+            data = data.replace("\n","");
+            //serverLog('depthmeter data received:{' + data+ '} app.currentModule:{' + app.currentModule+'}');
 			app.depthMeterData=data.replace('T','');
-            frac =  Number('0.' + app.depthMeterData.split('.')[1]);
+            try {
+                frac =  Number('0.' + app.depthMeterData.split('.')[1]);
+                //serverLog('frac:{' + frac+ '}');
+                if (frac>0.7) {
+                    //serverLog('frac>0.7');
+                    app.depthMeterData = Math.round(app.depthMeterData);
+                }
+                else {
+                    //serverLog('frac<=0.7');
+                    app.depthMeterData = Math.floor(app.depthMeterData);
+                }
+                
+            }
+            catch (err) {
+                serverLog('depthmeter data error:{' + app.depthMeterData+ '} errorMessage:{' + err.message+'}');
+                app.depthMeterData = Math.round(app.depthMeterData);
+            }
             /* data<=0.7 -> 0; data>0.7 -> 1*/
-            if (frac>0.7) app.depthMeterData = Math.round(app.depthMeterData);
-			else app.depthMeterData = Math.trunc(app.depthMeterData);
+            //serverLog('depthmeter data rounded:{' + app.depthMeterData+'}');
+            //app.depthMeterData = Math.round(app.depthMeterData);
 			if (app.currentModule=='beerk' || app.currentModule=='elrak' || app.currentModule=='leltar') {
 				if ( $('#gstat').is(":visible") ){
 					$('#gstat').val(app.depthMeterData);				
 					$('#gstat').trigger('change');
+                    //serverLog('depthmeter data sent');
 				}
 			}
 			else showMessage(data);

@@ -38,12 +38,18 @@ OGPanel.prototype.GPanelOptions = function (saveData){
   $('#bdelP').bind('click',function(){
 		gpanel.GPanelFunctions('del','P','');
   })
-  $('#bxcAB').bind('click',function(){
+  $('#bxcAB').bind('click',function(event){
+    if (!event.handled) {
 		gpanel.GPanelFunctions('xc','A','B');
+        event.handled=true;
+        $('#divGPOptions').hide();
+    }
+      
+		
   })  
   
 }
-OGPanel.prototype.GPanelFunctions = function(func,src,trg){
+OGPanel.prototype.GPanelFunctions = function(func,src,trg){alert(func);
 	if (func=='copy') {
 		fn='getMarka'; /* query */
 		ajaxCall(fn,{'marka':$('#gpMarka'+src).val(),'meret':$('#gpMeret'+src).val(),'minta':'mind','si':$('#gpSI'+src).val()},false, 'gpanel.'+fn+trg);

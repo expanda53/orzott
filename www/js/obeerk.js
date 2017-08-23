@@ -149,7 +149,7 @@ OBeerk.prototype.mibizList = function(result) {
             $('#bGPanelCancel').bind('click',function () {
                 beerk.GPanelClose(false);
             })	
-            $('#bGPanelOptions').bind('click',function () {
+            $('#bGPanelOptions').bind('click',function (event) {
                 beerk.GPanelOptions();
             })	
             $('#srendszam, #bRendszam').bind('click',function (event) {
@@ -365,11 +365,15 @@ OBeerk.prototype.selectPosition = function (obj) {
                         if (beerk.currentPosition=='bPOT') ppoz = 5;
                         if (beerk.currentPosition=='bJHI') ppoz = 6;
                         if (beerk.currentPosition=='bBHI') ppoz = 7;
-                        if (beerk.currentItem=="bGumi") ptip = "A";
-                        if (beerk.currentItem=="bFelni") ptip = "F";
-                        if (beerk.currentItem=="bGumiFelni") ptip = "M";
-                    
-                    tpl = data.replace(/\[RENDSZPOZ\]/g,rsz+"_"+ppoz+ptip); 
+                        pozstr=beerk.currentPosition.substring(1);
+                        if (beerk.currentItem=="bGumi") {ptip = "A";tipstr='Gumi';}
+                        if (beerk.currentItem=="bFelni") {ptip = "F";tipstr='Felni';}
+                        if (beerk.currentItem=="bGumiFelni") {ptip = "M";tipstr='Kerék';}
+                    tpl = data;
+                    tpl = tpl.replace(/\[RENDSZ\]/g,rsz); 
+                    tpl = tpl.replace(/\[TIPUS\]/g,tipstr); 
+                    tpl = tpl.replace(/\[POZSTR\]/g,pozstr); 
+                    tpl = tpl.replace(/\[RENDSZPOZ\]/g,rsz+"_"+ppoz+ptip); 
                     tpl += '\r\n';
                     var writeOk = function(){
                         fn = 'beerk.rszMent'; /* PDA_ORZOTTLERAK_SORUPDATE */
@@ -775,27 +779,38 @@ OBeerk.prototype.GPanelOptions = function (saveData){
   })
   $('#bcopyAB').bind('click',function(){
 		beerk.GPanelFunctions('copy','A','B');
+        $('#divGPOptions').hide();
   })
   $('#bcopyAP').bind('click',function(){
 		beerk.GPanelFunctions('copy','A','P');
+        $('#divGPOptions').hide();
   })
   $('#bcopyBA').bind('click',function(){
 		beerk.GPanelFunctions('copy','B','A');
+        $('#divGPOptions').hide();
   })
   $('#bcopyBP').bind('click',function(){
 		beerk.GPanelFunctions('copy','B','P');
+        $('#divGPOptions').hide();
   })
   $('#bdelA').bind('click',function(){
 		beerk.GPanelFunctions('del','A','');
+        $('#divGPOptions').hide();
   })
   $('#bdelB').bind('click',function(){
 		beerk.GPanelFunctions('del','B','');
+        $('#divGPOptions').hide();
   })
   $('#bdelP').bind('click',function(){
 		beerk.GPanelFunctions('del','P','');
+        $('#divGPOptions').hide();
   })
-  $('#bxcAB').bind('click',function(){
+  $('#bxcAB').bind('click',function(event){
+    if (!event.handled) {
 		beerk.GPanelFunctions('xc','A','B');
+        event.handled=true;
+        $('#divGPOptions').hide();
+    }
   })  
   
 }
@@ -836,27 +851,41 @@ OBeerk.prototype.GPanelFunctions = function(func,src,trg){
 	}
 	else
 	if (func=='xc') {
-        mezo='gpMarka';
-        temp=$('#'+mezo+src).val();
-        $('#'+mezo+src).val( $('#'+mezo+trg).val() );
-        $('#'+mezo+trg).val(temp);
-        
-        mezo='gpMeret';
-        temp=$('#'+mezo+src).val();
-        $('#'+mezo+src).val( $('#'+mezo+trg).val() );
-        $('#'+mezo+trg).val(temp);
-        
-        mezo='gpMinta';
-        temp=$('#'+mezo+src).val();
-        $('#'+mezo+src).val( $('#'+mezo+trg).val() );
-        $('#'+mezo+trg).val(temp);        
-        
-        mezo='gpSI';
-        temp=$('#'+mezo+src).val();
-        $('#'+mezo+src).val( $('#'+mezo+trg).val() );
-        $('#'+mezo+trg).val(temp);        
+        //B tengely felremasol
+        tmarka=$('#gpMarka'+trg).val();
+        tminta=$('#gpMinta'+trg).val();
+        tmeret=$('#gpMeret'+trg).val();
+        tsi=$('#gpSI'+trg).val();
+        //B urit
+        beerk.GPanelFunctions('del',trg,'');
+        //A->B
+        beerk.GPanelFunctions('copy',src,trg);
+        //A urit
+        beerk.GPanelFunctions('del',src,'');
+        //A tengelyre B beallitasa (felremasolt adatokbol)
+		fn='getMarka'; /* query */
+		ajaxCall(fn,{'marka':tmarka,'meret':tmeret,'minta':'mind','si':tsi},false, fn+src);
+		def = tmarka;
+		$('#gpMarka'+src+' option[value='+def+']').prop('selected', 'selected');
+		
+		fn='getMinta';/* query */
+		ajaxCall(fn,{'marka':tmarka,'meret':tmeret,'minta':'mind','si':tsi},false, fn+src);
+		def = tminta;
+		$('#gpMinta'+src+' option[value='+def+']').prop('selected', 'selected');
+		
+		fn='getMeret';/* query */
+		ajaxCall(fn,{'marka':tmarka,'meret':tmeret,'minta':'mind','si':tsi},false, fn+src);
+		def = tmeret;
+		$('#gpMeret'+src+' option[value='+def+']').prop('selected', 'selected');
+
+	
+		fn='getSI';/* query */
+		ajaxCall(fn,{'marka':tmarka,'meret':tmeret,'minta':'mind','si':tsi},false, fn+src);
+		def = tsi;
+		$('#gpSI'+src+' option[value='+def+']').prop('selected', 'selected');
+            
     }
-	$('#divGPOptions').hide();
+	//$('#divGPOptions').hide();
 		
 }
 
@@ -1072,22 +1101,22 @@ OBeerk.prototype.showGPanel =function(){
 
 function getMarka(result,tengely){
 	if (markaUpdate==false) {
-	markaUpdate=true;
-	def = $("#gpMarka"+tengely+' option:selected').val();
-	if (def=='mind') def='';
-	if (def=='' || def==null) {
-		if (tengely=='A') ix=9;
-		if (tengely=='B') ix=12;
-		if (tengely=='P') ix=15;
-		def = beerk.rszAdatokTEMP[ix].trim();
-	}
-	$("#gpMarka"+tengely).html('');
-	$("#gpMarka"+tengely).append('<option value=mind></option>');
-	for (var i = 0;i < result.length;i++){
-		res = result[i];
-		$("#gpMarka"+tengely).append('<option value="'+res.MARKA+'">'+res.MARKA+'</option>');
-	}
-	if (def!='') $('#gpMarka'+tengely+' option[value='+def+']').prop('selected', 'selected');
+        markaUpdate=true;
+        def = $("#gpMarka"+tengely+' option:selected').val();
+        if (def=='mind') def='';
+        if (def=='' || def==null) {
+            if (tengely=='A') ix=9;
+            if (tengely=='B') ix=12;
+            if (tengely=='P') ix=15;
+            def = beerk.rszAdatokTEMP[ix].trim();
+        }
+        $("#gpMarka"+tengely).html('');
+        $("#gpMarka"+tengely).append('<option value=mind></option>');
+        for (var i = 0;i < result.length;i++){
+            res = result[i];
+            $("#gpMarka"+tengely).append('<option value="'+res.MARKA+'">'+res.MARKA+'</option>');
+        }
+        if (def!='') $('#gpMarka'+tengely+' option[value='+def+']').prop('selected', 'selected');
 	
 	}
 	markaUpdate=false;
@@ -1098,26 +1127,26 @@ function getMarkaP(result){	getMarka(result,'P');}
 
 function getMeret(result,tengely){
 	if (meretUpdate==false) {
-	meretUpdate=true;
-	def = $("#gpMeret"+tengely+' option:selected').val();
-	if (def=='mind') def='';
-	optid = '';
-	if (def=='' || def==null) {
-		if (tengely=='A') ix=10;
-		if (tengely=='B') ix=13;
-		if (tengely=='P') ix=16;
-		def = beerk.rszAdatokTEMP[ix].trim();
-	}
-	
-	$("#gpMeret"+tengely).html('');
-	$("#gpMeret"+tengely).append('<option value=mind></option>');
-	for (var i = 0;i < result.length;i++){
-		res = result[i];
-		optid = checkParam(res.MERET);
-		$("#gpMeret"+tengely).append('<option value="'+optid+'">'+res.MERET+'</option>');
-	}
-	if (def!=null)optid = checkParam(def);
-	if (optid!='') $('#gpMeret'+tengely+' option[value='+optid+']').prop('selected', 'selected');
+        meretUpdate=true;
+        def = $("#gpMeret"+tengely+' option:selected').val();
+        if (def=='mind') def='';
+        optid = '';
+        if (def=='' || def==null) {
+            if (tengely=='A') ix=10;
+            if (tengely=='B') ix=13;
+            if (tengely=='P') ix=16;
+            def = beerk.rszAdatokTEMP[ix].trim();
+        }
+        
+        $("#gpMeret"+tengely).html('');
+        $("#gpMeret"+tengely).append('<option value=mind></option>');
+        for (var i = 0;i < result.length;i++){
+            res = result[i];
+            optid = checkParam(res.MERET);
+            $("#gpMeret"+tengely).append('<option value="'+optid+'">'+res.MERET+'</option>');
+        }
+        if (def!=null)optid = checkParam(def);
+        if (optid!='') $('#gpMeret'+tengely+' option[value='+optid+']').prop('selected', 'selected');
 	}
 	meretUpdate=false;
 }
@@ -1127,26 +1156,26 @@ function getMeretP(result) {getMeret(result,'P')}
 
 function getMinta(result,tengely){
 	if (mintaUpdate==false) {
-	mintaUpdate=true;
-	def = $("#gpMinta"+tengely+' option:selected').val();
-	if (def=='mind') def='';
-	optid='';
-	if (def=='' || def==null) {
-		if (tengely=='A') ix = 11;
-		if (tengely=='B') ix = 14;	
-		if (tengely=='P') ix = 17;	
-		def = beerk.rszAdatokTEMP[ix].trim();
-	}
-	
-	$("#gpMinta"+tengely).html('');
-	$("#gpMinta"+tengely).append('<option value=mind></option>');
-	for (var i = 0;i < result.length;i++){
-		res = result[i];
-		optid = checkParam(res.MINTA);
-		$("#gpMinta"+tengely).append('<option value="'+optid+'">'+res.MINTA+'</option>');
-	}
-	if (def!=null)optid = checkParam(def);
-	if (optid!='') $('#gpMinta'+tengely+' option[value='+optid+']').prop('selected', 'selected');
+        mintaUpdate=true;
+        def = $("#gpMinta"+tengely+' option:selected').val();
+        if (def=='mind') def='';
+        optid='';
+        if (def=='' || def==null) {
+            if (tengely=='A') ix = 11;
+            if (tengely=='B') ix = 14;	
+            if (tengely=='P') ix = 17;	
+            def = beerk.rszAdatokTEMP[ix].trim();
+        }
+        
+        $("#gpMinta"+tengely).html('');
+        $("#gpMinta"+tengely).append('<option value=mind></option>');
+        for (var i = 0;i < result.length;i++){
+            res = result[i];
+            optid = checkParam(res.MINTA);
+            $("#gpMinta"+tengely).append('<option value="'+optid+'">'+res.MINTA+'</option>');
+        }
+        if (def!=null)optid = checkParam(def);
+        if (optid!='') $('#gpMinta'+tengely+' option[value='+optid+']').prop('selected', 'selected');
 	}
 	mintaUpdate=false;
 }
@@ -1156,24 +1185,24 @@ function getMintaP(result) {getMinta(result,'P')}
 
 function getSI(result,tengely){
 	if (siUpdate==false) {
-	siUpdate=true;
-	def = $("#gpSI"+tengely+' option:selected').val();
-	if (def=='mind') def='';
-	if (def=='' || def==null) {
-		if (tengely=='A') ix = 18;
-		if (tengely=='B') ix = 19;	
-		if (tengely=='P') ix = 20;	
+        siUpdate=true;
+        def = $("#gpSI"+tengely+' option:selected').val();
+        if (def=='mind') def='';
+        if (def=='' || def==null) {
+            if (tengely=='A') ix = 18;
+            if (tengely=='B') ix = 19;	
+            if (tengely=='P') ix = 20;	
 
-		def = beerk.rszAdatokTEMP[ix].trim();
-	}
+            def = beerk.rszAdatokTEMP[ix].trim();
+        }
 
-	$("#gpSI"+tengely).html('');
-	$("#gpSI"+tengely).append('<option value=mind></option>');
-	for (var i = 0;i < result.length;i++){
-		res = result[i];
-		$("#gpSI"+tengely).append('<option value="'+res.SI+'">'+res.SI+'</option>');
-	}
-	if (def!='') $('#gpSI'+tengely+' option[value='+def+']').prop('selected', 'selected');
+        $("#gpSI"+tengely).html('');
+        $("#gpSI"+tengely).append('<option value=mind></option>');
+        for (var i = 0;i < result.length;i++){
+            res = result[i];
+            $("#gpSI"+tengely).append('<option value="'+res.SI+'">'+res.SI+'</option>');
+        }
+        if (def!='') $('#gpSI'+tengely+' option[value='+def+']').prop('selected', 'selected');
 	}
 	siUpdate=false;
 }

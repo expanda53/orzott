@@ -25,7 +25,7 @@
 <body>
 <div id=tplLogin>
 	<div id=divheader>
-		Bejelentkezés
+		Bejelentkezés <span id=divversion>11</span>
 	</div>
 	<div id=divcontent>
 		<div class=divinput>

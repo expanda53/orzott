@@ -143,8 +143,9 @@
 				<option value="Légzáró réteg elválás">Légzáró réteg elválás</option>
 				<option value="Nem javítható defekt">Nem javítható defekt</option>
 				<option value="Nem szakszerű javítás">Nem szakszerű javítás</option>
-				<option value="Oldalfal sérült">Oldalfal sérült</option>
-				<option value="Rendellenes kopás">Rendellenes kopás</option>
+				<option value="Rendellenes kopás (közepe kikopva)">Rendellenes kopás (közepe kikopva)</option>
+				<option value="Rendellenes kopás (szélei kopottak)">Rendellenes kopás (szélei kopottak)</option>
+				<option value="Rendellenes kopás (féloldalas kopás)">Rendellenes kopás (féloldalas kopás)</option>
 				<option value="Súlyosan elöregedve">Súlyosan elöregedve</option>
 				<option value="Szálszakadt">Szálszakadt</option>
 				<option value="Vállban sérült">Vállban sérült</option>

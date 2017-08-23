@@ -39,6 +39,16 @@
     return 'sql:'.$sql.' r:'.json_encode($r).$error_text;
   }
   
+  function _logSQL($func, $stmt,$r) {
+    _log('[START] {'.$func.'}');
+    $stmt->execute();
+    _log('[PARAMS] {' .$func.'} '. _debug($stmt,$r));  
+    $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    _log('[RESULT] {'.$func.'} '.json_encode($res));
+    return $res;
+  }
+  
+  
   switch ($func) {
   
   case 'checkLogin':
@@ -46,9 +56,7 @@
 		$stmt = Firebird::prepare($sql);
 		$login=trim($r['user']);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
-		$stmt->execute();
-        _log(_debug($stmt,$r));
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		echo json_encode(Converter::win2utf_array($res));
         break;
   
@@ -57,9 +65,7 @@
 		$stmt = Firebird::prepare($sql);
 		/*$login=trim($r['user']);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);*/
-		$stmt->execute();
-        _log(_debug($stmt,$r));
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		echo json_encode(Converter::win2utf_array($res));
         
         break;
@@ -70,9 +76,7 @@
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
-		$stmt->execute();
-        _log(_debug($stmt,$r));
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		echo json_encode(Converter::win2utf_array($res));
         break;
 
@@ -87,9 +91,7 @@
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':mibiz', $mibiz, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
-		$stmt->execute();
-        _log(_debug($stmt,$r));
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		echo json_encode(Converter::win2utf_array($res));
         break;
 
@@ -113,9 +115,7 @@
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
 		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
-		$stmt->execute();
-        _log(_debug($stmt,$r));
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		echo json_encode(Converter::win2utf_array($res));
         break;
 
@@ -135,9 +135,7 @@
 		$stmt->bindParam(':fedb', $fedb, PDO::PARAM_STR);
         $stmt->bindParam(':evszak', utf8_decode($evszak), PDO::PARAM_STR);
 		try { 
-			$stmt->execute();
-            _log(_debug($stmt,$r));
-			$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $res = _logSQL($func,$stmt,$r);
 			Firebird::commit();
 		} catch (PDOException $e) { 
 			Firebird::rollback();
@@ -154,8 +152,7 @@
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':mibiz', $mibiz, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
-		$stmt->execute();
-        _log(_debug($stmt,$r));
+        $res = _logSQL($func,$stmt,$r);
 		Firebird::commit();
 		$res=null;
 		//$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -180,9 +177,7 @@
 		$stmt->bindParam(':tip', $tip, PDO::PARAM_STR);
 		$stmt->bindParam(':rowstat', $rowstat, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
-		$stmt->execute();
-        _log(_debug($stmt,$r));
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
@@ -198,9 +193,7 @@
 		$stmt->bindParam(':sorsz', $sorsz, PDO::PARAM_STR);
 		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
-		$stmt->execute();
-        _log(_debug($stmt,$r));
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
 	    break;
@@ -215,9 +208,7 @@
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
-		$stmt->execute();
-        _log(_debug($stmt,$r));
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		echo json_encode(Converter::win2utf_array($res));
         break;
   case 'beerk.reviewRszGet':
@@ -236,9 +227,7 @@
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
-		$stmt->execute();
-        _log(_debug($stmt,$r));
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		echo json_encode(Converter::win2utf_array($res));
         break;
     
@@ -272,9 +261,7 @@
 		$stmt->bindParam(':mibiz', $mibiz, PDO::PARAM_STR);
 		$stmt->bindParam(':stat', $stat, PDO::PARAM_STR);
         $stmt->bindParam(':login', $login, PDO::PARAM_STR);
-		$stmt->execute();
-        _log(_debug($stmt,$r));
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		//$res=array();
 		//$res[0]['STATUS']='OK';
 		Firebird::commit();
@@ -291,9 +278,7 @@
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
 		$stmt->bindParam(':mibiz', $mibiz, PDO::PARAM_STR);
-		$stmt->execute();
-        _log(_debug($stmt,$r));
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
@@ -307,9 +292,7 @@
         if ($tip=='bFelni' || $tip=='F') $wherestr=" AND KOD IN ('FS','FCS') ";
 		$sql=" SELECT KOD FROM AKHSTAT WHERE TIPUS='G' $wherestr ORDER BY KOD3,KOD2,KOD";
 		$stmt = Firebird::prepare($sql);
-		$stmt->execute();
-        _log(_debug($stmt,$r));
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
@@ -331,9 +314,7 @@
 		$stmt->bindParam(':melyseg', $melyseg, PDO::PARAM_STR);
         $stmt->bindParam(':csereok', utf8_decode($csereok), PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
-		$stmt->execute();
-        _log(_debug($stmt,$r));
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
@@ -363,9 +344,7 @@
 		if ($where!='') $where = ' AND ' .$where;
 		$sql=" SELECT DISTINCT MARKA FROM AKHTORZS WHERE CICSOP STARTING WITH 'A' $where";
 		$stmt = Firebird::prepare($sql);
-		$stmt->execute();
-        _log(_debug($stmt,$r));
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));	  
         break;
@@ -395,9 +374,7 @@
 		if ($where!='') $where = ' AND ' .$where;
 		$sql=" SELECT DISTINCT MERET FROM AKHTORZS  WHERE CICSOP STARTING WITH 'A' $where";
 		$stmt = Firebird::prepare($sql);
-		$stmt->execute();
-        _log(_debug($stmt,$r));
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));	  
         break;
@@ -428,9 +405,7 @@
 
 		$sql=" SELECT DISTINCT MINTA FROM AKHTORZS  WHERE CICSOP STARTING WITH 'A' $where";
 		$stmt = Firebird::prepare($sql);
-		$stmt->execute();
-        _log(_debug($stmt,$r));
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));	  
         break;
@@ -461,9 +436,7 @@
 
 		$sql=" SELECT DISTINCT SI FROM AKHTORZS  WHERE CICSOP STARTING WITH 'A' $where";
 		$stmt = Firebird::prepare($sql);
-		$stmt->execute();
-        _log(_debug($stmt,$r));
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));	  
         break;
@@ -491,9 +464,7 @@
 	$stmt = Firebird::prepare($sql);
 	$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
     $stmt->bindParam(':login', $login, PDO::PARAM_STR);
-	$stmt->execute();
-    _log(_debug($stmt,$r));
-	$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $res = _logSQL($func,$stmt,$r);
 	Firebird::commit();
 	echo json_encode(Converter::win2utf_array($res));
     break;
@@ -508,9 +479,7 @@
 	$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
 	$stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);
 	$stmt->bindParam(':login', $login, PDO::PARAM_STR);
-	$stmt->execute();
-    _log(_debug($stmt,$r));
-	$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $res = _logSQL($func,$stmt,$r);
 	Firebird::commit();
 	echo json_encode(Converter::win2utf_array($res));
     break;
@@ -529,10 +498,8 @@
 	$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
 	$stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);
 	$stmt->bindParam(':login', $login, PDO::PARAM_STR);
-	$stmt->execute();
-    _log(_debug($stmt,$r));
-	$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-	Firebird::commit();
+    $res = _logSQL($func,$stmt,$r);
+    Firebird::commit();
 	echo json_encode(Converter::win2utf_array($res));
     break;
   case 'elrak.hkodDel':
@@ -545,9 +512,7 @@
 	$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
 	$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
 	$stmt->bindParam(':login', $login, PDO::PARAM_STR);
-	$stmt->execute();
-    _log(_debug($stmt,$r));    
-	$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $res = _logSQL($func,$stmt,$r);
 	Firebird::commit();
 	echo json_encode(Converter::win2utf_array($res));	
     break;
@@ -562,8 +527,7 @@
 
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		echo json_encode(Converter::win2utf_array($res));
         break;
   case 'elrak.reviewRszGet':
@@ -583,8 +547,7 @@
 
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		echo json_encode(Converter::win2utf_array($res));
         break;
   /* orzott leltar */
@@ -593,8 +556,7 @@
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
@@ -608,9 +570,7 @@
 		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
         $stmt->bindParam(':fejazon', $fejazon, PDO::PARAM_STR);
         $stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);
-		$stmt->execute();
-        _log(_debug($stmt,$r));
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		echo json_encode(Converter::win2utf_array($res));
         break;
 
@@ -625,9 +585,7 @@
 		$stmt->bindParam(':rszadatok', $rszadatok, PDO::PARAM_STR);
 		$stmt->bindParam(':rendszam', $rendszam, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
-		$stmt->execute();
-        _log(_debug($stmt,$r));
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
@@ -647,9 +605,8 @@
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
 		$stmt->bindParam(':melyseg', $melyseg, PDO::PARAM_STR);
         $stmt->bindParam(':csereok', utf8_decode($csereok), PDO::PARAM_STR);
-		$stmt->execute();
-        _log(_debug($stmt,$r));
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
+       
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
@@ -661,8 +618,7 @@
 		$fejazon=$r['fejazon'];
 		$stmt->bindParam(':fejazon', $fejazon, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		echo json_encode(Converter::win2utf_array($res));
         break;
   
@@ -683,16 +639,12 @@
         break;
   case 'leltar.lezarUpdate':
 		$azon = $r['azon'];
-		// $sql=" UPDATE BFEJ SET STAT3='Z' WHERE AZON=:azon  ";
-        $sql="SELECT * FROM PDA_ORZOTTLELTAR_LEZAR (:login,:fejazon)";
+		$sql=" UPDATE BFEJ SET STAT3='Z' WHERE AZON=:azon  ";
 		$stmt = Firebird::prepare($sql);
-		$login=$r['login'];
-		$fejazon=$r['fejazon'];
-		$stmt->bindParam(':fejazon', $fejazon, PDO::PARAM_STR);
-		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
-        _log(_debug($stmt,$r));
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
 		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		$res=array();
+		$res[0]['STATUS']='OK';
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
@@ -718,9 +670,7 @@
         $akttip=$r['akttip'];
         $stmt->bindParam(':akttip', $akttip, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		
+        $res = _logSQL($func,$stmt,$r);		
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
@@ -733,9 +683,7 @@
         $stmt->bindParam(':akttip', $akttip, PDO::PARAM_STR);
         $stmt->bindParam(':aktraktar', $aktraktar, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		
+        $res = _logSQL($func,$stmt,$r);		
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
@@ -750,9 +698,7 @@
         $stmt->bindParam(':akttip', $akttip, PDO::PARAM_STR);
         $stmt->bindParam(':raktar', $raktar, PDO::PARAM_STR);
         $stmt->bindParam(':cegazon', $cegazon, PDO::PARAM_STR);
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        //_debug($stmt,$r);    
+        $res = _logSQL($func,$stmt,$r);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
@@ -764,9 +710,7 @@
 		$hkod=$r['hkod'];
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
 		$stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		
+        $res = _logSQL($func,$stmt,$r);		
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
@@ -780,9 +724,7 @@
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
 		$stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);
 		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		
+        $res = _logSQL($func,$stmt,$r);		
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
@@ -801,9 +743,7 @@
 		$stmt->bindParam(':rszshort', $rszshort, PDO::PARAM_STR);		
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);		
 		$stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);		
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		
+        $res = _logSQL($func,$stmt,$r);		
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
@@ -818,9 +758,7 @@
 		$stmt->bindParam(':rszshort', $rszshort, PDO::PARAM_STR);		
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);		
 		$stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);		
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		
+        $res = _logSQL($func,$stmt,$r);		
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
@@ -836,8 +774,7 @@
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		echo json_encode(Converter::win2utf_array($res));
         break;
   case 'kiadas.reviewRszGet':
@@ -857,8 +794,7 @@
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		echo json_encode(Converter::win2utf_array($res));
         break;
 
@@ -870,8 +806,7 @@
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		echo json_encode(Converter::win2utf_array($res));
         break;
   case 'kiadas.closeIt':
@@ -882,8 +817,7 @@
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
         Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
@@ -896,8 +830,7 @@
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
 		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
 		//$stmt->bindParam(':login', $login, PDO::PARAM_STR);		
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
@@ -910,8 +843,7 @@
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
 		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);		
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
@@ -921,8 +853,7 @@
 		$stmt = Firebird::prepare($sql);
 		$login=$r['login'];
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		echo json_encode(Converter::win2utf_array($res));
         break;
   case 'szortir.getRszDetails':
@@ -932,8 +863,7 @@
 		$rsz=$r['rsz'];
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
 		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		echo json_encode(Converter::win2utf_array($res));
         break;
   case 'szortir.rszSave':
@@ -945,9 +875,7 @@
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
 		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);		
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		
+        $res = _logSQL($func,$stmt,$r);		
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
@@ -961,8 +889,7 @@
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
         $stmt->bindParam(':login', $login, PDO::PARAM_STR);
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		echo json_encode(Converter::win2utf_array($res));
         break;
 	case 'szortir.lezarUpdate':
@@ -972,8 +899,7 @@
 		$stmt = Firebird::prepare($sql);
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
         $stmt->bindParam(':login', $login, PDO::PARAM_STR);
-		$stmt->execute();
-		$res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = _logSQL($func,$stmt,$r);
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;

@@ -1,6 +1,6 @@
 var beerk = null;
 var elrak = null;
-var teszt = true;
+var teszt = false;
 $.support.cors=true;
 $.ajaxSetup({ cache: false });
 function ajaxCall( func, d,asyn,fn) {
@@ -80,6 +80,10 @@ function showMenu() {
 				app.currentModule='szortir';
 				szortir = new OSzortir();
 			}) 
+			$('#bqprint').bind('click',function () {
+				app.currentModule='print';
+				qprint = new OQPrint();
+			}) 
 
 			$('#blogout').bind('click',function () {
 				showLogin();
@@ -108,6 +112,7 @@ function showLogin() {
 			tpl = data; 
 			$('#divContent').html(css + tpl);
 			$('#divContent').show();
+            $('#divversion').html('( ' + app.version + ' )');            
 
 		});
 		
@@ -132,7 +137,7 @@ function checkLogin(result){
 		login_id = login_id.replace(/(?:\r\n|\r|\n|\t)+/g, '');
 		fn = 'loadSettings'; /* query */
 		r = ajaxCall(fn,{},true, fn);
-
+        //ajaxCall('kiadas.nextRszGet',{'rsz':'','hkod':'B:OMÛHELY','azon':971417510},true);
 		app.getDepthMeters();
 	}
 }

@@ -14,6 +14,7 @@ $('#divheader').append(' - Felhasználó:'+login_id);
 		<button id=bleltar>Leltár</button>
         <button id=bszortir>Szortírozás</button>
 		<button id=bsettings>Beállítások</button>
+        <button id=bqprint>Gyors nyomtatás</button>
 		<button id=blogout>Kijelentkezés</button>
 	</div>
 </div>

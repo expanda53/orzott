@@ -573,9 +573,35 @@ OKiadas.prototype.setLabelData = function(result){
 }
 OKiadas.prototype.printLabel = function(aktbutton){
 	rszprint = aktbutton.attr('val');
+    rsztomb = rszprint.split("_");
 	var btPrint = function() {
 		$.get( "views/prn_rendszam_lerak"+app.printerTplPrefix+".tpl", function( data ) {
-				tpl = data.replace(/\[RENDSZPOZ\]/g,rszprint); 
+                poz="";
+                tip="";
+                rsz="";
+                pozstr="";
+                tipstr="";
+                if (rsztomb.length>1) {
+                    rsz = rsztomb[0];
+                    poz = rsztomb[1].substring(0,1);
+                    tip = rsztomb[1].substring(1);
+                    if (poz=="1") pozstr = "JE";
+                    if (poz=="2") pozstr = "BE";
+                    if (poz=="3") pozstr = "JH";
+                    if (poz=="4") pozstr = "BH";
+                    if (poz=="5") pozstr = "POT";
+                    if (poz=="6") pozstr = "JHI";
+                    if (poz=="7") pozstr = "BHI";
+                    if (tip=="A") tipstr="Gumi";
+                    if (tip=="F") tipstr="Felni";
+                    if (tip=="M") tipstr="Kerék";
+                }
+                else rsz=rszprint;
+                tpl = data;
+                tpl = tpl.replace(/\[RENDSZ\]/g,rsz); 
+                tpl = tpl.replace(/\[TIPUS\]/g,tipstr); 
+                tpl = tpl.replace(/\[POZSTR\]/g,pozstr); 
+                tpl = tpl.replace(/\[RENDSZPOZ\]/g,rszprint); 
 				tpl += '\r\n';
 				var writeOk = function(){
 				}

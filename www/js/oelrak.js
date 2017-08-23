@@ -112,6 +112,10 @@ OElrak.prototype.rszChange = function (){
         clearObj='dataRendszam';
         showMessage("A rendszám nem lehet hosszabb, mint 13 karakter!",clearObj);
     }
+    else if (rsz.indexOf("B:")>-1) {    
+        clearObj='dataRendszam';
+        showMessage("Nem rendszám!",clearObj);
+    }
     else {
         fn = 'elrak.rszAdatokGet'; /* PDA_ORZOTTHKOD_GETRSZ */
         ajaxCall(fn,{'rsz':rsz,'login':login_id},true, fn);
@@ -337,12 +341,18 @@ OElrak.prototype.hkodSaveInit=function(){
 	rsz = $('#dataRendszam').val();
 	hkod = $('#dataHkod').val();
     //showMessage(hkod);
-    if (hkod!='') {
-        fn = 'elrak.hkodSaveCheck'; /* PDA_ORZOTTHKOD_HKODCHECK */
-        ajaxCall(fn,{'rsz':rsz,'hkod':hkod,'login':login_id},true, fn);
+    if (hkod.indexOf("B:")==-1 || (hkod.indexOf("_")>=0 && hkod.indexOf("-")>=0)) {
+        showMessage('Nem helykód!','dataHkod');
+        $('#dataHkod').focus();
     }
     else {
-        showMessage('Helykód nem lehet üres!');
+        if (hkod!='') {
+            fn = 'elrak.hkodSaveCheck'; /* PDA_ORZOTTHKOD_HKODCHECK */
+            ajaxCall(fn,{'rsz':rsz,'hkod':hkod,'login':login_id},true, fn);
+        }
+        else {
+            showMessage('Helykód nem lehet üres!');
+        }
     }
 }
 
