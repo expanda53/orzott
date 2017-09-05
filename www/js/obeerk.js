@@ -349,7 +349,23 @@ OBeerk.prototype.selectPosition = function (obj) {
 	}
 	else poz=obj.attr('id');
 	this.currentPosition = poz;
-	var btPrintInit = function() {
+
+    if (beerk.currentPosition=='bJE') ppoz = 1;
+    if (beerk.currentPosition=='bBE') ppoz = 2;
+    if (beerk.currentPosition=='bJH') ppoz = 3;
+    if (beerk.currentPosition=='bBH') ppoz = 4;
+    if (beerk.currentPosition=='bPOT') ppoz = 5;
+    if (beerk.currentPosition=='bJHI') ppoz = 6;
+    if (beerk.currentPosition=='bBHI') ppoz = 7;
+    pozstr=beerk.currentPosition.substring(1);
+    if (beerk.currentItem=="bGumi") {ptip = "A";tipstr='Gumi';}
+    if (beerk.currentItem=="bFelni") {ptip = "F";tipstr='Felni';}
+    if (beerk.currentItem=="bGumiFelni") {ptip = "M";tipstr='Kerék';}	
+    mindenre = settings.getItem('ORZOTT_LERAKODAS_MINDENRE_NYOMTAT').toUpperCase();
+    mindenre_nyomtat = (mindenre =='IGEN');
+
+    
+    var btPrintInit = function() {
         showMessage('Nyomtató OK.');
         btPrint();
     }
@@ -358,17 +374,7 @@ OBeerk.prototype.selectPosition = function (obj) {
         if (app.printerConnected || teszt){
             rsz = $('#rendszam').val();
             $.get( "views/prn_rendszam_lerak"+app.printerTplPrefix+".tpl", function( data ) {
-                        if (beerk.currentPosition=='bJE') ppoz = 1;
-                        if (beerk.currentPosition=='bBE') ppoz = 2;
-                        if (beerk.currentPosition=='bJH') ppoz = 3;
-                        if (beerk.currentPosition=='bBH') ppoz = 4;
-                        if (beerk.currentPosition=='bPOT') ppoz = 5;
-                        if (beerk.currentPosition=='bJHI') ppoz = 6;
-                        if (beerk.currentPosition=='bBHI') ppoz = 7;
-                        pozstr=beerk.currentPosition.substring(1);
-                        if (beerk.currentItem=="bGumi") {ptip = "A";tipstr='Gumi';}
-                        if (beerk.currentItem=="bFelni") {ptip = "F";tipstr='Felni';}
-                        if (beerk.currentItem=="bGumiFelni") {ptip = "M";tipstr='Kerék';}
+
                     tpl = data;
                     tpl = tpl.replace(/\[RENDSZ\]/g,rsz); 
                     tpl = tpl.replace(/\[TIPUS\]/g,tipstr); 
@@ -382,8 +388,6 @@ OBeerk.prototype.selectPosition = function (obj) {
                     var writeError = function(){
                         console.log('btprint write error:'+beerk.currentItem+':'+beerk.currentPosition);
                     }
-                    mindenre = settings.getItem('ORZOTT_LERAKODAS_MINDENRE_NYOMTAT').toUpperCase();
-                    mindenre_nyomtat = (mindenre =='IGEN');
                     if (!teszt && (beerk.currentItem!='bGumiFelni' || mindenre_nyomtat)) bluetoothSerial.write(tpl,writeOk,writeError);
                     if (teszt || (beerk.currentItem=='bGumiFelni' && !mindenre_nyomtat)) writeOk();
             })
@@ -426,24 +430,46 @@ OBeerk.prototype.selectPosition = function (obj) {
             showMessage('A beérkezett mennyiség '+drb+' db!');
         }
         /* ha a sajcegben a mindenre nyomtat=IGEN, akkor minden gombra nyomtatas van */
-        mindenre_nyomtat = (settings.getItem('ORZOTT_LERAKODAS_MINDENRE_NYOMTAT').toUpperCase() == 'IGEN');
+        //mindenre_nyomtat = (settings.getItem('ORZOTT_LERAKODAS_MINDENRE_NYOMTAT').toUpperCase() == 'IGEN');
         
         if (mindenre_nyomtat || tip!='bGumiFelni' || teszt) {
             /* print */
-            if(typeof bluetoothSerial != 'undefined') {
-                try {
-                    printing=true;
-                    bluetoothSerial.isConnected(btPrint, printError);
+            if (app.printerType=='bt') {
+                if(typeof bluetoothSerial != 'undefined') {
+                    try {
+                        printing=true;
+                        bluetoothSerial.isConnected(btPrint, printError);
+                    }
+                    finally {
+                        
+                    }
                 }
-                finally {
-                    
+                else {
+                    showMessage('printer not found');
+                    $("#btimg").attr("src","img/bluetooth-red.png");
+                    if (teszt) btPrint();
                 }
             }
-            else {
-                showMessage('printer not found');
-                $("#btimg").attr("src","img/bluetooth-red.png");
-                if (teszt) btPrint();
-            }
+            else { 
+                if (typeof Socket != 'undefined') {
+                    try {
+                        printing=true;
+          
+                        cbPrint = function(){
+                            fn = 'beerk.rszMent'; /* PDA_ORZOTTLERAK_SORUPDATE */
+                            r = ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'tip':beerk.currentItem, 'poz':beerk.currentPosition, 'login':login_id},true, fn);
+
+                        }
+                        dataString="ORZOTTCIMKE" + " " + rsz+" "+tipstr+" "+pozstr+" "+rsz+"_"+ppoz+ptip;
+                        if (beerk.currentItem!='bGumiFelni' || mindenre_nyomtat) tcpClient.send(app.tcpServerIP,app.tcpServerPort,dataString,cbPrint);
+                        if (beerk.currentItem=='bGumiFelni' && !mindenre_nyomtat) cbPrint();
+                    }
+                    finally {
+                        printing=false;                        
+                    }                
+                }
+                else  showMessage('printer not found');
+            }            
         }
         else {
             /* kerek valasztasnal nincs nyomtatas (mivel mossak oket, es kesobb nyomtatjak)*/

@@ -5,7 +5,7 @@
   */
 
 printing = false;
-
+tcpsocket = false;
 function clickHelp(){
 	$('#divclick').show();
 	window.setTimeout(function(){$('#divclick').hide();},20);
@@ -91,9 +91,33 @@ OQPrint.prototype.panelInit = function () {
 }
 
 OQPrint.prototype.print = function (printtext) {
-    
 	/* nyomtatas inditas + mentes ajax*/
     rszprint = printtext.toUpperCase();
+
+    rsztomb = rszprint.split("_");
+    poz="";
+    tip="";
+    rsz="";
+    pozstr="";
+    tipstr="";
+    
+    if (rsztomb.length>1) {
+        rsz = rsztomb[0];
+        poz = rsztomb[1].substring(0,1);
+        tip = rsztomb[1].substring(1);
+        if (poz=="1") pozstr = "JE";
+        if (poz=="2") pozstr = "BE";
+        if (poz=="3") pozstr = "JH";
+        if (poz=="4") pozstr = "BH";
+        if (poz=="5") pozstr = "POT";
+        if (poz=="6") pozstr = "JHI";
+        if (poz=="7") pozstr = "BHI";
+        if (tip=="A") tipstr="Gumi";
+        if (tip=="F") tipstr="Felni";
+        if (tip=="M") tipstr="Kerék";
+    }
+    else rsz=rszprint;
+
 	var btPrintInit = function() {
         showMessage('Nyomtató OK.');
         btPrint();
@@ -103,30 +127,8 @@ OQPrint.prototype.print = function (printtext) {
         if (app.printerConnected || teszt){
             
             $.get( "views/prn_gyors"+app.printerTplPrefix+".tpl", function( data ) {
-                    rsztomb = rszprint.split("_");
-                    poz="";
-                    tip="";
-                    rsz="";
-                    pozstr="";
-                    tipstr="";
-                    
-                    if (rsztomb.length>1) {
-                        rsz = rsztomb[0];
-                        poz = rsztomb[1].substring(0,1);
-                        tip = rsztomb[1].substring(1);
-                        if (poz=="1") pozstr = "JE";
-                        if (poz=="2") pozstr = "BE";
-                        if (poz=="3") pozstr = "JH";
-                        if (poz=="4") pozstr = "BH";
-                        if (poz=="5") pozstr = "POT";
-                        if (poz=="6") pozstr = "JHI";
-                        if (poz=="7") pozstr = "BHI";
-                        if (tip=="A") tipstr="Gumi";
-                        if (tip=="F") tipstr="Felni";
-                        if (tip=="M") tipstr="Kerék";
-                    }
-                    else rsz=rszprint;
-                    alert(rsztomb.length+ " pozstr:" + pozstr +" tipstr:" +tipstr+" rsz:" + rsz + " poz:" + poz +" tip:" +tip);
+
+                    //alert(rsztomb.length+ " pozstr:" + pozstr +" tipstr:" +tipstr+" rsz:" + rsz + " poz:" + poz +" tip:" +tip);
                     tpl = data;
                     tpl = tpl.replace(/\[RENDSZ\]/g,rsz); 
                     tpl = tpl.replace(/\[TIPUS\]/g,tipstr); 
@@ -165,24 +167,36 @@ OQPrint.prototype.print = function (printtext) {
 	}
 
     /* print */
-    if(typeof bluetoothSerial != 'undefined') {
-        try {
-            printing=true;
-            bluetoothSerial.isConnected(btPrint, printError);
+    if (app.printerType=='bt') {
+        if(typeof bluetoothSerial != 'undefined') {
+            try {
+                printing=true;
+                bluetoothSerial.isConnected(btPrint, printError);
+            }
+            finally {
+            }
         }
-        finally {
-            
+        else {
+            showMessage('printer not found');
+            $("#btimg").attr("src","img/bluetooth-red.png");
+            if (teszt) btPrint();
         }
     }
-    else {
-        showMessage('printer not found');
-        $("#btimg").attr("src","img/bluetooth-red.png");
-        if (teszt) btPrint();
+    else { 
+        if (typeof Socket != 'undefined') {
+            try {
+                printing=true;
+                cbPrint = function(){
+                }
+                dataString="ORZOTTCIMKEGYORS" + " " + rsz+" "+tipstr+" "+pozstr+" "+rszprint;
+                tcpClient.send(app.tcpServerIP,app.tcpServerPort,dataString,cbPrint);
+            }
+            finally {
+                printing=false;
+            }                
+        }
+        else  showMessage('printer not found');
     }
-
-
-    
-    
 }
 
 /* fopanel */

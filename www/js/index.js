@@ -50,7 +50,8 @@ function depthMeter (pid,pname) {
 	this.name = pname;
 	}
 var app = {
-    version:"v1.170823",
+    version:"v1.17.0905",
+    printerType:"tcp",
 	printerId:"",
 	printerName:"",
 	printerConnected:false,
@@ -64,6 +65,8 @@ var app = {
 	depthMeterData:"",
 	
 	currentModule:"",
+    tcpServerIP:"192.168.1.105",
+    tcpServerPort:"9099",
     // Application Constructor
     initialize: function() {
         this.bindEvents();
@@ -183,7 +186,8 @@ var app = {
 	    /* printer */
 		if(typeof bluetoothSerial != 'undefined') {
 			var connect = function () {
-                showMessage('Nyomtató csatlakoztatás...','',0);
+                showMessage('BT nyomtató csatlakoztatás...','',0);
+                app.printerType="bt";
                 d=[app.printerId,'abcd'];
 				bluetoothSerial.connect(
                 app.printerId,  // device to connect to, read printer display
@@ -261,7 +265,7 @@ var app = {
 			console.log(data);
         });
         
-        showMessage('Nyomtató csatlakoztatás...','',0);
+        showMessage('BT nyomtató csatlakoztatás...','',0);
         bluetoothSerial.isConnected(pconnected,pnotconnected);
         if (delayedFunc!=null) {
             window.setTimeout(
@@ -365,7 +369,7 @@ var app = {
 */
     showErrorPrinter: function(error) {
         messageHide();
-		showMessage('Nyomtató csatlakoztatás nem sikerült. '+error);
+		showMessage('BT nyomtató csatlakoztatás nem sikerült. '+error);
         console.log("printer bluetooth error:"+error);
         $('#btNext').removeAttr('disabled');
         $('#tableprinter').removeAttr('disabled');

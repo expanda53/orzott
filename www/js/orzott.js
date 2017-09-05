@@ -1,6 +1,6 @@
 var beerk = null;
 var elrak = null;
-var teszt = false;
+var teszt = true;
 $.support.cors=true;
 $.ajaxSetup({ cache: false });
 function ajaxCall( func, d,asyn,fn) {
@@ -87,8 +87,13 @@ function showMenu() {
 
 			$('#blogout').bind('click',function () {
 				showLogin();
-			}) 
-			settings_to_users = settings.getItem('ORZOTT_BEALLITASOKAT_LATHAT');
+			})
+            if (!teszt){
+                app.tcpServerIP = settings.getItem('TCPSERVER_IP');
+                app.tcpServerPort = settings.getItem('TCPSERVER_PORT');
+            }
+            
+            settings_to_users = settings.getItem('ORZOTT_BEALLITASOKAT_LATHAT');
 			if (1==2 && settings_to_users != null && settings_to_users.indexOf(login_id)>-1) {
 				$('#bsettings').show();
 			}
