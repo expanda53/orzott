@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <body>
 <div id=divclick></div>
 <input type=hidden id=hAZON>
@@ -9,6 +10,10 @@
 		Örzött beérkezés
 	</div>
 	<div id=divcontent>
+<div id="dialog" title="Dialog Title">
+<p>Dialog</p>
+</div>
+    
 		<!-- tasklist -->
 		<div id=divmibizlist>
 			<button id=bMenu>Menü</button>
@@ -133,42 +138,73 @@
 		<div id=divmeres>
 		</div>
 		<!-- melysegmeres panel end -->
+        <!-- atnezes panel -->
 		<div id=divreview>
 			<div class=divReviewTables>
-			<div class=divreviewLeft>
-				<!--
-				<div class=divreviewLeftFilter>
-					<button id=letter1>1</button>
-					<button id=letter2>2</button>
-					<button id=letter3>3</button>
-				</div>
-				-->
-				<div class='divreviewLeftContent'>
-					<table class=tableReviewFilter>
-						<tbody>
-						</tbody>
-					</table>
-				</div>
-				
-			</div>
-			<div class=divreviewRight>
-			<div class=divTableReview>
-			<table class=tableReview></table>
-			</div>
-			</div>
-			<div id=divhiany>
-				<div class=labelHiany></div>
-				<div class=dataHiany></div>
-			</div>
-		</div>
-		<div class=dButtonsReview>
-				<button id=bElteres>Eltérések</button>
-				<button id=bFolytMost>Folyt. most</button>
-				<button id=bFolytKesobb>Folyt. később</button>
-				<button id=bLezar>Lezárás</button>
-		</div>			
-		
-	</div>
+                <div class=divreviewLeft>
+                    <!--
+                    <div class=divreviewLeftFilter>
+                        <button id=letter1>1</button>
+                        <button id=letter2>2</button>
+                        <button id=letter3>3</button>
+                    </div>
+                    -->
+                    <div class='divreviewLeftContent'>
+                        <table class=tableReviewFilter>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                </div>
+                <div class=divreviewRight>
+                    <div class=divTableReview>
+                        <table class=tableReview></table>
+                    </div>
+                </div>
+                <div id=divtobbletsum>
+                    <div class=labelTobbletSum></div>
+                    <div class=dataTobbletSum></div>
+                </div>                
+                <div id=divhiany>
+                    <div class=labelHiany></div>
+                    <div class=dataHiany></div>
+                </div>
+            </div>
+            <div class=dButtonsReview>
+                    <button id=bElteres>Eltérések</button>
+                    <button id=bTobblet>Többlet</button>
+                    <button id=bFolytMost>Folyt. most</button>
+                    <button id=bFolytKesobb>Folyt. később</button>
+                    <button id=bLezar>Lezárás</button>
+            </div>
+        </div>
+        <!-- atnezes panel end -->        
+        <div id=divTobblet>
+          <div class=divTobbletLabel>Eddigi többlet</div>
+          <div class=dataTobbletRegi></div>
+          <div class=divTobbletModLabel>Módosítás</div>
+          <div class=dataTobbletUpdate></div>
+          <div class=dbuttonscontent>
+                <div class=divnumbuttons>
+                    <button class=bnum>0</button>
+                    <button class=bnum>1</button>
+                    <button class=bnum>2</button>
+                    <button class=bnum>3</button>
+                    <button class=bnum>4</button>
+                    <button class=bnum>5</button>
+                    <button class=bnum>6</button>
+                    <button class=bnum>7</button>
+                    <button class=bnum>8</button>
+                    <button class=bnum>9</button>
+                    <button class=bnum>+/-</button>                    
+                    <button class=bbacksp>Javítás</button>
+                    <button class=bment>Mentés</button>
+                    <button class=bvissza>Vissza</button>
+                </div>
+          </div>
+        </div>
+        
 </div>
 
 </body>

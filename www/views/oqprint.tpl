@@ -52,6 +52,8 @@
                     <button class=bnum>S</button>
                     <button class=bnum>T</button>
                     <button class=bnum>U</button>
+                    <button class=bnum>V</button>
+                    <button class=bnum>W</button>
                     <button class=bnum>X</button>
                     <button class=bnum>Y</button>
                     <button class=bnum>Z</button>

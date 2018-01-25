@@ -1,4 +1,4 @@
-var depthMeterDialog = {
+Ôªøvar depthMeterDialog = {
 	show: function(){
 		panelName = 'printer';
 		$.get( "css/"+panelName+".css", function( data ) {
@@ -7,7 +7,7 @@ var depthMeterDialog = {
 				tpl = data; 
 				$('#divSettings').html(css + tpl);
 				$('#divSettings').show();
-                $('#divheaderS').html('MÈlysÈgmÈrı csatlakoztat·s');
+                $('#divheaderS').html('M√©lys√©gm√©r≈ë csatlakoztat√°s');
                 $('#divContent').hide();
 				depthMeterDialog.createTable();				
 				
@@ -22,7 +22,7 @@ var depthMeterDialog = {
 	createTable:function(){
 				sorok = "";
                 var connected = function(){
-                    showMessage('MÈlysÈgmÈrı OK.','',2)
+                    showMessage('M√©lys√©gm√©r≈ë OK.','',2)
                     app.getPrinters();
                 }
                 

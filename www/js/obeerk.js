@@ -1,16 +1,16 @@
-/* beerkezes */
+Ôªø/* beerkezes */
 markaUpdate = false;
 meretUpdate = false;
 mintaUpdate = false;
 siUpdate = false;
 printing = false;
-
+dialogResult = false;
 function clickHelp(){
 	$('#divclick').show();
 	window.setTimeout(function(){$('#divclick').hide();},20);
 }
 function pingPrinter(){
-	//nem kell, a nyomtatÛt be lehet konfigolni, hogy ne kapcsoljon ki.
+	//nem kell, a nyomtat√≥t be lehet konfigolni, hogy ne kapcsoljon ki.
 	//! U1 setvar "power.inactivity_timeout" "0"
 	/*window.setTimeout(function(){
 		if (!printing) {
@@ -49,16 +49,17 @@ var OBeerk = function(){
 	this.currentItem = ""; //bGumi,bFelni,bGumiFelni
 	this.currentPosition = '';
     this.kerekPozvalasztas=true; //korabban ugy volt, hogy a kerek megy mosasra, es utana nyomtatnak. Ez ugy tunik nem igy van, de berakok egy konfigot, ha megis...
+    this.tobblet=0;
     //gpanel = new OGPanel();
 }
 /* feladat valasztas */
 OBeerk.prototype.initMibizList = function(){
 	fn = 'beerk.mibizList'; /* PDA_MIBIZLIST_ORZOTTLERAK2 */
 	r = ajaxCall(fn,{'login':login_id},true, fn);
-	/* obeerk.tpl beolvas, tr click -re mibiz ·tad·sa selectTask-nak. tr click az obeerk.tpl-ben van*/
+	/* obeerk.tpl beolvas, tr click -re mibiz √°tad√°sa selectTask-nak. tr click az obeerk.tpl-ben van*/
 }
 OBeerk.prototype.mibizList = function(result) {
-	/* feladat lista ajax eredmÈnye */
+	/* feladat lista ajax eredm√©nye */
 	panelName = 'obeerk';
     if (result.length>0) {
 	sor = '';
@@ -140,6 +141,9 @@ OBeerk.prototype.mibizList = function(result) {
             $('#bLezar').bind('click',function () {
                 beerk.lezarStart();
             })	
+            $('#bTobblet').bind('click',function () {
+                beerk.tobbletStart();
+            })	
             $('#bMenu').bind('click',function () {
                 showMenu();
             })	
@@ -169,7 +173,57 @@ OBeerk.prototype.mibizList = function(result) {
 
             })	
             
-            
+            $('.bnum').on('click', function(event){
+                    event.stopPropagation();
+                    event.preventDefault();
+                    char = $(this).text();		
+                    if (char=='+/-' ) {
+                        content = $('.dataTobbletUpdate').html()
+                        c = content.substring(0,1);
+                        if (c=='-' || c=='+') {
+                            if (c=='-') char='+';
+                            else char='-';
+                            content = char + content.substring(1,content.length);
+                        }
+                        else {
+                            char='-';
+                            content = char + $('.dataTobbletUpdate').html();
+                        }
+                    }
+                    else {
+                        content = $('.dataTobbletUpdate').html() + char;
+                    }
+                    $('.dataTobbletUpdate').html(content);
+                    
+                    
+           });
+           $('.bbacksp').on('click', function(event){
+                    event.stopPropagation();
+                    event.preventDefault();
+                    content = $('.dataTobbletUpdate').html();
+                    content = content.substring(0,content.length-1);
+                    $('.dataTobbletUpdate').html(content);
+          });
+           $('.bment').on('click', function(event){
+                    event.stopPropagation();
+                    event.preventDefault();
+                    content = $('.dataTobbletUpdate').html();
+                    if (content!='') {
+                        azon = $('#hAZON').val();
+                        fn = 'beerk.updateTobblet'; /// PDA_ORZOTTLERAK_TOBBLET
+                        r = ajaxCall(fn,{'azon':azon,'drb':content,'login':login_id},true, fn);
+                    }
+                    else {
+                       showMessage('Add meg hogy mennyivel m√≥dos√≠tod a t√∂bbletet!');
+                    }
+          });      
+           $('.bvissza').on('click', function(event){
+                    event.stopPropagation();
+                    event.preventDefault();
+                    $('#divTobblet').hide();
+                    $('#divreview').show();
+          });      
+                        
 			//feladat valasztas inditasa
 			$('.tmibizlist tr').bind('click',function(){
 				tr = $(this);
@@ -182,26 +236,79 @@ OBeerk.prototype.mibizList = function(result) {
             $('#divheader').bind('click',function(){
                 app.getDepthMeters();
             })
+                
 		});
 		
 	})
     }
     else {
-        showMessage('Nincs Èlı bevÈt lista a rendszerben!','',1.5);
+        showMessage('Nincs √©l≈ë bev√©t lista a rendszerben!','',1.5);
         showMenu();
         
     }
 
 }
+
+OBeerk.prototype.updateTobblet = function (result) {
+	/* tobblet javitas ajax eredmenye */
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		if (res.RESULT!=-1)	{
+            beerk.tobblet=res.TOBBLET;
+            $('.dataTobbletSum').html(beerk.tobblet);
+            $('#divTobblet').hide();
+            $('#divreview').show();		
+        }
+		else alert('Hiba');
+	}
+}
+OBeerk.prototype.showDialog = function(caption,text, fnTrue, fnFalse){
+    $('#dialog').html(text);    
+            $( "#dialog" ).dialog({
+                autoOpen: true,
+                width: 400,
+                modal: true, 
+                title:caption,
+                buttons: [
+                    {
+                        text: "Igen",
+                        click: function() {
+                            this.dialogResult=true;
+                            fnTrue(true);
+                            $( this ).dialog( "close" );
+                        }
+                    },
+                    {
+                        text: "Nem",
+                        click: function() {
+                            this.dialogResult=false;
+                            fnFalse(false);
+                            $( this ).dialog( "close" );
+                        }
+                    }
+                ]
+            });
+
+    
+//    $( "#dialog" ).dialog( "open" );    
+}
+
 OBeerk.prototype.selectTask = function(mibiz,mszam3) {
 	/* feladat valaszto ajax inditas */
-	
-	this.meresKell = confirm("¡llapot felmÈrÈssel?");
+	beerk.tempMibiz=mibiz;
+	beerk.tempMszam3=mszam3;
+    this.showDialog('√územm√≥d','√Ållapot felm√©r√©ssel?', beerk.selectTaskCont,beerk.selectTaskCont);
+}
+
+OBeerk.prototype.selectTaskCont = function(result) {
+	mibiz = beerk.tempMibiz;
+	mszam3 = beerk.tempMszam3;
+	this.meresKell=result;
 	if (this.meresKell) {
-		$('#divheader').html('’rzˆtt beÈrkezÈs - ·llapot felmÈrÈssel - Sofır:'+mszam3);
+		$('#divheader').html('≈êrz√∂tt be√©rkez√©s - <b>√°llapot felm√©r√©ssel</b> - Sof≈ër:'+mszam3);
 	}
 	else {
-		$('#divheader').html('’rzˆtt beÈrkezÈs - ·llapot felmÈrÈs nÈlk¸l - Sofır:'+mszam3);
+		$('#divheader').html('≈êrz√∂tt be√©rkez√©s - <b>√°llapot felm√©r√©s n√©lk√ºl</b> - Sof≈ër:'+mszam3);
 	}
 	ajaxCall('beerk.taskReg',{'mibiz':mibiz, 'login':login_id},true, '');
 	$('#divmibizlist').hide();
@@ -210,7 +317,7 @@ OBeerk.prototype.selectTask = function(mibiz,mszam3) {
 
 }
 OBeerk.prototype.panelInit = function (result) {
-	/* feladat indÌt·s ajax eredmÈnye*/
+	/* feladat ind√≠t√°s ajax eredm√©nye*/
 	sor = '';
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
@@ -244,17 +351,20 @@ OBeerk.prototype.rszJav = function (result) {
 
 OBeerk.prototype.rszJavitas = function () {
 	/* mennyiseg javitas ajax inditas */
-	var r = confirm("A rendsz·mhoz tartozo elozo nyomtatas torlese,mehet?");
-	if (r == true) {
+	this.showDialog('Jav√≠t√°s','A rendsz√°mhoz tartoz√≥ el≈ëz≈ë nyomtat√°s t√∂rl√©se,mehet?', beerk.rszJavitasResponse,beerk.rszJavitasResponse);
+}
+OBeerk.prototype.rszJavitasResponse=function(result){
+	if (result) {
 		azon = $('#hAZON').val();
 		sorsz = $('#hSORSZ').val();	
 		rsz = $('#rendszam').val();
 		drb2 = $('.dataDrbKesz').html();
 		if (drb2>0) {
-		  fn = 'beerk.rszJav'; /* PDA_ORZOTTLERAK_JAVITAS */
+		  fn = 'beerk.rszJav'; /// PDA_ORZOTTLERAK_JAVITAS
 		  r = ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'rsz':rsz,'login':login_id},true, fn);
 		}
-	}	
+    }
+    
 }
 
 
@@ -268,47 +378,56 @@ OBeerk.prototype.showPozPanel = function(obj) {
 
 /* allapot panel */
 OBeerk.prototype.showAllapotPanel = function(obj){
-	this.currentItem = obj.attr('id'); 
+    this.currentItem = obj.attr('id'); 
+    if (beerk.fedb>0 && beerk.currentItem=="bGumi") this.showDialog('R√∂gz√≠t√©s','Ker√©knek v√°rjuk, biztos hogy guminak r√∂gz√≠ted?', beerk.showAllapotPanelResponse,beerk.showAllapotPanelResponse);
+    else
+    if (beerk.fedb==0 && beerk.currentItem=="bGumiFelni") this.showDialog('R√∂gz√≠t√©s','Guminak v√°rjuk, biztos hogy ker√©knek r√∂gz√≠ted?', beerk.showAllapotPanelResponse,beerk.showAllapotPanelResponse);
+    else beerk.showAllapotPanelResponse(true);
 
-	$('#bAllapotClose').show();
-	if (this.meresKell || beerk.currentItem=="bGumi" || (this.kerekPozvalasztas && beerk.currentItem=="bGumiFelni")) {
-		/* ha meressel kerte, vagy meres nelkul de gumit (vagy kereket) valasztott */
-		panelName='meres';
-		$.get( "css/"+panelName+".css", function( data ) {
-			css = '<head><style>' + data + '</style></head>';
-			$.get( "views/"+panelName+".tpl", function( data ) { 
-				rsz = $('#rendszam').val();
-				mibiz = $('#hMIBIZ').val();
-				$('#divmeres').html(css + data);
-				$('#divpanel').hide();
-				$('#divmeres').show();
-				$('#divpozicio').show();				
-				var muvelet = 'Rendsz·m: '+rsz+' ';
-                
-				if (beerk.currentItem=="bGumi") muvelet += "beÈrkezÈs: gumi";
-				if (beerk.currentItem=="bFelni") muvelet += "beÈrkezÈs: felni";
-				if (beerk.currentItem=="bGumiFelni") muvelet += "beÈrkezÈs: kerÈk";
-                muvelet += beerk.szlevAllapot;
-				beerk.currentPosition = '';
-				$('#muvelet').html(muvelet);
-                
-                app.btRefresh();
-                
-				fn='beerk.getPositions'; /* PDA_ORZOTTLERAK_GETPOZ */
-				ajaxCall(fn,{'rsz':rsz,'mibiz':mibiz,'login':login_id},true, fn);
-				
-			});
-			
-		})
-	}
-	else {
-		/* ha meres nelkul kerte (kiveve gumi eseten, ott ilyenkor is van allapot panel) */
-		/* felni eseten automatikus nyomtatas erkezesi sorrendben, nincs jelentosege, hogy melyik felni melyik pozicio*/
-		/* kerek eseten csak mennyiseg noveles van, mivel nem merunk es nyomtatni sem kell, mert mossak oket */
-		this.selectPosition(null);
-	}
 }
 			
+OBeerk.prototype.showAllapotPanelResponse = function(result){
+    if (result) {
+        $('#bAllapotClose').show();
+        if (this.meresKell || beerk.currentItem=="bGumi" || (this.kerekPozvalasztas && beerk.currentItem=="bGumiFelni")) {
+            /* ha meressel kerte, vagy meres nelkul de gumit (vagy kereket) valasztott */
+            panelName='meres';
+            $.get( "css/"+panelName+".css", function( data ) {
+                css = '<head><style>' + data + '</style></head>';
+                $.get( "views/"+panelName+".tpl", function( data ) { 
+                    rsz = $('#rendszam').val();
+                    mibiz = $('#hMIBIZ').val();
+                    $('#divmeres').html(css + data);
+                    $('#divpanel').hide();
+                    $('#divmeres').show();
+                    $('#divpozicio').show();				
+                    var muvelet = 'Rendsz√°m: '+rsz+' ';
+                    
+                    if (beerk.currentItem=="bGumi") muvelet += "be√©rkez√©s: gumi";
+                    if (beerk.currentItem=="bFelni") muvelet += "be√©rkez√©s: felni";
+                    if (beerk.currentItem=="bGumiFelni") muvelet += "be√©rkez√©s: ker√©k";
+                    muvelet += beerk.szlevAllapot;
+                    beerk.currentPosition = '';
+                    $('#muvelet').html(muvelet);
+                    
+                    app.btRefresh();
+                    
+                    fn='beerk.getPositions'; /* PDA_ORZOTTLERAK_GETPOZ */
+                    ajaxCall(fn,{'rsz':rsz,'mibiz':mibiz,'login':login_id},true, fn);
+                    
+                });
+                
+            })
+        }
+        else {
+            /* ha meres nelkul kerte (kiveve gumi eseten, ott ilyenkor is van allapot panel) */
+            /* felni eseten automatikus nyomtatas erkezesi sorrendben, nincs jelentosege, hogy melyik felni melyik pozicio*/
+            /* kerek eseten csak mennyiseg noveles van, mivel nem merunk es nyomtatni sem kell, mert mossak oket */
+            this.selectPosition(null);
+        }
+    }
+}
+
 
 OBeerk.prototype.getPositions=function(result){
 	/* mar kivalasztott poziciok disabledre: JE:A:13  (pozicio:tipus:melyseg)*/
@@ -331,7 +450,7 @@ OBeerk.prototype.checkMarka = function (poz){
       if (poz=='bJH' || poz=='bBH')  index=12;
       if (poz=='bPOT' )  index=15;
       if (index!=-1) {
-        if (beerk.rszAdatok[index].trim()=='') {showMessage('Az adott tengelyen nincs mÈret, minta be·llÌtva! ¡llÌtsd be!');result=false;}
+        if (beerk.rszAdatok[index].trim()=='') {showMessage('Az adott tengelyen nincs m√©ret, minta be√°ll√≠tva! √Åll√≠tsd be!');result=false;}
       }
   }
   return result;
@@ -360,13 +479,13 @@ OBeerk.prototype.selectPosition = function (obj) {
     pozstr=beerk.currentPosition.substring(1);
     if (beerk.currentItem=="bGumi") {ptip = "A";tipstr='Gumi';}
     if (beerk.currentItem=="bFelni") {ptip = "F";tipstr='Felni';}
-    if (beerk.currentItem=="bGumiFelni") {ptip = "M";tipstr='KerÈk';}	
+    if (beerk.currentItem=="bGumiFelni") {ptip = "M";tipstr='Ker√©k';}	
     mindenre = settings.getItem('ORZOTT_LERAKODAS_MINDENRE_NYOMTAT').toUpperCase();
     mindenre_nyomtat = (mindenre =='IGEN');
 
     
     var btPrintInit = function() {
-        showMessage('NyomtatÛ OK.');
+        showMessage('Nyomtat√≥ OK.');
         btPrint();
     }
 	var btPrint = function() {
@@ -406,7 +525,7 @@ OBeerk.prototype.selectPosition = function (obj) {
         }
 		if (app.printerConnected==false) {
             $("#btimg").attr("src","img/bluetooth-red.png");
-            showMessage('Nyomtat·si hiba');
+            showMessage('Nyomtat√°si hiba');
         }
         printing=false;
 	}
@@ -427,7 +546,7 @@ OBeerk.prototype.selectPosition = function (obj) {
 	}
 	if (this.checkMarka(poz)) {
         if (drb2>=drb) {
-            showMessage('A beÈrkezett mennyisÈg '+drb+' db!');
+            showMessage('A be√©rkezett mennyis√©g '+drb+' db!');
         }
         /* ha a sajcegben a mindenre nyomtat=IGEN, akkor minden gombra nyomtatas van */
         //mindenre_nyomtat = (settings.getItem('ORZOTT_LERAKODAS_MINDENRE_NYOMTAT').toUpperCase() == 'IGEN');
@@ -490,7 +609,7 @@ OBeerk.prototype.rszMent = function(result) {
     app.btRefresh();
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
-		if (res.RESULT!=-1)	{
+		if (res.RESULT>0 && res.RESULT<=10)	{
 			$('.dataDrbKesz').html(res.RESULT);
 			$('.dataDrbFEGU').html(res.FE+'/'+res.GU);
 			
@@ -501,7 +620,7 @@ OBeerk.prototype.rszMent = function(result) {
 				$('#divpozicio').hide();
 				$('#divallapot').show();
                 var dmOk = function(){
-                    showMessage('MÈlysÈgmÈrı OK.');
+                    showMessage('M√©lys√©gm√©r≈ë OK.');
                 }
 
                 var dmreconnect = function(){
@@ -511,7 +630,7 @@ OBeerk.prototype.rszMent = function(result) {
                         app.BT2Enabled(dmOk);
                     }
                     if (app.depthMeterConnected==false) {
-                        showMessage('MÈlysÈgmÈrı hiba');
+                        showMessage('M√©lys√©gm√©r≈ë hiba');
                         $("#btimg").attr("src","img/bluetooth-red.png");
                     }
                     
@@ -544,7 +663,7 @@ OBeerk.prototype.rszMent = function(result) {
 
 OBeerk.prototype.getMelyseg=function(result){
 	$("#gstat").html('');
-	$("#gstat").append('<option value="-" selected disabled>MÈrjen!</option>');
+	$("#gstat").append('<option value="-" selected disabled>M√©rjen!</option>');
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		$("#gstat").append('<option value='+res.KOD+'>'+res.KOD+'</option>');
@@ -561,10 +680,10 @@ OBeerk.prototype.allapotMentes=function(){
 	melyseg = $('#gstat').val();
 	csereok = $('#gcsok').val();
     tip=beerk.currentItem;
-	if (this.meresKell && (melyseg=='-' || melyseg=='' || melyseg==null) && tip!='bFelni' ) showMessage('MentÈs elıtt mÈrd meg a mÈlysÈget!');
+	if (this.meresKell && (melyseg=='-' || melyseg=='' || melyseg==null) && tip!='bFelni' ) showMessage('Ment√©s el≈ëtt m√©rd meg a m√©lys√©get!');
 	else 
 	if (melyseg=='CS' && csereok=="") {
-		showMessage('Csere esetÈn tˆltd ki a csere ok·t!');
+		showMessage('Csere eset√©n t√∂ltd ki a csere ok√°t!');
 	}
 	else {
 		rsz = $('#rendszam').val();
@@ -581,7 +700,7 @@ OBeerk.prototype.allapotMent=function(result){
 /* atnezo panel */
 OBeerk.prototype.showReview = function() {
 	/* atnezo panel ajax inditas */
-	$('bFolytMost').show();
+	//$('bFolytMost').show();
 	azon = $('#hAZON').val();
 	$('#divpanel').hide();
 	fn = 'beerk.reviewRszFilter'; /* query */
@@ -625,8 +744,9 @@ OBeerk.prototype.reviewRszGet = function(result) {
 	sorok = '';
 	fej="<thead>"
 				+"<tr>"
-					+"<th class='tdrsz'>Rendsz·m</th>"
-					+"<th>LerakodandÛ</th>"
+					+"<th class='tdrsz'>Rendsz√°m</th>"
+					+"<th>K√°rtya</th>"
+					+"<th>Lerakodand√≥</th>"
 					+"<th>Lerakodott</th>"
 				+"</tr>"
 		+"</thead>";
@@ -634,18 +754,26 @@ OBeerk.prototype.reviewRszGet = function(result) {
 	$('.tableReview').empty();
 	var hianydb = 0;
 	beerk.reviewSet = result;
+    beerk.tobblet=0;
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
-		tdclass='';
-		if (res.DRB==res.DRB2) tdclass=' rowhighlighted';
-		sorok += '<tr class="'+tdclass+'" id="'+res.RENDSZAM+'">';
-		sorok += '<td class="tdrsz">'+res.RENDSZAM+'</td>';
-		sorok += '<td>'+res.DRB+'</td>'; 
-		sorok +=  '<td class="tmibiz">'+res.DRB2+'</td>'; 
-		sorok += '</tr>';
-		if (res.DRB2<res.DRB) {
-			hianydb = parseInt(hianydb) + parseInt(res.DRB) - parseInt(res.DRB2);
-		}
+        if (res.RENDSZAM!='TOBBLET') {
+            tdclass='';
+            if (res.DRB==res.DRB2) tdclass=' rowhighlighted';
+            sorok += '<tr class="'+tdclass+'" id="'+res.RENDSZAM+'">';
+            sorok += '<td class="tdrsz">'+res.RENDSZAM+'</td>';
+            sorok += '<td>'+res.KARTYA+'</td>';
+            sorok += '<td>'+res.DRB+'</td>'; 
+            sorok += '<td class="tmibiz">'+res.DRB2+'</td>'; 
+            sorok += '</tr>';
+            if (res.DRB2<res.DRB) {
+                hianydb = parseInt(hianydb) + parseInt(res.DRB) - parseInt(res.DRB2);
+            }
+        }
+        else {
+           //tobblet
+            beerk.tobblet = beerk.tobblet + parseInt(res.DRB2);
+        }
 		
 	}
 	$('.tableReview').html(fej+sorok);
@@ -660,8 +788,12 @@ OBeerk.prototype.reviewRszGet = function(result) {
 	})
 
 	//if (hianydb!=0){
-		$('.labelHiany').html('Hi·nyzÛ mennyisÈg:');
+		$('.labelHiany').html('Hi√°ny:');
 		$('.dataHiany').html(hianydb);
+        
+		$('.labelTobbletSum').html('T√∂bblet:');
+		$('.dataTobbletSum').html(beerk.tobblet);
+        
 	//}
 	beerk.reviewFilter();
 
@@ -670,11 +802,11 @@ OBeerk.prototype.reviewRszGet = function(result) {
 
 
 OBeerk.prototype.reviewFilter = function() {
-	/* eltÈrÈs/ˆsszes sor mutat·sa*/
+	/* elt√©r√©s/√∂sszes sor mutat√°sa*/
 	val = $('#bElteres').html();
-	showAll = (val!='EltÈrÈsek');
-	if (val=='EltÈrÈsek') val='÷sszes sor';
-	else val='EltÈrÈsek';
+	showAll = (val!='Elt√©r√©sek');
+	if (val=='Elt√©r√©sek') val='√ñsszes sor';
+	else val='Elt√©r√©sek';
 	$('#bElteres').html(val);
 	
 	sor = '';
@@ -683,15 +815,18 @@ OBeerk.prototype.reviewFilter = function() {
 	result = beerk.reviewSet;
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
-		tdclass='';
-		if (showAll || res.DRB!=res.DRB2) {
-			if (res.DRB==res.DRB2) tdclass=' rowhighlighted';
-			sor += '<tr class="'+tdclass+'" id="'+res.RENDSZAM+'">';
-			sor += '<td class="tdrsz">'+res.RENDSZAM+'</td>';
-			sor += '<td>'+res.DRB+'</td>'; 
-			sor +=  '<td class="tmibiz">'+res.DRB2+'</td>'; 
-			sor += '</tr>';
-		}
+        if (res.RENDSZAM!='TOBBLET') {
+            tdclass='';
+            if (showAll || res.DRB!=res.DRB2) {
+                if (res.DRB==res.DRB2) tdclass=' rowhighlighted';
+                sor += '<tr class="'+tdclass+'" id="'+res.RENDSZAM+'">';
+                sor += '<td class="tdrsz">'+res.RENDSZAM+'</td>';
+                sor += '<td>'+res.KARTYA+'</td>';
+                sor += '<td>'+res.DRB+'</td>'; 
+                sor +=  '<td class="tmibiz">'+res.DRB2+'</td>'; 
+                sor += '</tr>';
+            }
+        }
 		
 	}
 	$('.tableReview tbody').append(sor);
@@ -742,7 +877,7 @@ OBeerk.prototype.rszAdatokGet = function (result){
 		if (checkParam(beerk.rszAdatok[7])=='A' && beerk.fedb>0) feall='Alu';
 		$(".dataFeall").html(feall);
         
-        beerk.szlevAllapot = '  (Sz·llÌtÛlevÈlen JE:'+beerk.rszAdatok[0]+' BE:'+beerk.rszAdatok[1]+' JH:'+beerk.rszAdatok[2]+' BH:'+beerk.rszAdatok[3]+' POT:'+beerk.rszAdatok[4]+' JHI:'+beerk.rszAdatok[5]+' BHI:'+beerk.rszAdatok[6]+')';
+        beerk.szlevAllapot = '  (Sz√°ll√≠t√≥lev√©len JE:'+beerk.rszAdatok[0]+' BE:'+beerk.rszAdatok[1]+' JH:'+beerk.rszAdatok[2]+' BH:'+beerk.rszAdatok[3]+' POT:'+beerk.rszAdatok[4]+' JHI:'+beerk.rszAdatok[5]+' BHI:'+beerk.rszAdatok[6]+')';
         
 	}
 	$('.rszadatok').show();
@@ -765,13 +900,31 @@ OBeerk.prototype.folytUpdate=function(result){
 OBeerk.prototype.lezarStart = function(){
 	/* atnezon lezaras ajax inditas */
 	hianydb = $('.dataHiany').html();
+    if (hianydb=='') hianydb=0;
 	stat='Z';
 	mehet=true;
-	if (hianydb!='' && hianydb!=0) {
-		var mehet = confirm("Vannak hi·nyzÛ tÈtelek, ennek ellenÈre lez·rja?");
-		stat='X';
+	if (hianydb!=0 || beerk.tobblet!=0) {
+        mehet=false;
+        msg='';
+        if (hianydb!=0) msg+="Hi√°ny: <b>"+hianydb+" db</b><br>";
+        if (beerk.tobblet!=0) msg+="T√∂bblet: <b>"+beerk.tobblet+" db</b><br>";
+        msg+="<br>Ennek ellen√©re lez√°rod?";
+        
+		this.showDialog('Lez√°r√°s',msg, beerk.lezarStartResponse, beerk.lezarStartResponse);
 	}
 	if (mehet) {
+		showMessage('hiany:'+hianydb+' stat:'+stat);
+		mibiz=$("#hMIBIZ").val();
+		fn = 'beerk.lezarUpdate'; /* PDA_LERAKODAS_LEZAR */
+		ajaxCall(fn,{'mibiz':mibiz,'stat':stat,'login':login_id},true, fn);
+	}
+}
+OBeerk.prototype.lezarStartResponse = function(result){
+	/* atnezon lezaras ajax inditas, hiannyal lezaras */
+    console.debug('beerk.lezarStartResponse start');
+	if (result==true) {
+        hianydb = $('.dataHiany').html();
+        stat='X';
 		showMessage('hiany:'+hianydb+' stat:'+stat);
 		mibiz=$("#hMIBIZ").val();
 		fn = 'beerk.lezarUpdate'; /* PDA_LERAKODAS_LEZAR */
@@ -783,12 +936,20 @@ OBeerk.prototype.lezarStart = function(){
 OBeerk.prototype.lezarUpdate =function(result){
 	/* atnezon lezaras ajax eredmenye */
 	res = result[0];  
-    if (res.RESULT!=0) showMessage('A lerakod·s lez·r·sa sor·n hiba tˆrtÈnt! Lez·r·s le·llÌtva.');
+    if (res.RESULT!=0) showMessage('A lerakod√°s lez√°r√°sa sor√°n hiba t√∂rt√©nt! Lez√°r√°s le√°ll√≠tva.');
     else {
-        showMessage('A lez·r·s kÈsz.');
+        showMessage('A lez√°r√°s k√©sz.');
     	beerk.folytUpdate(result);
     }
 }
+OBeerk.prototype.tobbletStart = function(){
+    /*  tobblet gomb megnyomasa, felir egy tobblet sort ha meg nincs. Ha mar van, akkor csak modositja a darabszamot*/ 
+        $('#divreview').hide();
+        $('.dataTobbletRegi').html(beerk.tobblet);
+        $('.dataTobbletUpdate').html('');
+        $('#divTobblet').show();
+}
+
 /* atnezo panel eddig */
 
 
@@ -945,14 +1106,14 @@ OBeerk.prototype.GPanelClose = function (saveData){
 						if (beerk.rszAdatok[19]!='' && beerk.rszAdatok[19]==beerk.rszAdatok[18]) {
 							newContent=beerk.rszAdatok[9]+' '+beerk.rszAdatok[10]+' '+beerk.rszAdatok[11]+' '+beerk.rszAdatok[18]; //egyezik minden
 						}
-						else newContent=beerk.rszAdatok[9]+' '+beerk.rszAdatok[10]+' '+beerk.rszAdatok[11]+' '+beerk.rszAdatok[18]+'+'+beerk.rszAdatok[19]; //csak SI eltÈrÈs
+						else newContent=beerk.rszAdatok[9]+' '+beerk.rszAdatok[10]+' '+beerk.rszAdatok[11]+' '+beerk.rszAdatok[18]+'+'+beerk.rszAdatok[19]; //csak SI elt√©r√©s
 						
 					}
-					else newContent=beerk.rszAdatok[9]+' '+beerk.rszAdatok[10]+' '+beerk.rszAdatok[11]+' '+beerk.rszAdatok[18] + ' + ' + beerk.rszAdatok[14]+' '+beerk.rszAdatok[19];//minta,si eltÈrÈs
+					else newContent=beerk.rszAdatok[9]+' '+beerk.rszAdatok[10]+' '+beerk.rszAdatok[11]+' '+beerk.rszAdatok[18] + ' + ' + beerk.rszAdatok[14]+' '+beerk.rszAdatok[19];//minta,si elt√©r√©s
 				}
-				else newContent=beerk.rszAdatok[9]+' '+beerk.rszAdatok[10]+' '+beerk.rszAdatok[11]+' '+beerk.rszAdatok[18] + ' + ' + beerk.rszAdatok[13]+' '+beerk.rszAdatok[14]+' '+beerk.rszAdatok[19]; //meret,minta,si eltÈrÈs
+				else newContent=beerk.rszAdatok[9]+' '+beerk.rszAdatok[10]+' '+beerk.rszAdatok[11]+' '+beerk.rszAdatok[18] + ' + ' + beerk.rszAdatok[13]+' '+beerk.rszAdatok[14]+' '+beerk.rszAdatok[19]; //meret,minta,si elt√©r√©s
 			}
-			else newContent=beerk.rszAdatok[9]+' '+beerk.rszAdatok[10]+' '+beerk.rszAdatok[11]+' '+beerk.rszAdatok[18] + ' + ' + beerk.rszAdatok[12]+' '+beerk.rszAdatok[13]+' '+beerk.rszAdatok[14]+' '+beerk.rszAdatok[19]; //marka,meret,minta,si eltÈrÈs
+			else newContent=beerk.rszAdatok[9]+' '+beerk.rszAdatok[10]+' '+beerk.rszAdatok[11]+' '+beerk.rszAdatok[18] + ' + ' + beerk.rszAdatok[12]+' '+beerk.rszAdatok[13]+' '+beerk.rszAdatok[14]+' '+beerk.rszAdatok[19]; //marka,meret,minta,si elt√©r√©s
 			newContent = newContent.trim();
 			if (newContent.indexOf('+')==0) {
 				newContent = newContent.replace('+','').trim();
@@ -1243,9 +1404,9 @@ function getSIP(result) {getSI(result,'P')}
 
 /*
 initMibizList->mibizList->selectTask->panelInit->showReview->rszChange->rszAdatokGet->#bgumi.click->showPozPanel->showAllapotPanel->getPositions
-(meres.tpl)bpozicio.click->selectPosition->checkMarka->btPrint->writeOk->rszMent (pozÌciÛ mentÈs)->getMelyseg->(meres.tpl)allapotMentes.click->allapotMentes->allapotMent(allapot,csere ok mentes)->(meres.tpl)bAllapotClose.click
+(meres.tpl)bpozicio.click->selectPosition->checkMarka->btPrint->writeOk->rszMent (poz√≠ci√≥ ment√©s)->getMelyseg->(meres.tpl)allapotMentes.click->allapotMentes->allapotMent(allapot,csere ok mentes)->(meres.tpl)bAllapotClose.click
 
-z·r·s:
+z√°r√°s:
 showReview->lezarStart->lezarUpdate->folytUpdate->folytKesobb->initMibizList
 
 allapotpanel:

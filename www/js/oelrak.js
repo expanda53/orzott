@@ -1,11 +1,11 @@
-/* elrakodas */
+Ôªø/* elrakodas */
 /*
-	1. nincs feladat v·laszt·s, rˆgtˆn a rendsz·mra lıhet.
-	2. rendsz·mra lˆvÈs ut·n megnÈzni, hogy ki van-e szedve teljesen.
-	3a, ha nincs kiszedve teljesen, akkor hiba¸zenet. Azt·n 1.
-	3b ha ki van szedve teljesem, meg kell nÈzni hogy a mÈlysÈgmÈrÈs el lett-e rajta vÈgezve
-	4a, ha nem, akkor mÈlysÈg mÈrÈs. Ut·na 4b
-	4b, ha volt mÈlysÈgmÈrÈs, akkor helykÛdra lıhet
+	1. nincs feladat v√°laszt√°s, r√∂gt√∂n a rendsz√°mra l≈ëhet.
+	2. rendsz√°mra l√∂v√©s ut√°n megn√©zni, hogy ki van-e szedve teljesen.
+	3a, ha nincs kiszedve teljesen, akkor hiba√ºzenet. Azt√°n 1.
+	3b ha ki van szedve teljesem, meg kell n√©zni hogy a m√©lys√©gm√©r√©s el lett-e rajta v√©gezve
+	4a, ha nem, akkor m√©lys√©g m√©r√©s. Ut√°na 4b
+	4b, ha volt m√©lys√©gm√©r√©s, akkor helyk√≥dra l≈ëhet
 5
 
 */
@@ -27,7 +27,7 @@ var OElrak = function(){
 	this.currentPosition = '';
 }
 OElrak.prototype.panelInit = function () {
-	/* kezdı panel megjelenÌtÈse*/
+	/* kezd≈ë panel megjelen√≠t√©se*/
 	panelName='oelrak';
 	$.get( "css/"+panelName+".css", function( data ) {
 		css = '<head><style>' + data + '</style></head>';
@@ -108,13 +108,13 @@ OElrak.prototype.getRszInProgress = function (result){
 OElrak.prototype.rszChange = function (){
 	/* rendszam valasztas ajax indito */
 	rsz = $('#dataRendszam').val();
-    if (rsz.length>13) {
+    if (rsz.length>15) {
         clearObj='dataRendszam';
-        showMessage("A rendsz·m nem lehet hosszabb, mint 13 karakter!",clearObj);
+        showMessage("A rendsz√°m nem lehet hosszabb, mint 15 karakter!",clearObj);
     }
     else if (rsz.indexOf("B:")>-1) {    
         clearObj='dataRendszam';
-        showMessage("Nem rendsz·m!",clearObj);
+        showMessage("Nem rendsz√°m!",clearObj);
     }
     else {
         fn = 'elrak.rszAdatokGet'; /* PDA_ORZOTTHKOD_GETRSZ */
@@ -125,7 +125,7 @@ OElrak.prototype.rszChange = function (){
 
 
 OElrak.prototype.rszAdatokGet = function (result){
-	/* rendszam valasztas ajax eredmenye, rszChange indÌtja */
+	/* rendszam valasztas ajax eredmenye, rszChange ind√≠tja */
     /* ha van mar hkod es nem kell merni, akkor mentheto. Ha meg nincs hkod, akkor lonie kell hkodot */
 	clearObj='dataRendszam';
 	for (var i = 0;i < result.length;i++){
@@ -151,38 +151,38 @@ OElrak.prototype.rszAdatokGet = function (result){
             var showHkod = false;
 			switch (res.RESULTTEXT) {
 				case 'TYPE': 
-					errormsg='Nem megfelelı tÌpus a pozÌciÛn!';
+					errormsg='Nem megfelel≈ë t√≠pus a poz√≠ci√≥n!';
 					showMessage(errormsg,clearObj,2);
 					break;
 				case 'NOT_FOUND': 
-					errormsg='Nem tal·lhatÛ ilyen rendsz·m a lerakodott abroncsok kˆzˆtt!';
+					errormsg='Nem tal√°lhat√≥ ilyen rendsz√°m a lerakodott abroncsok k√∂z√∂tt!';
 					showMessage(errormsg,clearObj,2);
 					break;
 				case 'DEEP': 
-					errormsg='MÈlysÈgmÈrÈs nem lett elvÈgezve!';
+					errormsg='M√©lys√©gm√©r√©s nem lett elv√©gezve!';
 					showMessage(errormsg,'',2);
 					meresKell=true;
 					break;
 				case 'POSITION_NOT_FOUND': 
-					errormsg='Lelıtt pozÌciÛn nem tal·lhatÛ abroncs a rendsz·mhoz!';
+					errormsg='Lel≈ëtt poz√≠ci√≥n nem tal√°lhat√≥ abroncs a rendsz√°mhoz!';
 					showMessage(errormsg,clearObj,2);
 					break;
 				case 'EMPTY_POSITION': 
-					errormsg='A rendsz·mhoz tartozÛ pozÌciÛk ¸resek!';
+					errormsg='A rendsz√°mhoz tartoz√≥ poz√≠ci√≥k √ºresek!';
 					showMessage(errormsg,clearObj,2);
 					break;
 				case 'QUANTITY': 
-					errormsg='Nem egyezik a v·rt Ès a lerakodott mennyisÈg! '+res.ERRORTEXT;
+					errormsg='Nem egyezik a v√°rt √©s a lerakodott mennyis√©g! '+res.ERRORTEXT;
 					showMessage(errormsg,clearObj,2);
 					break;
 				case 'ALREADY_DONE': 
-					errormsg='Ez a gumi m·r el lett pakolva! helykÛd:'+res.ERRORTEXT;
+					errormsg='Ez a gumi m√°r el lett pakolva! helyk√≥d:'+res.ERRORTEXT;
 					showMessage(errormsg,clearObj,2);
 					//$('#dataHkod').val(res.ERRORTEXT);
                     //showHkod=true;
 					break;
 				case 'ALREADY_STARTED': 
-					errormsg='M·r van egy elkezdett garnit˙ra:<BR>'+res.ERRORTEXT;
+					errormsg='M√°r van egy elkezdett garnit√∫ra:<BR>'+res.ERRORTEXT;
 					showMessage(errormsg,clearObj,2);
 					break;
 				default:
@@ -234,7 +234,7 @@ OElrak.prototype.showPozPanel = function(obj) {
 OElrak.prototype.getMelyseg=function(result){
     $("#dataRendszam").prop('disabled', true);
 	$("#gstat").html('');
-	$("#gstat").append('<option value="" disabled selected>V·lasszon</option>');
+	$("#gstat").append('<option value="" disabled selected>V√°lasszon</option>');
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		$("#gstat").append('<option value='+res.KOD+'>'+res.KOD+'</option>');
@@ -256,10 +256,10 @@ OElrak.prototype.allapotMentes=function(){
 	fn='elrak.allapotMent'; /*PDA_ORZOTTLERAK_ALLAPOTMENT*/
 
 	csereok = $('#gcsok').val();
-	if ((melyseg=='-' || melyseg=='' || melyseg==null)) showMessage('MentÈs elıtt mÈrd meg a mÈlysÈget!');
+	if ((melyseg=='-' || melyseg=='' || melyseg==null)) showMessage('Ment√©s el≈ëtt m√©rd meg a m√©lys√©get!');
 	else 
 	if (melyseg=='CS' && csereok=="") {
-		showMessage('Csere esetÈn tˆltd ki a csere ok·t!');
+		showMessage('Csere eset√©n t√∂ltd ki a csere ok√°t!');
 	}
 	else {
 		ajaxCall(fn,{'rsz':rsz,'mibiz':mibiz,'poz':poz,'melyseg':melyseg,'login':login_id,'tip':tip,'csereok':csereok},true, fn);
@@ -311,7 +311,7 @@ OElrak.prototype.hkodDel=function(result){
 	for (var i = 0;i < result.length;i++){	
 		res = result[i];
 		if (res.RESULT=='OK') {
-			showMessage('TˆrlÈs rendben');
+			showMessage('T√∂rl√©s rendben');
             $("#dataRendszam").prop('disabled', false);
             $('#dataRendszam').focus();
 		}
@@ -319,13 +319,13 @@ OElrak.prototype.hkodDel=function(result){
 			errormsg='';
 			switch (res.RESULTTEXT) {
 				case 'NOT_FOUND': 
-					errormsg='Nem tal·lhatÛ ilyen rendsz·m a lerakodott abroncsok kˆzˆtt!';
+					errormsg='Nem tal√°lhat√≥ ilyen rendsz√°m a lerakodott abroncsok k√∂z√∂tt!';
 					break;
 				case 'EMPTY_POSITION': 
-					errormsg='A rendsz·mhoz tartozÛ pozÌciÛk ¸resek!';
+					errormsg='A rendsz√°mhoz tartoz√≥ poz√≠ci√≥k √ºresek!';
 					break;
 				case 'HKOD_EXISTS': 
-					errormsg='M·s helykÛdon is van ez a rendsz·m!';
+					errormsg='M√°s helyk√≥don is van ez a rendsz√°m!';
 					break;					
 				default:
 					errormsg = res.RESULTTEXT;
@@ -342,7 +342,7 @@ OElrak.prototype.hkodSaveInit=function(){
 	hkod = $('#dataHkod').val();
     //showMessage(hkod);
     if (hkod.indexOf("B:")==-1 || (hkod.indexOf("_")>=0 && hkod.indexOf("-")>=0)) {
-        showMessage('Nem helykÛd!','dataHkod');
+        showMessage('Nem helyk√≥d!','dataHkod');
         $('#dataHkod').focus();
     }
     else {
@@ -351,13 +351,13 @@ OElrak.prototype.hkodSaveInit=function(){
             ajaxCall(fn,{'rsz':rsz,'hkod':hkod,'login':login_id},true, fn);
         }
         else {
-            showMessage('HelykÛd nem lehet ¸res!');
+            showMessage('Helyk√≥d nem lehet √ºres!');
         }
     }
 }
 
 OElrak.prototype.hkodSaveCheck = function (result){
-	/* hkod ellenırzÈs, majd mentÈs (ha a visszaadott result=ok) */
+	/* hkod ellen≈ërz√©s, majd ment√©s (ha a visszaadott result=ok) */
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		$('#hAZON').val(res.FEJAZON);
@@ -379,23 +379,23 @@ OElrak.prototype.hkodSaveCheck = function (result){
 			errormsg='';
 			switch (res.RESULTTEXT) {
 				case 'DIFFERENT_HKOD': 
-					errormsg='A kor·bban elrakodott termÈkek m·s helykÛdon vannak! '+res.ERRORTEXT;
+					errormsg='A kor√°bban elrakodott term√©kek m√°s helyk√≥don vannak! '+res.ERRORTEXT;
 					showMessage(errormsg,clearObj);
 					break;
 				case 'NOT_FOUND': 
-					errormsg='Nem tal·lhatÛ ilyen rendsz·m a lerakodott abroncsok kˆzˆtt!';
+					errormsg='Nem tal√°lhat√≥ ilyen rendsz√°m a lerakodott abroncsok k√∂z√∂tt!';
 					showMessage(errormsg,clearObj);
 					break;
 				case 'ALREADY_DONE': 
-					errormsg='Ez a gumi m·r el lett pakolva erre a helykÛdra!';
+					errormsg='Ez a gumi m√°r el lett pakolva erre a helyk√≥dra!';
 					showMessage(errormsg);
 					break;
 				case 'EMPTY_POSITION': 
-					errormsg='A rendsz·mhoz tartozÛ pozÌciÛk ¸resek!';
+					errormsg='A rendsz√°mhoz tartoz√≥ poz√≠ci√≥k √ºresek!';
 					showMessage(errormsg,clearObj);
 					break;
 				case 'HKOD_EXISTS': 
-					errormsg='M·s helykÛdon is van ez a rendsz·m!';
+					errormsg='M√°s helyk√≥don is van ez a rendsz√°m!';
 					showMessage(errormsg,clearObj);
 					break;					
 				default:
@@ -429,13 +429,13 @@ OElrak.prototype.hkodSave = function (result){
 			errormsg='';
 			switch (res.RESULTTEXT) {
 				case 'NOT_FOUND': 
-					errormsg='Nem tal·lhatÛ ilyen rendsz·m a lerakodott abroncsok kˆzˆtt!';
+					errormsg='Nem tal√°lhat√≥ ilyen rendsz√°m a lerakodott abroncsok k√∂z√∂tt!';
 					break;
 				case 'EMPTY_POSITION': 
-					errormsg='A rendsz·mhoz tartozÛ pozÌciÛk ¸resek!';
+					errormsg='A rendsz√°mhoz tartoz√≥ poz√≠ci√≥k √ºresek!';
 					break;
 				case 'HKOD_EXISTS': 
-					errormsg='M·s helykÛdon is van ez a rendsz·m!';
+					errormsg='M√°s helyk√≥don is van ez a rendsz√°m!';
 					break;					
 				default:
 					errormsg = res.RESULTTEXT;
@@ -497,7 +497,7 @@ OElrak.prototype.reviewRszGet = function(result) {
 	sorok = '';
 	fej="<thead>"
 				+"<tr>"
-					+"<th class='tdrsz'>Rendsz·m</th>"
+					+"<th class='tdrsz'>Rendsz√°m</th>"
 					+"<th>Lerakodott</th>"
 					+"<th>Elpakolt</th>"
 				+"</tr>"
@@ -522,7 +522,7 @@ OElrak.prototype.reviewRszGet = function(result) {
 	}
 	$('.tableReview').html(fej+sorok);
 	if (hianydb!=0){
-		$('.labelHiany').html('ElpakolandÛ:');
+		$('.labelHiany').html('Elpakoland√≥:');
 		$('.dataHiany').html(hianydb);
 	}
 	elrak.reviewFilter();
@@ -531,7 +531,7 @@ OElrak.prototype.reviewRszGet = function(result) {
 
 
 OElrak.prototype.reviewFilter = function() {
-	/* eltÈrÈs/ˆsszes sor mutat·sa*/
+	/* elt√©r√©s/√∂sszes sor mutat√°sa*/
 	showAll = true;
 	sor = '';
 	$('.tableReview tbody tr').remove();
@@ -568,6 +568,6 @@ panelInit->getRszInProgress->(#datarendszam.change)->rszChange()->rszAdatokGet->
                                                                                                                                         ->(ha meg nincs hkod)->showHkod->hkodSaveInit->hkodSaveCheck->hkodSave->getRszInProgress
                                                                               
                                                                               
-·tnÈzı: showReview->reviewRszFilter->reviewRszGet->reviewFilter
+√°tn√©z≈ë: showReview->reviewRszFilter->reviewRszGet->reviewFilter
 */
 

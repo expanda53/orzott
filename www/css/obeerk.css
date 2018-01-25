@@ -173,24 +173,100 @@ margin: 2px 0px;
 }
 #divhiany {
 	position: relative;
-    left: 285px;
+    left: 430px;
     width: 170px;
     top: 5px;
 }
-.labelHiany{
+.labelHiany, .labelTobbletSum{
 	background-color: yellow;
     padding: 5px;
-    width: 121px;
+    width: 45px;
     position: absolute;
 }
-.dataHiany {
+.dataHiany, .dataTobbletSum {
 	background-color: yellow;
     padding: 5px;
     width: 30px;
     position: absolute;
-    left: 134px;
+    left: 57px;
     text-align: center;
 }
+
+#divtobbletsum {
+	position: relative;
+    left: 325px;
+    width: 170px;
+    top: 5px;
+}
+#divTobblet {
+    height: 220px;
+    background-color: #e8e8e8;
+    position: fixed;
+    top: 40px;
+    left: 9px;
+    border: 1px solid black;
+    padding: 5px;
+    display:none;
+}
+.divTobbletLabel, .dataTobbletRegi, .divTobbletModLabel,.dataTobbletUpdate {
+    width: 100px;
+    height: 30px;
+    float: left;
+}
+.divTobbletLabel,.divTobbletModLabel {
+    margin-top:5px;
+}
+.dataTobbletRegi {
+    line-height: 31px;    
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.dataTobbletUpdate {
+    background-color: white;
+    font-weight: bold;
+    border: 1px solid black;
+    vertical-align: middle;
+    text-align: center;
+    line-height: 31px;
+    margin-bottom: 5px;
+    font-size: 20px;
+}
+.divnumbuttons{
+    margin: 2px auto;
+    width: 483px;
+    height: 130px;
+}
+.bnum {
+    padding: 15px 19px;
+    background-color: orange;
+    color: black;
+    font-size: 21px;
+    font-weight: bold;
+    width: 93px;
+    margin-bottom: 5px;
+    border: 1px solid orange;
+}
+
+.bbacksp, .bment,.bvissza {
+    padding: 15px 19px;
+    background-color: yellow;
+    color: black;
+    font-size: 21px;
+    font-weight: bold;
+    width: 125px;
+    margin-bottom: 5px;
+    border: 1px solid black;
+}
+.bment {
+    background-color: #77b55a !important;
+}
+
+.bvissza {
+    background-color: #c8c8ff !important;
+}
+
+
 .divreviewLeft{
 	position:relative;
 	top:0px;
@@ -206,7 +282,7 @@ margin: 2px 0px;
 	top:32px;
 	left:103px;
 	background-color:white;
-	width:366px;
+	width:100%;
 }
 #divreview table{
 	display:block;
@@ -347,6 +423,9 @@ margin: 2px 0px;
     top: 173px;
     left: 362px;
 
+}
+#dialog {
+    display:none;
 }
 
 /*

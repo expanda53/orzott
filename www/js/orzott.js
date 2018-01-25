@@ -1,6 +1,7 @@
-var beerk = null;
+Ôªøvar beerk = null;
 var elrak = null;
-var teszt = true;
+var teszt = false;
+if (teszt) alert('!!TESZT!!');
 $.support.cors=true;
 $.ajaxSetup({ cache: false });
 function ajaxCall( func, d,asyn,fn) {
@@ -131,18 +132,18 @@ function orzottLogin(){
 }
 function checkLogin(result){
 	if (result!='undefined' && (result[0].RCOUNT==0 || result[0].RCOUNT=='')) {
-		showMessage('Nem megfelelı felhaszn·lÛi kÛd!');
+		showMessage('Nem megfelel≈ë felhaszn√°l√≥i k√≥d!');
 	}
     else
     if (result!='undefined' && (result[0].TELEP=='')) {
-		showMessage('Nincs a kezelıhˆz telep rendelve!');
+		showMessage('Nincs a kezel≈ëh√∂z telep rendelve!');
 	}
 	else {	
 		login_id=$('.divinput').text();
 		login_id = login_id.replace(/(?:\r\n|\r|\n|\t)+/g, '');
 		fn = 'loadSettings'; /* query */
 		r = ajaxCall(fn,{},true, fn);
-        //ajaxCall('kiadas.nextRszGet',{'rsz':'','hkod':'B:OM€HELY','azon':971417510},true);
+        //ajaxCall('kiadas.nextRszGet',{'rsz':'','hkod':'B:OM≈∞HELY','azon':971417510},true);
 		app.getDepthMeters();
 	}
 }

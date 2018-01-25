@@ -1,6 +1,7 @@
 var tcpClient = {
     send: function(ip,port,dataString,cbOk){
         dataString+="\r\n";
+        alert('ip:'+ip+' port:'+port);
         var tsocket = new Socket();
         tsocket.open(
           ip,
@@ -12,7 +13,7 @@ var tcpClient = {
                   data[i] = dataString.charCodeAt(i);
                 }
                 tsocket.write(data,
-                    function(){showMessage("Nyomtatási parancs elküldve.");cbOk()},
+                    function(){/*showMessage("Nyomtatási parancs elküldve.");*/cbOk()},
                     function(errorMessage){showMessage(errorMessage)}
                 );        
                 tsocket.shutdownWrite();         

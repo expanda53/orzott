@@ -1,11 +1,11 @@
-/* kiadas */
+Ôªø/* kiadas */
 /*
 	1. aktualis feladat fejazonjanak beolvasa (pda_mibizlist_orzottki)
-	2. rendsz·mra lˆvÈs ut·n megnÈzni, hogy ki van-e szedve teljesen.
-	3a, ha nincs kiszedve teljesen, akkor hiba¸zenet. Azt·n 1.
-	3b ha ki van szedve teljesem, meg kell nÈzni hogy a mÈlysÈgmÈrÈs el lett-e rajta vÈgezve
-	4a, ha nem, akkor mÈlysÈg mÈrÈs. Ut·na 4b
-	4b, ha volt mÈlysÈgmÈrÈs, akkor helykÛdra lıhet
+	2. rendsz√°mra l√∂v√©s ut√°n megn√©zni, hogy ki van-e szedve teljesen.
+	3a, ha nincs kiszedve teljesen, akkor hiba√ºzenet. Azt√°n 1.
+	3b ha ki van szedve teljesem, meg kell n√©zni hogy a m√©lys√©gm√©r√©s el lett-e rajta v√©gezve
+	4a, ha nem, akkor m√©lys√©g m√©r√©s. Ut√°na 4b
+	4b, ha volt m√©lys√©gm√©r√©s, akkor helyk√≥dra l≈ëhet
 5
 
 */
@@ -30,7 +30,7 @@ var OKiadas = function(){
 	this.panelInit();
 }
 OKiadas.prototype.panelInit = function () {
-	/* kezdı panel megjelenÌtÈse*/
+	/* kezd≈ë panel megjelen√≠t√©se*/
 	panelName='okiadas';
 	$.get( "css/"+panelName+".css", function( data ) {
 		css = '<head><style>' + data + '</style></head>';
@@ -163,7 +163,7 @@ OKiadas.prototype.nextHkodGet = function (result){
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
         if (res.HKOD=='NOTFOUND') {
-            showMessage('Nincs tˆbb szedhetı tÈtel!','');
+            showMessage('Nincs t√∂bb szedhet≈ë t√©tel!','');
             kiadas.showReview();
             
         }
@@ -235,7 +235,7 @@ OKiadas.prototype.rszChange = function (){
 		ajaxCall(fn,{'rsz':rsz,'rszshort':kiadas.currentRsz,'azon':kiadas.fejazon,'login':login_id,'hkod':kiadas.currentHkod,'lastrsz':kiadas.lastRsz},true, fn);
 	}
 	else {
-		showMessage('Rendsz·m nem egyezik!','dataRendszam');
+		showMessage('Rendsz√°m nem egyezik!','dataRendszam');
 	}
 	
 }
@@ -251,7 +251,7 @@ OKiadas.prototype.rszSave = function (result){
 			if (res.NEXTRSZ!='') {
 				if (res.NEXTRSZ=='NEXTHKOD') {
 					/* nincs a helykodon tobb kiszedheto rendszam*/
-					errormsg='MentÈs rendben, HELYK”D V¡LT¡S!';
+					errormsg='Ment√©s rendben, HELYK√ìD V√ÅLT√ÅS!';
 					showMessage(errormsg,'dataRendszam');
 					kiadas.hideRsz();
 					fn = 'kiadas.nextHkodGet'; /* PDA_ORZOTTKI_HKOD */
@@ -261,7 +261,7 @@ OKiadas.prototype.rszSave = function (result){
 				}
 				else {
 					kiadas.setNextRsz(res);
-					errormsg='MentÈs rendben, RENDSZ¡M V¡LT¡S!';
+					errormsg='Ment√©s rendben, RENDSZ√ÅM V√ÅLT√ÅS!';
 					showMessage(errormsg,'dataRendszam');
 				}
 				
@@ -272,19 +272,19 @@ OKiadas.prototype.rszSave = function (result){
 			errormsg='';
 			switch (res.RESULTTEXT) {
 				case 'NOT_FOUND': 
-					errormsg='Nem tal·lhatÛ ilyen rendsz·m a kiszedendı abroncsok kˆzˆtt!';
+					errormsg='Nem tal√°lhat√≥ ilyen rendsz√°m a kiszedend≈ë abroncsok k√∂z√∂tt!';
 					break;
 				case 'ALREADY_DONE': 
-					errormsg='Ez a pozÌciÛ m·r ki lett szedve!';
+					errormsg='Ez a poz√≠ci√≥ m√°r ki lett szedve!';
 					break;
 				case 'DIFFERENT_HKOD': 
-					errormsg='M·s helykÛdon van ez a rendsz·m!';
+					errormsg='M√°s helyk√≥don van ez a rendsz√°m!';
 					break;					
 				case 'UNKNOWN_ERROR': 
-					errormsg='Adatb·zis hiba a felÌr·sn·l!';
+					errormsg='Adatb√°zis hiba a fel√≠r√°sn√°l!';
 					break;					
 				case 'NOT_READY': 
-					errormsg='Az elızı rendsz·m mÈg nincs kÈsz! ('+kiadas.lastRsz+')';
+					errormsg='Az el≈ëz≈ë rendsz√°m m√©g nincs k√©sz! ('+kiadas.lastRsz+')';
 					break;					
 				default:
 					errormsg = res.RESULTTEXT;
@@ -313,14 +313,14 @@ OKiadas.prototype.rszEmpty = function(result){
             //OKVISSZA: volt belole kiszedes, vissza kell rakni
             if (res.RESULTTEXT=='OKVISSZA') {
                 hkod = $('#labelHkodVart').html();
-                alert('Ne felejtsd el a kiszedett abroncsokat visszarakni a helyÈre: '+hkod+' !');
+                alert('Ne felejtsd el a kiszedett abroncsokat visszarakni a hely√©re: '+hkod+' !');
             }
 			errormsg = res.RESULTTEXT;
 			showMessage(errormsg,'dataRendszam');
 			if (res.NEXTRSZ!='') {
 				if (res.NEXTRSZ=='NEXTHKOD') {
 					/* nincs a helykodon tobb kiszedheto rendszam*/
-					errormsg='MentÈs rendben, HELYK”D V¡LT¡S!';
+					errormsg='Ment√©s rendben, HELYK√ìD V√ÅLT√ÅS!';
 					showMessage(errormsg,'dataRendszam');
 					kiadas.hideRsz();
 					fn = 'kiadas.nextHkodGet'; /* PDA_ORZOTTKI_HKOD */
@@ -330,14 +330,14 @@ OKiadas.prototype.rszEmpty = function(result){
 				}
 				else {
 					kiadas.setNextRsz(res);
-					errormsg='MentÈs rendben, RENDSZ¡M V¡LT¡S!';
+					errormsg='Ment√©s rendben, RENDSZ√ÅM V√ÅLT√ÅS!';
 					showMessage(errormsg,'dataRendszam');
 				}
 				
 			}
             else {
                 /* nincs tobb szedheto rsz a bizonylaton */
-				errormsg='MentÈs rendben, NINCS T÷BB SZEDHET÷ RENDSZ¡M!';
+				errormsg='Ment√©s rendben, NINCS T√ñBB SZEDHET√ñ RENDSZ√ÅM!';
 				showMessage(errormsg,'dataRendszam');
             }
 			
@@ -346,16 +346,16 @@ OKiadas.prototype.rszEmpty = function(result){
 			errormsg='';
 			switch (res.RESULTTEXT) {
 				case 'NOT_FOUND': 
-					errormsg='Nem tal·lhatÛ ilyen rendsz·m a kiszedendı abroncsok kˆzˆtt!';
+					errormsg='Nem tal√°lhat√≥ ilyen rendsz√°m a kiszedend≈ë abroncsok k√∂z√∂tt!';
 					break;
 				case 'ALREADY_DONE': 
-					errormsg='Ez a rendsz·m mÈg nem lett kiszedve!';
+					errormsg='Ez a rendsz√°m m√©g nem lett kiszedve!';
 					break;
 				case 'DIFFERENT_HKOD': 
-					errormsg='M·s helykÛdon van ez a rendsz·m!';
+					errormsg='M√°s helyk√≥don van ez a rendsz√°m!';
 					break;					
 				case 'UNKNOWN_ERROR': 
-					errormsg='Adatb·zis hiba a felÌr·sn·l!';
+					errormsg='Adatb√°zis hiba a fel√≠r√°sn√°l!';
 					break;					
 				default:
 					errormsg = res.RESULTTEXT;
@@ -417,9 +417,9 @@ OKiadas.prototype.reviewRszGet = function(result) {
 	sorok = '<tr><td/></tr>';
 	fej="<thead>"
 				+"<tr>"
-					+"<th class='tdrsz'>Rendsz·m</th>"
-					+"<th class='tdhkod'>HelykÛd</th>"
-					+"<th>Kiszedendı</th>"
+					+"<th class='tdrsz'>Rendsz√°m</th>"
+					+"<th class='tdhkod'>Helyk√≥d</th>"
+					+"<th>Kiszedend≈ë</th>"
 					+"<th>Kiszedett</th>"
 				+"</tr>"
 		+"</thead>";
@@ -435,7 +435,7 @@ OKiadas.prototype.reviewRszGet = function(result) {
 	}
 
 	if (hianydb!=0){
-		$('.labelHiany').html('Kiszedendı:');
+		$('.labelHiany').html('Kiszedend≈ë:');
 		$('.dataHiany').html(hianydb);
 	}
 	$('.tableReview').html(fej+sorok);
@@ -444,7 +444,7 @@ OKiadas.prototype.reviewRszGet = function(result) {
 }
 
 OKiadas.prototype.reviewFilter = function() {
-	/* eltÈrÈs/ˆsszes sor mutat·sa*/
+	/* elt√©r√©s/√∂sszes sor mutat√°sa*/
 	showAll = true;
 	sor = '';
 	$('.tableReview tbody tr').remove();
@@ -469,8 +469,8 @@ OKiadas.prototype.reviewFilter = function() {
 		curTR = $(this);
 		rszTD = curTR.find('.tdrsz');
 		if (curTR.attr('stat')=='X') {
-			/* "nincs meg" esetÈn fut csak, "nincs meg" jelzes torles */
-			if (confirm("MÈgis szedhetı?")) {
+			/* "nincs meg" eset√©n fut csak, "nincs meg" jelzes torles */
+			if (confirm("M√©gis szedhet≈ë?")) {
 				rsz = rszTD.html();
 				fn = 'kiadas.rszReset'; /* PDA_ORZOTTKI_RSZRESET */
 				r = ajaxCall(fn,{'rsz':rsz,'azon':kiadas.fejazon,'login':login_id},true, fn);
@@ -484,7 +484,7 @@ OKiadas.prototype.rszReset = function(result){
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		if (res.RESULTTEXT=='OK') {
-			showMessage('Vissza·llÌt·s rendben!','');
+			showMessage('Vissza√°ll√≠t√°s rendben!','');
 			kiadas.showReview();
 		}
 		else {
@@ -495,7 +495,7 @@ OKiadas.prototype.rszReset = function(result){
 
 
 OKiadas.prototype.lezarInit = function() {
-	if (confirm("Z·rhatÛ?")) {
+	if (confirm("Z√°rhat√≥?")) {
 		fn = 'kiadas.closeCheck'; /* PDA_ORZOTTKI_CLOSECHECK */
 		ajaxCall(fn,{'login':login_id,'azon':kiadas.fejazon},true, fn);
 	}
@@ -513,10 +513,10 @@ OKiadas.prototype.closeCheck = function(result){
 			errormsg='';
 			switch (res.RESULTTEXT) {
 				case 'NOT_READY': 
-					errormsg='MÈg van kiszedettlen tÈtel!';
+					errormsg='M√©g van kiszedettlen t√©tel!';
 					break;
 				case 'UNKNOWN_ERROR': 
-					errormsg='Adatb·zis hiba a lez·r·sn·l!';
+					errormsg='Adatb√°zis hiba a lez√°r√°sn√°l!';
 					break;					
 				default:
 					errormsg = res.RESULTTEXT;
@@ -538,7 +538,7 @@ OKiadas.prototype.closeIt = function(result){
 			errormsg='';
 			switch (res.RESULTTEXT) {
 				case 'UNKNOWN_ERROR': 
-					errormsg='Adatb·zis hiba a felÌr·sn·l!';
+					errormsg='Adatb√°zis hiba a fel√≠r√°sn√°l!';
 					break;					
 				default:
 					errormsg = res.RESULTTEXT;
@@ -593,7 +593,7 @@ OKiadas.prototype.printLabel = function(aktbutton){
         if (poz=="7") pozstr = "BHI";
         if (tip=="A") tipstr="Gumi";
         if (tip=="F") tipstr="Felni";
-        if (tip=="M") tipstr="KerÈk";
+        if (tip=="M") tipstr="Ker√©k";
     }
     else rsz=rszprint;    
 	var btPrint = function() {
@@ -619,7 +619,7 @@ OKiadas.prototype.printLabel = function(aktbutton){
 		console.log('btprint write error:kiadas, label print:'+rszprint);
 		app.printerConnected=false;
 		if (app.printerId!="") BTEnabled(null);
-		if (app.printerConnected==false) alert('Nyomtat·si hiba');
+		if (app.printerConnected==false) alert('Nyomtat√°si hiba');
 	}
 	/* print */
     if (app.printerType=='bt') {
@@ -662,8 +662,8 @@ OKiadas.prototype.printLabel = function(aktbutton){
 /*
 panelInit->(#kiadastip.change)->raktarList->(#raktarlist.change)->[(akttip='H' teleptolto)->telepList]->(#btStart.click)->mibizList->nextHkodGet->
                                                                                                                                             (van tetel)->hkodChange->nextRszGet->setNextRsz->(#dataRendszam.change)->rszChange->rszSave->
-                                                                                                                                                            ->(nincs tˆbb rsz a helykÛdon)->nextHkodGet
-                                                                                                                                                            ->(kˆv. rendsz·m a helykÛdrÛl)->setNextRsz
+                                                                                                                                                            ->(nincs t√∂bb rsz a helyk√≥don)->nextHkodGet
+                                                                                                                                                            ->(k√∂v. rendsz√°m a helyk√≥dr√≥l)->setNextRsz
                                                                                                                                             (nincs tetel)->showReview
     
 //nincs meg:
@@ -673,6 +673,6 @@ rszNotFound->rszEmpty->rsz/hkod valtas (ld fent)
 //lezaras:
 lezarInit->closeCheck->closeIt
     
-//·tnÈzı: 
+//√°tn√©z≈ë: 
 showReview->reviewRszFilter->reviewRszGet->reviewFilter->(stat3=X:rszReset - "nincs meg" torles->showReview)
 */

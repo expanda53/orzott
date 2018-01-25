@@ -1,4 +1,4 @@
-/* leltarazas */
+Ôªø/* leltarazas */
 markaUpdate = false;
 meretUpdate = false;
 mintaUpdate = false;
@@ -24,10 +24,10 @@ OLeltar.prototype.initMibizList = function(){
     gpanel = new OGPanel();
 	fn = 'leltar.mibizList';
 	r = ajaxCall(fn,{'biztip':'MO12', 'login':login_id},true, fn);
-	/* OLeltar.tpl beolvas, tr click -re mibiz ·tad·sa selectTask-nak. tr click az OLeltar.tpl-ben van*/
+	/* OLeltar.tpl beolvas, tr click -re mibiz √°tad√°sa selectTask-nak. tr click az OLeltar.tpl-ben van*/
 }
 OLeltar.prototype.mibizList = function(result) {
-	/* feladat lista ajax eredmÈnye */
+	/* feladat lista ajax eredm√©nye */
 	panelName = 'oleltar';
 	if (result.length>0) {
 		res = result[0];
@@ -97,7 +97,7 @@ OLeltar.prototype.selectTask = function() {
 	/* feladat valaszto ajax inditas */
 	//app.BTEnabled(null);						
 
-	$('#divheader').html('’rzˆtt lelt·r');
+	$('#divheader').html('≈êrz√∂tt lelt√°r');
 	//ajaxCall('leltar.taskReg',{'mibiz':this.mibiz, 'login':login_id},true, '');
 	$('#divmibizlist').hide();
 	
@@ -171,7 +171,7 @@ OLeltar.prototype.rszAdatokGet = function(result) {
                 break;
             case '1':
                 rendszam = $('#dataRendszam').val();
-                showMessage('Nem tal·lhatÛ ilyen rendsz·m! ' + rendszam);
+                showMessage('Nem tal√°lhat√≥ ilyen rendsz√°m! ' + rendszam);
                 $('#dataRendszam').val("");
                 $('#dataRendszam').focus();
                 leltar.currentPosition="";
@@ -180,7 +180,7 @@ OLeltar.prototype.rszAdatokGet = function(result) {
                 break;
             case '2':
                 rendszam = $('#dataRendszam').val();
-                showMessage(rendszam+': M·r lelt·rozva lett!');
+                showMessage(rendszam+': M√°r lelt√°rozva lett!');
                 $('#divmeres').hide();
                 $('.rszadatok').hide();
                 $('.dcontrol').hide();
@@ -192,7 +192,7 @@ OLeltar.prototype.rszAdatokGet = function(result) {
                 break;
             case '3':
                 rendszam = $('#dataRendszam').val();
-                showMessage(rendszam+': Nem rakhatÛ m·s helykÛdra, mint a tˆbbi! HelykÛd:' + res.RESULTTEXT);
+                showMessage(rendszam+': Nem rakhat√≥ m√°s helyk√≥dra, mint a t√∂bbi! Helyk√≥d:' + res.RESULTTEXT);
                 $('#divmeres').hide();
                 $('.rszadatok').hide();
                 $('.dcontrol').hide();
@@ -218,7 +218,7 @@ OLeltar.prototype.rszAdatokSet = function(rszadatok) {
 }
 OLeltar.prototype.rszAdatokUpdate = function(result) {
     leltar.rszAdatokBack();
-    showMessage("Gumi adatok frissÌtve.");
+    showMessage("Gumi adatok friss√≠tve.");
         
 }
 OLeltar.prototype.rszAdatokBack = function() {
@@ -234,7 +234,7 @@ OLeltar.prototype.rszAdatokBack = function() {
 
 OLeltar.prototype.getMelyseg=function(result){
 	$("#gstat").html('');
-	$("#gstat").append('<option value="" disabled selected>V·lasszon</option>');
+	$("#gstat").append('<option value="" disabled selected>V√°lasszon</option>');
 	for (var i = 0;i < result.length;i++){
 		res = result[i];
 		$("#gstat").append('<option value='+res.KOD+'>'+res.KOD+'</option>');
@@ -252,10 +252,10 @@ OLeltar.prototype.allapotMentes=function(){
 	fn='leltar.rszSave';  /*PDA_ORZOTTLERAK_SORUPDATE*/
 
 	csereok = $('#gcsok').val();
-	if ((melyseg=='-' || melyseg=='' || melyseg==null)) showMessage('MentÈs elıtt mÈrd meg a mÈlysÈget!');
+	if ((melyseg=='-' || melyseg=='' || melyseg==null)) showMessage('Ment√©s el≈ëtt m√©rd meg a m√©lys√©get!');
 	else 
 	if (melyseg=='CS' && csereok=="") {
-		showMessage('Csere esetÈn tˆltd ki a csere ok·t!');
+		showMessage('Csere eset√©n t√∂ltd ki a csere ok√°t!');
 	}
 	else {
         ajaxCall(fn,{'fejazon':leltar.fejazon, 'login':login_id, 'rendszam':rendszam, 'hkod':hkod,'csereok':csereok,'melyseg':melyseg},true, fn);
@@ -281,7 +281,7 @@ OLeltar.prototype.rszSave = function (result) {
                     leltar.currentRsz = "";
                     break;
                 case 'EXISTS':
-                    showMessage(rendszam+': M·r lelt·rozva lett!');
+                    showMessage(rendszam+': M√°r lelt√°rozva lett!');
                     $('#divmeres').hide();
                     $('.rszadatok').hide();
                     $('.dcontrol').hide();
@@ -315,8 +315,8 @@ OLeltar.prototype.reviewLoad = function(result) {
 	sorok = '';
 	fej="<thead>"
 				+"<tr>"
-					+"<th class='tdrsz'>Rendsz·m</th>"
-					+"<th>HelykÛd</th>"
+					+"<th class='tdrsz'>Rendsz√°m</th>"
+					+"<th>Helyk√≥d</th>"
 					+"<th></th>"
 				+"</tr>"
 		+"</thead>";
@@ -332,7 +332,7 @@ OLeltar.prototype.reviewLoad = function(result) {
 		sorok += '<td class="tdrsz">'+res.RSZSHORT+'<br><div class="tpoz">JE:'+res.JE+' BE:'+res.BE+' JH:'+res.JH+' BH:'+res.BH+' POT:'+res.POT+'</div></td>';
 		sorok +=  '<td class="tmibiz">'+res.HELY+'</td>'; 
 		//sorok +=  '<td class="tpoz">JE:'+res.JE+' BE:'+res.BE+' JH:'+res.JH+' BH:'+res.BH+' POT:'+res.POT+'</td>'; 
-		sorok +=  '<td class="tmibiz"><button onclick="leltar.delRszInit(\''+res.RSZSHORT+'\')">TˆrlÈs</button></td>'; 
+		sorok +=  '<td class="tmibiz"><button onclick="leltar.delRszInit(\''+res.RSZSHORT+'\')">T√∂rl√©s</button></td>'; 
 		sorok += '</tr>';
 		
 	}
@@ -358,7 +358,7 @@ OLeltar.prototype.showReview = function() {
 
 OLeltar.prototype.delRszInit=function(rendszam){
 	/* atnezon sortorles ajax inditas */
-  	torles = confirm(rendszam+": Biztos tˆrli a rendsz·mot a lelt·rbÛl?");
+  	torles = confirm(rendszam+": Biztos t√∂rli a rendsz√°mot a lelt√°rb√≥l?");
 	if (torles) {
         fn = 'leltar.delRsz';
         azon = leltar.fejazon;

@@ -20,7 +20,7 @@
  console.debug('orzott debug');
 
 showMessage =function (msg, clearObj,timeout ){
-    timeout = typeof timeout !== 'undefined' ? timeout : 3; //default paramÈtert csak igy eszi meg.
+    timeout = typeof timeout !== 'undefined' ? timeout : 3; //default param√©tert csak igy eszi meg.
 	$('#dmsg .msgtxt').html(msg);
 	$('#dmsg').show();
     if (timeout>0) {
@@ -50,7 +50,7 @@ function depthMeter (pid,pname) {
 	this.name = pname;
 	}
 var app = {
-    version:"v1.17.0905",
+    version:"v1.180125",
     printerType:"tcp",
 	printerId:"",
 	printerName:"",
@@ -186,7 +186,7 @@ var app = {
 	    /* printer */
 		if(typeof bluetoothSerial != 'undefined') {
 			var connect = function () {
-                showMessage('BT nyomtatÛ csatlakoztat·s...','',0);
+                showMessage('BT nyomtat√≥ csatlakoztat√°s...','',0);
                 app.printerType="bt";
                 d=[app.printerId,'abcd'];
 				bluetoothSerial.connect(
@@ -265,7 +265,7 @@ var app = {
 			console.log(data);
         });
         
-        showMessage('BT nyomtatÛ csatlakoztat·s...','',0);
+        showMessage('BT nyomtat√≥ csatlakoztat√°s...','',0);
         bluetoothSerial.isConnected(pconnected,pnotconnected);
         if (delayedFunc!=null) {
             window.setTimeout(
@@ -294,7 +294,7 @@ var app = {
         
         bluetoothSerial2.subscribe('\n', app.onData);
         //alert('meter openport 2');
-        showMessage('MÈlysÈgmÈrı csatlakoztat·s...','',0);
+        showMessage('M√©lys√©gm√©r≈ë csatlakoztat√°s...','',0);
         bluetoothSerial2.isConnected(dconnected,dnotconnected);
         if (delayedFunc!=null) {
             window.setTimeout(
@@ -369,7 +369,7 @@ var app = {
 */
     showErrorPrinter: function(error) {
         messageHide();
-		showMessage('BT nyomtatÛ csatlakoztat·s nem siker¸lt. '+error);
+		showMessage('BT nyomtat√≥ csatlakoztat√°s nem siker√ºlt. '+error);
         console.log("printer bluetooth error:"+error);
         $('#btNext').removeAttr('disabled');
         $('#tableprinter').removeAttr('disabled');
@@ -381,7 +381,7 @@ var app = {
     },
     showErrorDepthMeter: function(error) {
         messageHide();
-        showMessage('MÈlysÈgmÈrı csatlakoztat·s nem siker¸lt.'+error);
+        showMessage('M√©lys√©gm√©r≈ë csatlakoztat√°s nem siker√ºlt.'+error);
         $('#btNext').removeAttr('disabled');
         $('#tableprinter').removeAttr('disabled');
 

@@ -1,4 +1,4 @@
-/* gyors nyomtatas */
+Ôªø/* gyors nyomtatas */
 /*
   a beirt szoveget nyomtatja
 
@@ -14,7 +14,7 @@ var OQPrint = function(){
 	this.panelInit();
 }
 OQPrint.prototype.panelInit = function () {
-	/* kezdı panel megjelenÌtÈse*/
+	/* kezd≈ë panel megjelen√≠t√©se*/
 	panelName='oqprint';
 	$.get( "css/"+panelName+".css", function( data ) {
 		css = '<head><style>' + data + '</style></head>';
@@ -114,12 +114,12 @@ OQPrint.prototype.print = function (printtext) {
         if (poz=="7") pozstr = "BHI";
         if (tip=="A") tipstr="Gumi";
         if (tip=="F") tipstr="Felni";
-        if (tip=="M") tipstr="KerÈk";
+        if (tip=="M") tipstr="Ker√©k";
     }
     else rsz=rszprint;
 
 	var btPrintInit = function() {
-        showMessage('NyomtatÛ OK.');
+        showMessage('Nyomtat√≥ OK.');
         btPrint();
     }
 	var btPrint = function() {
@@ -142,7 +142,7 @@ OQPrint.prototype.print = function (printtext) {
                     }
                     var writeError = function(){
                         //console.log('btprint write error:'+beerk.currentItem+':'+beerk.currentPosition);
-                        showMessage('Nyomtat·si hiba');
+                        showMessage('Nyomtat√°si hiba');
                     }
                     bluetoothSerial.write(tpl,writeOk,writeError);
             })
@@ -161,7 +161,7 @@ OQPrint.prototype.print = function (printtext) {
         }
 		if (app.printerConnected==false) {
             $("#btimg").attr("src","img/bluetooth-red.png");
-            showMessage('Nyomtat·si hiba');
+            showMessage('Nyomtat√°si hiba');
         }
         printing=false;
 	}
@@ -217,6 +217,6 @@ panelInit->getRszInProgress->(#datarendszam.change)->rszChange()->rszAdatokGet->
                                                                                                                                         ->(ha meg nincs hkod)->showHkod->hkodSaveInit->hkodSaveCheck->hkodSave->getRszInProgress
                                                                               
                                                                               
-·tnÈzı: showReview->reviewRszFilter->reviewRszGet->reviewFilter
+√°tn√©z≈ë: showReview->reviewRszFilter->reviewRszGet->reviewFilter
 */
 

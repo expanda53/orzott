@@ -1,4 +1,4 @@
-
+ï»¿
 var OGPanel = function(){
     this.markaUpdate = false;
     this.meretUpdate = false;
@@ -163,14 +163,14 @@ OGPanel.prototype.GPanelClose = function (saveData){
 						if (gpanel.rszAdatokTEMP.BSI!='' && gpanel.rszAdatokTEMP.BSI==gpanel.rszAdatokTEMP.ASI) {
 							newContent=gpanel.rszAdatokTEMP.AMARKA+' '+gpanel.rszAdatokTEMP.AMERET+' '+gpanel.rszAdatokTEMP.AMINTA+' '+gpanel.rszAdatokTEMP.ASI; //egyezik minden
 						}
-						else newContent=gpanel.rszAdatokTEMP.AMARKA+' '+gpanel.rszAdatokTEMP.AMERET+' '+gpanel.rszAdatokTEMP.AMINTA+' '+gpanel.rszAdatokTEMP.ASI+'+'+gpanel.rszAdatokTEMP.BSI; //csak SI eltérés
+						else newContent=gpanel.rszAdatokTEMP.AMARKA+' '+gpanel.rszAdatokTEMP.AMERET+' '+gpanel.rszAdatokTEMP.AMINTA+' '+gpanel.rszAdatokTEMP.ASI+'+'+gpanel.rszAdatokTEMP.BSI; //csak SI eltÃ©rÃ©s
 						
 					}
-					else newContent=gpanel.rszAdatokTEMP.AMARKA+' '+gpanel.rszAdatokTEMP.AMERET+' '+gpanel.rszAdatokTEMP.AMINTA+' '+gpanel.rszAdatokTEMP.ASI + ' + ' + gpanel.rszAdatokTEMP.BMINTA+' '+gpanel.rszAdatokTEMP.BSI;//minta,si eltérés
+					else newContent=gpanel.rszAdatokTEMP.AMARKA+' '+gpanel.rszAdatokTEMP.AMERET+' '+gpanel.rszAdatokTEMP.AMINTA+' '+gpanel.rszAdatokTEMP.ASI + ' + ' + gpanel.rszAdatokTEMP.BMINTA+' '+gpanel.rszAdatokTEMP.BSI;//minta,si eltÃ©rÃ©s
 				}
-				else newContent=gpanel.rszAdatokTEMP.AMARKA+' '+gpanel.rszAdatokTEMP.AMERET+' '+gpanel.rszAdatokTEMP.AMINTA+' '+gpanel.rszAdatokTEMP.ASI + ' + ' + gpanel.rszAdatokTEMP.BMERET+' '+gpanel.rszAdatokTEMP.BMINTA+' '+gpanel.rszAdatokTEMP.BSI; //meret,minta,si eltérés
+				else newContent=gpanel.rszAdatokTEMP.AMARKA+' '+gpanel.rszAdatokTEMP.AMERET+' '+gpanel.rszAdatokTEMP.AMINTA+' '+gpanel.rszAdatokTEMP.ASI + ' + ' + gpanel.rszAdatokTEMP.BMERET+' '+gpanel.rszAdatokTEMP.BMINTA+' '+gpanel.rszAdatokTEMP.BSI; //meret,minta,si eltÃ©rÃ©s
 			}
-			else newContent=gpanel.rszAdatokTEMP.AMARKA+' '+gpanel.rszAdatokTEMP.AMERET+' '+gpanel.rszAdatokTEMP.AMINTA+' '+gpanel.rszAdatokTEMP.ASI + ' + ' + gpanel.rszAdatokTEMP.BMARKA+' '+gpanel.rszAdatokTEMP.BMERET+' '+gpanel.rszAdatokTEMP.BMINTA+' '+gpanel.rszAdatokTEMP.BSI; //marka,meret,minta,si eltérés
+			else newContent=gpanel.rszAdatokTEMP.AMARKA+' '+gpanel.rszAdatokTEMP.AMERET+' '+gpanel.rszAdatokTEMP.AMINTA+' '+gpanel.rszAdatokTEMP.ASI + ' + ' + gpanel.rszAdatokTEMP.BMARKA+' '+gpanel.rszAdatokTEMP.BMERET+' '+gpanel.rszAdatokTEMP.BMINTA+' '+gpanel.rszAdatokTEMP.BSI; //marka,meret,minta,si eltÃ©rÃ©s
 			newContent = newContent.trim();
 			if (newContent.indexOf('+')==0) {
 				newContent = newContent.replace('+','').trim();

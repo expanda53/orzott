@@ -40,7 +40,7 @@
   }
   
   function _logSQL($func, $stmt,$r) {
-    _log('[START] {'.$func.'}');
+    //_log('[START] {'.$func.'}');
     $stmt->execute();
     _log('[PARAMS] {' .$func.'} '. _debug($stmt,$r));  
     $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -48,8 +48,37 @@
     return $res;
   }
   
+  function tcpMessage($msg){
+	$ip = "192.168.1.164";
+	$band='ORZOTTJKV';
+	$db='F2017';
+	//'192.168.1.164;9099;'||TEMPS||' '||DBNAME||' c:\Alfa\Tir\Repib\au_abroncs_pda.AR '||TEMPS||' '||MIBIZ;	
+    $command=$band.' '.$db.' c:\Alfa\Tir\Repib\au_abroncs_pda.AR '.$band.' '.$msg;
+	$fp = fsockopen($ip, 9099, $errno, $errstr, 30); 
+    if (!$fp) {
+        echo "$errstr ($errno)<br />\n";
+    } else {
+        fwrite($fp, "$command\n");
+        
+        /*while (!feof($fp)) {
+          echo fgets($fp, 128);
+        }*/
+
+        fclose($fp);
+    }
+	  
+  }
+  
   
   switch ($func) {
+  case 'tcp':
+		tcpMessage(971421928);
+		break;
+  case 'log':
+		$log=$r['log'];  
+        _log('[LOG] ' . $log);
+        echo json_encode("OK");
+        break;
   
   case 'checkLogin':
 		$sql="select kezelo RCOUNT,telep from pda_kezelok where kezelo=:login";
@@ -61,7 +90,7 @@
         break;
   
   case 'loadSettings':
-		$sql="select tetel,ertek  from ini where konftip='SAJC' and szekcio = 'ANDROID' and tetel like 'ORZOTT%'";
+		$sql="select tetel,ertek  from ini where konftip='SAJC' and szekcio = 'ANDROID' /*and tetel like 'ORZOTT%'*/";
 		$stmt = Firebird::prepare($sql);
 		/*$login=trim($r['user']);
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);*/
@@ -202,7 +231,7 @@
 		$login = $r['login'];
 		$sql=" SELECT DISTINCT LEFT(BSOR.TAPADO,2) RENDSZAM
 				FROM BSOR
-				WHERE BSOR.BFEJ=:azon
+				WHERE BSOR.BFEJ=:azon AND TAPADO<>'TOBBLET'
 				";
 
 		$stmt = Firebird::prepare($sql);
@@ -219,7 +248,7 @@
 		}
 		$azon = $r['azon'];
 		$login = $r['login'];
-		$sql=" SELECT BSOR.TAPADO RENDSZAM, CAST(DRB AS INTEGER) DRB, CAST(DRB2 AS INTEGER) DRB2
+		$sql=" SELECT BSOR.TAPADO RENDSZAM, FOBIZ KARTYA, CAST(DRB AS INTEGER) DRB, CAST(DRB2 AS INTEGER) DRB2
 				FROM BSOR
 				WHERE BSOR.BFEJ=:azon $filterStr
 				";
@@ -265,11 +294,24 @@
 		//$res=array();
 		//$res[0]['STATUS']='OK';
 		Firebird::commit();
+		tcpMessage($mibiz);
 		echo $log=json_encode(Converter::win2utf_array($res));
         _log($log);
         break;
 	  
-  
+  case 'beerk.updateTobblet':
+		$azon = $r['azon'];
+		$drb = $r['drb'];
+		$login = $r['login'];
+		$sql=" SELECT * FROM PDA_ORZOTTLERAK_TOBBLET(:azon,:drb,:login)  ";
+		$stmt = Firebird::prepare($sql);
+		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+		$stmt->bindParam(':drb', $drb, PDO::PARAM_STR);
+        $stmt->bindParam(':login', $login, PDO::PARAM_STR);
+        $res = _logSQL($func,$stmt,$r);
+		Firebird::commit();
+		echo $log=json_encode(Converter::win2utf_array($res));
+        break;
   case 'beerk.getPositions':
 		$rsz = $r['rsz'];
 		$mibiz = $r['mibiz'];
@@ -708,6 +750,8 @@
 		$login=$r['login'];
 		$azon=$r['azon'];
 		$hkod=$r['hkod'];
+		//$hkod=utf8_decode($hkod);
+		$r['hkod']=$hkod;
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
 		$stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);
         $res = _logSQL($func,$stmt,$r);		
@@ -720,7 +764,9 @@
 		$login=$r['login'];
 		$azon=$r['azon'];
 		$hkod=$r['hkod'];
+		//$hkod=utf8_decode($hkod);
 		$rsz=$r['rsz'];
+		$r['hkod']=$hkod;
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
 		$stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);
 		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
@@ -742,7 +788,7 @@
 		$stmt->bindParam(':lastrsz', $lastrsz, PDO::PARAM_STR);
 		$stmt->bindParam(':rszshort', $rszshort, PDO::PARAM_STR);		
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);		
-		$stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);		
+		$stmt->bindParam(':hkod', utf8_decode($hkod), PDO::PARAM_STR);		
         $res = _logSQL($func,$stmt,$r);		
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
@@ -757,7 +803,7 @@
 		$stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
 		$stmt->bindParam(':rszshort', $rszshort, PDO::PARAM_STR);		
 		$stmt->bindParam(':login', $login, PDO::PARAM_STR);		
-		$stmt->bindParam(':hkod', $hkod, PDO::PARAM_STR);		
+		$stmt->bindParam(':hkod', utf8_decode($hkod), PDO::PARAM_STR);		
         $res = _logSQL($func,$stmt,$r);		
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));

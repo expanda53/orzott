@@ -1,4 +1,4 @@
-var printerDialog = {
+Ôªøvar printerDialog = {
 	show: function(){
 		panelName = 'printer';
 		$.get( "css/"+panelName+".css", function( data ) {
@@ -8,7 +8,7 @@ var printerDialog = {
 				$('#divSettings').html(css + tpl);
                 $('#divContent').hide();
 				$('#divSettings').show();
-                $('#divheaderS').html('BT nyomtatÛ csatlakoztat·s');
+                $('#divheaderS').html('BT nyomtat√≥ csatlakoztat√°s');
 				printerDialog.createTable();				
 				$('#btNext').bind('click', function() {
 					printerDialog.showNext();
@@ -21,10 +21,10 @@ var printerDialog = {
 	createTable:function(){
 				sorok = "";
                 var connected = function(){
-                    //showMessage('nyomtatÛ ok','',2);
-                    if (app.printerTplPrefix=="_portrait") {showMessage("BT nyomtatÛ csatlakoztatva. Nyomtat·s ·llÌtva (RW220)","",2);printerDialog.showNext();}
+                    //showMessage('nyomtat√≥ ok','',2);
+                    if (app.printerTplPrefix=="_portrait") {showMessage("BT nyomtat√≥ csatlakoztatva. Nyomtat√°s √°ll√≠tva (RW220)","",2);printerDialog.showNext();}
                     else
-                    if (app.printerTplPrefix=="") {showMessage("BT nyomtatÛ csatlakoztatva. Nyomtat·s fektetve (RW420)","",2);printerDialog.showNext();}
+                    if (app.printerTplPrefix=="") {showMessage("BT nyomtat√≥ csatlakoztatva. Nyomtat√°s fektetve (RW420)","",2);printerDialog.showNext();}
                     else printerDialog.setOrientation();
                 
                     
@@ -65,7 +65,7 @@ var printerDialog = {
 	},
     setOrientation:function(){
         app.printerTplPrefix="_portrait";
-        if(confirm("Fektetve(OK) vagy ·llÌtva nyomtat(MÈgse)?")) {
+        if(confirm("Fektetve(OK) vagy √°ll√≠tva nyomtat(M√©gse)?")) {
             app.printerTplPrefix="";
         }
         printerDialog.showNext();
@@ -83,4 +83,4 @@ var printerDialog = {
 }
 
 /*
-  show->createTable->(index.js)app.BTEnabled->connected->setOrientation->showNext->(orzott.js)showMenu/panel elrejtÈs*/
+  show->createTable->(index.js)app.BTEnabled->connected->setOrientation->showNext->(orzott.js)showMenu/panel elrejt√©s*/

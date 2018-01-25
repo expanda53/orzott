@@ -1,4 +1,4 @@
-/* szortirozas */
+Ôªø/* szortirozas */
 
 function clickHelp(){
 	$('#divclick').show();
@@ -16,10 +16,10 @@ var OSzortir = function(){
 OSzortir.prototype.initMibizList = function(){
 	fn = 'szortir.mibizList'; /* PDA_ORZOTTSZORTIR_MIBIZLIST */
 	r = ajaxCall(fn,{'login':login_id},true, fn);
-	/* OSzortir.tpl beolvas, tr click -re mibiz ·tad·sa selectTask-nak. tr click az OSzortir.tpl-ben van*/
+	/* OSzortir.tpl beolvas, tr click -re mibiz √°tad√°sa selectTask-nak. tr click az OSzortir.tpl-ben van*/
 }
 OSzortir.prototype.mibizList = function(result) {
-	/* feladat lista ajax eredmÈnye */
+	/* feladat lista ajax eredm√©nye */
 	panelName = 'oszortir';
 	if (result.length>0) {
 		res = result[0];
@@ -39,7 +39,7 @@ OSzortir.prototype.mibizList = function(result) {
 		})
 	}
     else {
-        showMessage('Nincs Èlı szortÌrlista a rendszerben!','',1.5)
+        showMessage('Nincs √©l≈ë szort√≠rlista a rendszerben!','',1.5)
     }
 	
 	
@@ -47,7 +47,7 @@ OSzortir.prototype.mibizList = function(result) {
 }
 OSzortir.prototype.selectTask = function() {
 	/* feladat valaszto ajax inditas */
-	$('#divheader').html('’rzˆtt szortir');
+	$('#divheader').html('≈êrz√∂tt szortir');
 	$('#divmibizlist').hide();
 	
 	$("#hAZON").val(szortir.fejazon);
@@ -94,8 +94,8 @@ OSzortir.prototype.getRszDetails = function (result) {
             ajaxCall(fn,{'azon':szortir.fejazon, 'login':login_id, 'rsz':rendszam},true, fn);
             
         }
-        if (res.RESULT==0) showMessage('Nincs ilyen rendsz·m a szortÌr list·n!','');
-        if (res.RESULT==-1) showMessage('LekÈrdezÈsi hiba!','');
+        if (res.RESULT==0) showMessage('Nincs ilyen rendsz√°m a szort√≠r list√°n!','');
+        if (res.RESULT==-1) showMessage('Lek√©rdez√©si hiba!','');
     }
     $('#dataRendszam').val('');    
 }
@@ -115,18 +115,18 @@ OSzortir.prototype.rszSave = function (result) {
 			errormsg='';
 			switch (res.RESULTTEXT) {
 				case 'NOT_FOUND': 
-					errormsg='Nem tal·lhatÛ ilyen rendsz·m a szortÌrozandÛ abroncsok kˆzˆtt!';
+					errormsg='Nem tal√°lhat√≥ ilyen rendsz√°m a szort√≠rozand√≥ abroncsok k√∂z√∂tt!';
 					break;
 				case 'ALREADY_DONE': 
-					errormsg='Ez a pozÌciÛ m·r szortÌrozva lett!';
+					errormsg='Ez a poz√≠ci√≥ m√°r szort√≠rozva lett!';
                     $('#dataKeszdrb').html(res.ODRB2);
 					break;
 				case 'AUTOCLOSE_DONE': 
-					errormsg='Az ˆsszes tÈtel szortirozva lett, lista lez·rva.';
+					errormsg='Az √∂sszes t√©tel szortirozva lett, lista lez√°rva.';
                     emptyobj='';
 					break;                    
 				case 'UNKNOWN_ERROR': 
-					errormsg='Adatb·zis hiba a felÌr·sn·l!';
+					errormsg='Adatb√°zis hiba a fel√≠r√°sn√°l!';
 					break;					
 				default:
 					errormsg = res.RESULTTEXT;
@@ -166,18 +166,18 @@ OSzortir.prototype.reviewLoad = function(result) {
 		sorok += '<tr class="'+tdclass+'" id="'+res.RENDSZAM+'">';
 		sorok += '<td class="tdrsz">';
         sorok += '<span class="reviewData">'+res.RENDSZAM+'</span>';
-		sorok +=  ' J·rat:'+'<span class="reviewData">'+res.JARAT+'</span>'; 
-        sorok +=  ' Hi·nyzik:'+'<span class="reviewData">'+res.HIANY+'</span>'; 
+		sorok +=  ' J√°rat:'+'<span class="reviewData">'+res.JARAT+'</span>'; 
+        sorok +=  ' Hi√°nyzik:'+'<span class="reviewData">'+res.HIANY+'</span>'; 
         sorok +=  '<br>';
         sorok +=  '<span class="reviewData">'+res.MERETMINTA+'</span>'; 
-        sorok +=  ' HelykÛd:'+'<span class="reviewData">'+res.HELYKOD+'</span>';
+        sorok +=  ' Helyk√≥d:'+'<span class="reviewData">'+res.HELYKOD+'</span>';
         sorok += '</td>'; 
 		sorok += '</tr>';
         hianydb = parseInt(hianydb) + parseInt(res.HIANYDB);
 		
 	}
 	if (hianydb!=0){
-		$('.labelHiany').html('SzortÌrozandÛ:');
+		$('.labelHiany').html('Szort√≠rozand√≥:');
 		$('.dataHiany').html(hianydb);
 	}
 	$('.tableReview').html(sorok);
@@ -205,10 +205,10 @@ OSzortir.prototype.lezarUpdate= function(result) {
 					errormsg='';
 					break;
 				case 'OK': 
-					errormsg='Az ˆsszes tÈtel szortirozva lett, lista lez·rva.';
+					errormsg='Az √∂sszes t√©tel szortirozva lett, lista lez√°rva.';
 					break;
 				case 'UNKNOWN_ERROR': 
-					errormsg='Adatb·zis hiba a lez·r·sn·l!';
+					errormsg='Adatb√°zis hiba a lez√°r√°sn√°l!';
 					break;					
 				default:
 					errormsg = res.RESULTTEXT;
