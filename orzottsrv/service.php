@@ -210,7 +210,37 @@
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
-	  
+
+  case 'beerk.rszMentMind':
+		$azon = $r['azon'];
+		$sorsz = $r['sorsz'];
+		$drb2 = $r['drb2'];
+		$login = $r['login'];
+		$pozmind = $r['poz'];
+		$tip = $r['tip'];
+        
+        $poz     = explode(";", $pozmind);
+		$rowstat='R';
+        foreach ($poz as $aktpoz) {
+            $aktpoz=str_replace('#','',$aktpoz);
+            if ($aktpoz!='') {
+                $res=null;
+                $sql=" SELECT RESULT,FE,GU FROM PDA_ORZOTTLERAK_SORUPDATE(:azon, :sorsz, :drb2, :poz, :tip, :rowstat, :login) ";
+                $stmt = Firebird::prepare($sql);
+                $stmt->bindParam(':azon', $azon, PDO::PARAM_STR);
+                $stmt->bindParam(':sorsz', $sorsz, PDO::PARAM_STR);
+                $stmt->bindParam(':drb2', $drb2, PDO::PARAM_STR);
+                $stmt->bindParam(':poz', $aktpoz, PDO::PARAM_STR);
+                $stmt->bindParam(':tip', $tip, PDO::PARAM_STR);
+                $stmt->bindParam(':rowstat', $rowstat, PDO::PARAM_STR);
+                $stmt->bindParam(':login', $login, PDO::PARAM_STR);
+                $res = _logSQL($func,$stmt,$r);
+            }
+        }
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+        break;
+        
   case 'beerk.rszJav':
 		$azon = $r['azon'];
 		$sorsz = $r['sorsz'];

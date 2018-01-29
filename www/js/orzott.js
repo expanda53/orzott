@@ -1,6 +1,6 @@
 ﻿var beerk = null;
 var elrak = null;
-var teszt = false;
+var teszt = true;
 if (teszt) alert('!!TESZT!!');
 $.support.cors=true;
 $.ajaxSetup({ cache: false });
@@ -93,7 +93,7 @@ function showMenu() {
                 app.tcpServerIP = settings.getItem('TCPSERVER_IP');
                 app.tcpServerPort = settings.getItem('TCPSERVER_PORT');
             }
-            
+           
             settings_to_users = settings.getItem('ORZOTT_BEALLITASOKAT_LATHAT');
 			if (1==2 && settings_to_users != null && settings_to_users.indexOf(login_id)>-1) {
 				$('#bsettings').show();

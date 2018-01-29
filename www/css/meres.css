@@ -4,6 +4,9 @@
 	font-size:15px;
 	width:90px;
 }
+#bMIND {
+    background-color:yellow !important;
+}
 .bpozicio {
 	padding:10px 20px;
 	margin:5px;

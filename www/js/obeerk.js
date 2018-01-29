@@ -50,6 +50,8 @@ var OBeerk = function(){
 	this.currentPosition = '';
     this.kerekPozvalasztas=true; //korabban ugy volt, hogy a kerek megy mosasra, es utana nyomtatnak. Ez ugy tunik nem igy van, de berakok egy konfigot, ha megis...
     this.tobblet=0;
+    this.printAll = false;
+    this.pozToPrint = '';
     //gpanel = new OGPanel();
 }
 /* feladat valasztas */
@@ -303,8 +305,8 @@ OBeerk.prototype.selectTask = function(mibiz,mszam3) {
 OBeerk.prototype.selectTaskCont = function(result) {
 	mibiz = beerk.tempMibiz;
 	mszam3 = beerk.tempMszam3;
-	this.meresKell=result;
-	if (this.meresKell) {
+	beerk.meresKell=result;
+	if (beerk.meresKell) {
 		$('#divheader').html('Őrzött beérkezés - <b>állapot felméréssel</b> - Sofőr:'+mszam3);
 	}
 	else {
@@ -401,6 +403,13 @@ OBeerk.prototype.showAllapotPanelResponse = function(result){
                     $('#divpanel').hide();
                     $('#divmeres').show();
                     $('#divpozicio').show();				
+                    if (beerk.meresKell) { 
+                        $('#bMIND').hide();
+                    }
+                    else {
+                        $('#bMIND').show(); 
+                    }
+                    
                     var muvelet = 'Rendszám: '+rsz+' ';
                     
                     if (beerk.currentItem=="bGumi") muvelet += "beérkezés: gumi";
@@ -457,6 +466,76 @@ OBeerk.prototype.checkMarka = function (poz){
 
 }
 
+OBeerk.prototype.selectAll = function () {
+    //maradek cimkek egyben lenyomtatasa
+    drb = $('.dataDrbVart').html();
+    drb2 = $('.dataDrbKesz').html();
+    pdrb= drb - drb2;
+    if (pdrb>0) {
+        beerk.printAll = true;
+        beerk.pozToPrint='';        
+        aktpoz='#bJE';
+        aktpozDisabled = $(aktpoz).attr('disabled');
+        if (!aktpozDisabled && pdrb>0) {
+            beerk.pozToPrint+=aktpoz+';';
+            pdrb--;
+            beerk.selectPosition($(aktpoz));
+        }
+
+        aktpoz='#bBE';
+        aktpozDisabled = $(aktpoz).attr('disabled');
+        if (!aktpozDisabled && pdrb>0) {
+            beerk.pozToPrint+=aktpoz+';';
+            pdrb--;
+            beerk.selectPosition($(aktpoz));
+        }
+
+        aktpoz='#bJH';
+        aktpozDisabled = $(aktpoz).attr('disabled');
+        if (!aktpozDisabled && pdrb>0) {
+            beerk.pozToPrint+=aktpoz+';';
+            pdrb--;
+            beerk.selectPosition($(aktpoz));
+        }
+        
+        aktpoz='#bBH';
+        aktpozDisabled = $(aktpoz).attr('disabled');
+        if (!aktpozDisabled && pdrb>0) {
+            beerk.pozToPrint+=aktpoz+';';
+            pdrb--;
+            beerk.selectPosition($(aktpoz));
+        }
+        
+        aktpoz='#bPOT';
+        aktpozDisabled = $(aktpoz).attr('disabled');
+        if (!aktpozDisabled && pdrb>0) {
+            beerk.pozToPrint+=aktpoz+';';
+            pdrb--;
+            beerk.selectPosition($(aktpoz));
+        }
+        
+        aktpoz='#bJHI';
+        aktpozDisabled = $(aktpoz).attr('disabled');
+        if (!aktpozDisabled && pdrb>0) {
+            beerk.pozToPrint+=aktpoz+';';
+            pdrb--;
+            beerk.selectPosition($(aktpoz));
+        }
+
+        aktpoz='#bBHI';
+        aktpozDisabled = $(aktpoz).attr('disabled');
+        if (!aktpozDisabled && pdrb>0) {
+            beerk.pozToPrint+=aktpoz+';';
+            pdrb--;
+            beerk.selectPosition($(aktpoz));
+        }
+        beerk.mentesMind();
+        beerk.printAll = false;
+        //alert(drb+ ' ' + drb2 + ' ' + aktpoz + ' ' + aktpozDisabled);
+        
+    }
+}
+
 OBeerk.prototype.selectPosition = function (obj) {
 	/* nyomtatas inditas + mentes ajax*/
 	tip = this.currentItem; /* gumi,felni, ... */
@@ -501,8 +580,7 @@ OBeerk.prototype.selectPosition = function (obj) {
                     tpl = tpl.replace(/\[RENDSZPOZ\]/g,rsz+"_"+ppoz+ptip); 
                     tpl += '\r\n';
                     var writeOk = function(){
-                        fn = 'beerk.rszMent'; /* PDA_ORZOTTLERAK_SORUPDATE */
-                        r = ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'tip':beerk.currentItem, 'poz':beerk.currentPosition, 'login':login_id},true, fn);
+                        beerk.mentes(azon,sorsz,drb2,tip,poz);
                     }
                     var writeError = function(){
                         console.log('btprint write error:'+beerk.currentItem+':'+beerk.currentPosition);
@@ -575,9 +653,7 @@ OBeerk.prototype.selectPosition = function (obj) {
                         printing=true;
           
                         cbPrint = function(){
-                            fn = 'beerk.rszMent'; /* PDA_ORZOTTLERAK_SORUPDATE */
-                            r = ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'tip':beerk.currentItem, 'poz':beerk.currentPosition, 'login':login_id},true, fn);
-
+                            beerk.mentes(azon,sorsz,drb2,tip,poz);
                         }
                         dataString="ORZOTTCIMKE" + " " + rsz+" "+tipstr+" "+pozstr+" "+rsz+"_"+ppoz+ptip;
                         if (beerk.currentItem!='bGumiFelni' || mindenre_nyomtat) tcpClient.send(app.tcpServerIP,app.tcpServerPort,dataString,cbPrint);
@@ -588,12 +664,12 @@ OBeerk.prototype.selectPosition = function (obj) {
                     }                
                 }
                 else  showMessage('printer not found');
+                //if (teszt) beerk.mentes(azon,sorsz,drb2,tip,poz);
             }            
         }
         else {
             /* kerek valasztasnal nincs nyomtatas (mivel mossak oket, es kesobb nyomtatjak)*/
-            fn = 'beerk.rszMent';
-            ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'tip':tip,'poz':poz,'login':login_id},true, fn);
+            beerk.mentes(azon,sorsz,drb2,tip,poz);
         }
     }
     else {
@@ -604,6 +680,34 @@ OBeerk.prototype.selectPosition = function (obj) {
 
 }
 
+OBeerk.prototype.mentes = function(azon,sorsz,drb2,tip,poz) {
+    if (!beerk.printAll) {
+            fn = 'beerk.rszMent';
+            ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'tip':tip,'poz':poz,'login':login_id},true, fn);
+    }
+}
+OBeerk.prototype.mentesMind = function() {
+    if (beerk.printAll && beerk.pozToPrint!='') {
+            tip = beerk.currentItem; /* gumi,felni, ... */
+            drb2 = $('.dataDrbVart').html();
+            azon = $('#hAZON').val();
+            sorsz = $('#hSORSZ').val();	
+            fn = 'beerk.rszMentMind';
+            ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'tip':tip,'poz':beerk.pozToPrint,'login':login_id},true, fn);
+    }
+}
+OBeerk.prototype.rszMentMind = function(result) {
+	/* mentes ajax eredmenye */
+    app.btRefresh();
+	for (var i = 0;i < result.length;i++){
+		res = result[i];
+		if (res.RESULT>0 && res.RESULT<=10)	{
+			$('.dataDrbKesz').html(res.RESULT);
+			$('.dataDrbFEGU').html(res.FE+'/'+res.GU);
+        }
+    }
+    $('#bAllapotClose').trigger( "click" );
+}
 OBeerk.prototype.rszMent = function(result) {
 	/* mentes ajax eredmenye */
     app.btRefresh();

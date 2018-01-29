@@ -27,6 +27,9 @@
 	$('.bpozicio').bind('click',function () {
 		beerk.selectPosition($(this));
 	})
+	$('.bmind').bind('click',function () {
+		beerk.selectAll();
+	})
 	$('#bAllapotMent').bind('click',function () {
 		beerk.allapotMentes();
 	})
@@ -122,6 +125,7 @@
 	<button class=bpozicio id=bPOT>POT</button>
 	<button class=bpozicio id=bJHI>JHI</button>
 	<button class=bpozicio id=bBHI>BHI</button>
+	<button class=bmind id=bMIND>Mind</button>
 </div>
 <div id=divallapot>
 	<div id=divgstat>

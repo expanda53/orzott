@@ -50,7 +50,7 @@ function depthMeter (pid,pname) {
 	this.name = pname;
 	}
 var app = {
-    version:"v1.180125",
+    version:"v1.180129_2",
     printerType:"tcp",
 	printerId:"",
 	printerName:"",
