@@ -1,6 +1,6 @@
 ﻿var beerk = null;
 var elrak = null;
-var teszt = true;
+var teszt = false;
 if (teszt) alert('!!TESZT!!');
 $.support.cors=true;
 $.ajaxSetup({ cache: false });
@@ -42,7 +42,7 @@ function ajaxCall( func, d,asyn,fn) {
 }
 
 function ajaxError(func){
-    alert(func);
+    alert('ajax hiba a függvénynél:' + func);
 }
 
 

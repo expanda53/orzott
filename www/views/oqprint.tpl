@@ -7,7 +7,6 @@
 			<button id=bMenu>Menü</button>
             <button id=btabaj>A-O</button>
             <button id=btabkz>P-Z</button>
-            <button id=btabspec>...</button>
             <button id=btabnum>0-9</button>
             <div id=divheader>
                         <input id=dataRendszam>
@@ -27,6 +26,11 @@
                     <button class=bnum>7</button>
                     <button class=bnum>8</button>
                     <button class=bnum>9</button>
+                    <button class=bnum>-</button>
+                    <button class=bnum>_</button>
+                    <button class=bnum>:</button>
+                    <button class=bnum>/</button>
+                    
                 </div>
                 <div class=divajbuttons>
                     <button class=bnum>A</button>
@@ -58,15 +62,15 @@
                     <button class=bnum>Y</button>
                     <button class=bnum>Z</button>
                 </div>
-                <div class=divspecbuttons>
-                    <button class=bnum>-</button>
-                    <button class=bnum>_</button>
-                    <button class=bnum>:</button>
-                    <button class=bnum>/</button>
-                </div>
             </div>
-
 		</div>
+        <!-- cimke panel -->
+        <div id=divcimke>
+            <div id=dcimkebuttons></div>
+            <button id=bCimkeClose>Vissza</button>
+        </div>
+        <!-- cimke panel end -->
+        
 	</div>
 </div>
 </body>

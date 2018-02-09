@@ -380,6 +380,7 @@ OBeerk.prototype.showPozPanel = function(obj) {
 
 /* allapot panel */
 OBeerk.prototype.showAllapotPanel = function(obj){
+    beerk.printAll = false;
     this.currentItem = obj.attr('id'); 
     if (beerk.fedb>0 && beerk.currentItem=="bGumi") this.showDialog('Rögzítés','Keréknek várjuk, biztos hogy guminak rögzíted?', beerk.showAllapotPanelResponse,beerk.showAllapotPanelResponse);
     else
@@ -391,7 +392,7 @@ OBeerk.prototype.showAllapotPanel = function(obj){
 OBeerk.prototype.showAllapotPanelResponse = function(result){
     if (result) {
         $('#bAllapotClose').show();
-        if (this.meresKell || beerk.currentItem=="bGumi" || (this.kerekPozvalasztas && beerk.currentItem=="bGumiFelni")) {
+        if (beerk.meresKell || beerk.currentItem=="bGumi" || (beerk.kerekPozvalasztas && beerk.currentItem=="bGumiFelni")) {
             /* ha meressel kerte, vagy meres nelkul de gumit (vagy kereket) valasztott */
             panelName='meres';
             $.get( "css/"+panelName+".css", function( data ) {
@@ -432,7 +433,7 @@ OBeerk.prototype.showAllapotPanelResponse = function(result){
             /* ha meres nelkul kerte (kiveve gumi eseten, ott ilyenkor is van allapot panel) */
             /* felni eseten automatikus nyomtatas erkezesi sorrendben, nincs jelentosege, hogy melyik felni melyik pozicio*/
             /* kerek eseten csak mennyiseg noveles van, mivel nem merunk es nyomtatni sem kell, mert mossak oket */
-            this.selectPosition(null);
+            beerk.selectPosition(null);
         }
     }
 }
@@ -459,7 +460,7 @@ OBeerk.prototype.checkMarka = function (poz){
       if (poz=='bJH' || poz=='bBH')  index=12;
       if (poz=='bPOT' )  index=15;
       if (index!=-1) {
-        if (beerk.rszAdatok[index].trim()=='') {showMessage('Az adott tengelyen nincs méret, minta beállítva! Állítsd be!');result=false;}
+        if (beerk.rszAdatok[index].trim()=='' || beerk.rszAdatok[index].trim()=='nincs') {showMessage('Az adott tengelyen nincs méret, minta beállítva! Állítsd be!');result=false;}
       }
   }
   return result;
@@ -468,69 +469,150 @@ OBeerk.prototype.checkMarka = function (poz){
 
 OBeerk.prototype.selectAll = function () {
     //maradek cimkek egyben lenyomtatasa
+    /* a nynomtatas kesleltetve van inditva, hogy ne elozze be egyik a masikat. emiatt lehet hogy a beerk.printAll trueban marad, de a showAllapotPanel false-ra allitja a kov. megnyitaskor */
     drb = $('.dataDrbVart').html();
     drb2 = $('.dataDrbKesz').html();
     pdrb= drb - drb2;
+    sec=1;
+    aktdrb=0;
+    beerk.printAll = false;
+    
     if (pdrb>0) {
+        stop=false;
         beerk.printAll = true;
         beerk.pozToPrint='';        
         aktpoz='#bJE';
         aktpozDisabled = $(aktpoz).attr('disabled');
-        if (!aktpozDisabled && pdrb>0) {
-            beerk.pozToPrint+=aktpoz+';';
-            pdrb--;
-            beerk.selectPosition($(aktpoz));
+        if (!aktpozDisabled && pdrb>0 && !stop) {
+            poz=$(aktpoz).attr('id');
+            if (this.checkMarka(poz)) {
+                beerk.pozToPrint+=aktpoz+';';
+                pdrb--;
+                aktdrb++;
+                setTimeout(function(){ 
+                    aktpoz='#bJE';
+                    beerk.printAll = true;
+                    //showMessage('Nyomtatás:' + aktpoz,'',sec);            
+                    beerk.selectPosition($(aktpoz)) ;
+                }, aktdrb * sec * 1000);
+            }
+            else stop=true;
         }
 
         aktpoz='#bBE';
         aktpozDisabled = $(aktpoz).attr('disabled');
-        if (!aktpozDisabled && pdrb>0) {
-            beerk.pozToPrint+=aktpoz+';';
-            pdrb--;
-            beerk.selectPosition($(aktpoz));
+        if (!aktpozDisabled && pdrb>0 && !stop) {
+            poz=$(aktpoz).attr('id');
+            if (this.checkMarka(poz)) {
+                pdrb--;
+                beerk.pozToPrint+=aktpoz+';';
+                aktdrb++;
+                setTimeout(function(){ 
+                    aktpoz='#bBE';
+                    beerk.printAll = true;
+                    //showMessage('Nyomtatás:' + aktpoz,'',sec);                            
+                    beerk.selectPosition($(aktpoz)) ;
+                }, aktdrb * sec * 1000);
+            }
+            else stop=true;
         }
 
         aktpoz='#bJH';
         aktpozDisabled = $(aktpoz).attr('disabled');
-        if (!aktpozDisabled && pdrb>0) {
-            beerk.pozToPrint+=aktpoz+';';
-            pdrb--;
-            beerk.selectPosition($(aktpoz));
+        if (!aktpozDisabled && pdrb>0 && !stop) {
+            poz=$(aktpoz).attr('id');
+            if (this.checkMarka(poz)) {            
+                beerk.pozToPrint+=aktpoz+';';
+                pdrb--;
+                aktdrb++;
+                setTimeout(function(){ 
+                    aktpoz='#bJH';
+                    beerk.printAll = true;
+                    //showMessage('Nyomtatás:' + aktpoz,'',sec);                            
+                    beerk.selectPosition($(aktpoz)) ;
+                }, aktdrb * sec * 1000);
+            }
+            else stop=true;
         }
         
         aktpoz='#bBH';
         aktpozDisabled = $(aktpoz).attr('disabled');
-        if (!aktpozDisabled && pdrb>0) {
-            beerk.pozToPrint+=aktpoz+';';
-            pdrb--;
-            beerk.selectPosition($(aktpoz));
+        if (!aktpozDisabled && pdrb>0 && !stop) {
+            poz=$(aktpoz).attr('id');
+            if (this.checkMarka(poz)) {            
+                beerk.pozToPrint+=aktpoz+';';
+                pdrb--;
+                aktdrb++;
+                setTimeout(function(){ 
+                    aktpoz='#bBH';
+                    beerk.printAll = true;
+                    //showMessage('Nyomtatás:' + aktpoz,'',sec);            
+                    beerk.selectPosition($(aktpoz)) ;
+                }, aktdrb * sec * 1000);
+            }
+            else stop=true;
         }
         
         aktpoz='#bPOT';
         aktpozDisabled = $(aktpoz).attr('disabled');
-        if (!aktpozDisabled && pdrb>0) {
-            beerk.pozToPrint+=aktpoz+';';
-            pdrb--;
-            beerk.selectPosition($(aktpoz));
+        if (!aktpozDisabled && pdrb>0 && !stop) {
+            poz=$(aktpoz).attr('id');
+            if (this.checkMarka(poz)) {            
+                beerk.pozToPrint+=aktpoz+';';
+                pdrb--;
+                aktdrb++;
+                setTimeout(function(){ 
+                    aktpoz='#bPOT';
+                    beerk.printAll = true;
+                    //showMessage('Nyomtatás:' + aktpoz,'',sec);            
+                    beerk.selectPosition($(aktpoz)) ;
+                }, aktdrb * sec * 1000);
+            }
+            else stop=true;
         }
         
         aktpoz='#bJHI';
         aktpozDisabled = $(aktpoz).attr('disabled');
-        if (!aktpozDisabled && pdrb>0) {
-            beerk.pozToPrint+=aktpoz+';';
-            pdrb--;
-            beerk.selectPosition($(aktpoz));
+        if (!aktpozDisabled && pdrb>0 && !stop) {
+            poz=$(aktpoz).attr('id');
+            if (this.checkMarka(poz)) {            
+                beerk.pozToPrint+=aktpoz+';';
+                pdrb--;
+                aktdrb++;
+                setTimeout(function(){ 
+                    aktpoz='#bJHI';
+                    beerk.printAll = true;
+                    //showMessage('Nyomtatás:' + aktpoz,'',sec);
+                    beerk.selectPosition($(aktpoz)) ;
+                }, aktdrb * sec * 1000);
+            }
+            else stop=true;
         }
 
         aktpoz='#bBHI';
         aktpozDisabled = $(aktpoz).attr('disabled');
-        if (!aktpozDisabled && pdrb>0) {
-            beerk.pozToPrint+=aktpoz+';';
-            pdrb--;
-            beerk.selectPosition($(aktpoz));
+        if (!aktpozDisabled && pdrb>0 && !stop) {
+            poz=$(aktpoz).attr('id');
+            if (this.checkMarka(poz)) {            
+                beerk.pozToPrint+=aktpoz+';';
+                pdrb--;
+                aktdrb++;
+                setTimeout(function(){ 
+                    beerk.printAll = true;
+                    aktpoz='#bBHI';
+                    //showMessage('Nyomtatás:' + aktpoz,'',sec);
+                    beerk.selectPosition($(aktpoz)) ;
+                }, aktdrb * sec * 1000);
+            }
+            else stop=true;
         }
-        beerk.mentesMind();
-        beerk.printAll = false;
+        if (!stop) beerk.mentesMind();
+        else {
+          beerk.printAll = false;
+          this.showGPanel();
+          $('#bAllapotClose').trigger( "click" );
+        }
+        
         //alert(drb+ ' ' + drb2 + ' ' + aktpoz + ' ' + aktpozDisabled);
         
     }
@@ -622,8 +704,9 @@ OBeerk.prototype.selectPosition = function (obj) {
 					poz=beerk.currentPosition;
 
 	}
-	if (this.checkMarka(poz)) {
-        if (drb2>=drb) {
+    //egyedi nyomtatasnal itt kell ellenorizni, hogy ki van-e toltve a gumipanel. Csoportos nyomtatasnal a selectAll rutinban tortenik az ellenorzes, mert itt mar keso
+	if (beerk.printAll || this.checkMarka(poz)) {
+        if (drb2>=drb && !beerk.printAll) {
             showMessage('A beérkezett mennyiség '+drb+' db!');
         }
         /* ha a sajcegben a mindenre nyomtat=IGEN, akkor minden gombra nyomtatas van */
@@ -655,7 +738,8 @@ OBeerk.prototype.selectPosition = function (obj) {
                         cbPrint = function(){
                             beerk.mentes(azon,sorsz,drb2,tip,poz);
                         }
-                        dataString="ORZOTTCIMKE" + " " + rsz+" "+tipstr+" "+pozstr+" "+rsz+"_"+ppoz+ptip;
+                        fegu = beerk.fedb+"/"+beerk.gudb;
+                        dataString="ORZOTTCIMKE" + " " + rsz+" "+tipstr+" "+pozstr+" "+rsz+"_"+ppoz+ptip+" "+fegu;
                         if (beerk.currentItem!='bGumiFelni' || mindenre_nyomtat) tcpClient.send(app.tcpServerIP,app.tcpServerPort,dataString,cbPrint);
                         if (beerk.currentItem=='bGumiFelni' && !mindenre_nyomtat) cbPrint();
                     }
@@ -682,18 +766,20 @@ OBeerk.prototype.selectPosition = function (obj) {
 
 OBeerk.prototype.mentes = function(azon,sorsz,drb2,tip,poz) {
     if (!beerk.printAll) {
+            rsz = $('#rendszam').val();
             fn = 'beerk.rszMent';
-            ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'tip':tip,'poz':poz,'login':login_id},true, fn);
+            ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'tip':tip,'poz':poz,'login':login_id,'rsz':rsz},true, fn);
     }
 }
 OBeerk.prototype.mentesMind = function() {
-    if (beerk.printAll && beerk.pozToPrint!='') {
+    if (beerk.pozToPrint!='') {
             tip = beerk.currentItem; /* gumi,felni, ... */
             drb2 = $('.dataDrbVart').html();
             azon = $('#hAZON').val();
-            sorsz = $('#hSORSZ').val();	
+            sorsz = $('#hSORSZ').val();
+            rsz = $('#rendszam').val();
             fn = 'beerk.rszMentMind';
-            ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'tip':tip,'poz':beerk.pozToPrint,'login':login_id},true, fn);
+            ajaxCall(fn,{'azon':azon,'sorsz':sorsz,'drb2':drb2,'tip':tip,'poz':beerk.pozToPrint,'login':login_id,'rsz':rsz},true, fn);
     }
 }
 OBeerk.prototype.rszMentMind = function(result) {

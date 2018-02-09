@@ -68,7 +68,7 @@
     }
 	  
   }
-  
+  //_log(json_encode($r));  
   
   switch ($func) {
   case 'tcp':
@@ -407,7 +407,13 @@
 		$minta=str_replace('\\r','',$minta);		
 		$si=str_replace('\\r','',$si);
         $evszak=str_replace('\\r','',$evszak);
+
+		if (strtoupper($marka)=='NINCS') $marka='';
+		if (strtoupper($meret)=='NINCS') $meret='';
+		if (strtoupper($minta)=='NINCS') $minta='';
+		if (strtoupper($si)=='NINCS') $si='';
 		$where='';
+
 		if (trim($marka)!='') $where = " MARKA = '$marka' ";
 		if (trim($meret)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MERET,'/',''),' ','') = replace(replace('$meret','/',''),' ','') ";}
 		if (trim($minta)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(replace(replace(MINTA,'/',''),' ',''),'.',''),'*','') = replace(replace(replace(replace('$minta','/',''),' ',''),'.',''),'*','') ";}
@@ -437,6 +443,11 @@
 		$minta=str_replace('\\r','',$minta);		
 		$si=str_replace('\\r','',$si);
         $evszak=str_replace('\\r','',$evszak);
+		if (strtoupper($marka)=='NINCS') $marka='';
+		if (strtoupper($meret)=='NINCS') $meret='';
+		if (strtoupper($minta)=='NINCS') $minta='';
+		if (strtoupper($si)=='NINCS') $si='';
+
 		$where='';
 		if (trim($marka)!='') $where = " MARKA = '$marka' ";
 		if (trim($meret)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MERET,'/',''),' ','') = replace(replace('$meret','/',''),' ','') ";}
@@ -467,6 +478,10 @@
 		$minta=str_replace('\\r','',$minta);		
 		$si=str_replace('\\r','',$si);
         $evszak=str_replace('\\r','',$evszak);
+		if (strtoupper($marka)=='NINCS') $marka='';
+		if (strtoupper($meret)=='NINCS') $meret='';
+		if (strtoupper($minta)=='NINCS') $minta='';
+		if (strtoupper($si)=='NINCS') $si='';
 		$where='';
 		if (trim($marka)!='') $where = " MARKA = '$marka' ";
 		if (trim($meret)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MERET,'/',''),' ','') = replace(replace('$meret','/',''),' ','') ";}
@@ -498,6 +513,10 @@
 		$minta=str_replace('\\r','',$minta);		
 		$si=str_replace('\\r','',$si);
         $evszak=str_replace('\\r','',$evszak);
+		if (strtoupper($marka)=='NINCS') $marka='';
+		if (strtoupper($meret)=='NINCS') $meret='';
+		if (strtoupper($minta)=='NINCS') $minta='';
+		if (strtoupper($si)=='NINCS') $si='';
 		$where='';
 		if (trim($marka)!='') $where = " MARKA = '$marka' ";
 		if (trim($meret)!='') {if ($where!='') $where.=' AND ';$where .= " replace(replace(MERET,'/',''),' ','') = replace(replace('$meret','/',''),' ','') ";}
@@ -979,6 +998,18 @@
 		Firebird::commit();
 		echo json_encode(Converter::win2utf_array($res));
         break;
+  case 'qprint.setLabelData':
+		$sql="SELECT * FROM PDA_ORZOTTPRINT_RSZADATOK (:rsz)";
+		$stmt = Firebird::prepare($sql);
+		//$login=$r['login'];
+		$rsz=$r['rsz'];
+		$stmt->bindParam(':rsz', $rsz, PDO::PARAM_STR);
+		//$stmt->bindParam(':login', $login, PDO::PARAM_STR);		
+        $res = _logSQL($func,$stmt,$r);
+		Firebird::commit();
+		echo json_encode(Converter::win2utf_array($res));
+        break;
+        
     default:
         echo json_encode('unknown command');
   }

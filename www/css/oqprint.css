@@ -172,4 +172,30 @@
     height: 40px;
     
 }
- 
+/* cimke panel */
+#divcimke {
+	display:none;
+	width:100%;
+	position:relative;
+	top:0px;
+	height:100%;
+}
+#divcimke div{
+	width: 200px;
+    float: left;
+	margin-left:25px;
+}
+#dcimkebuttons {
+    width: 507px !important;
+}
+#bCimkeClose {
+    margin-left: 50px;
+}
+
+.bcimkeprint {
+	
+}
+#teleplist {
+    display:none;
+}
+/* cimke panel eddig */ 

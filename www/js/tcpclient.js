@@ -1,7 +1,7 @@
 var tcpClient = {
     send: function(ip,port,dataString,cbOk){
         dataString+="\r\n";
-        alert('ip:'+ip+' port:'+port);
+        //if (teszt) alert('ip:'+ip+' port:'+port);
         var tsocket = new Socket();
         tsocket.open(
           ip,

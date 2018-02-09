@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -50,7 +50,7 @@ function depthMeter (pid,pname) {
 	this.name = pname;
 	}
 var app = {
-    version:"v1.180129_2",
+    version:"v1.180209",
     printerType:"tcp",
 	printerId:"",
 	printerName:"",
