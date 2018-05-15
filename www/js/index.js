@@ -50,7 +50,7 @@ function depthMeter (pid,pname) {
 	this.name = pname;
 	}
 var app = {
-    version:"v1.180209",
+    version:"v1.180323",
     printerType:"tcp",
 	printerId:"",
 	printerName:"",
@@ -67,6 +67,8 @@ var app = {
 	currentModule:"",
     tcpServerIP:"192.168.1.105",
     tcpServerPort:"9099",
+    tcpPrinterNr:1,
+    tcpPrinterMax:2,
     // Application Constructor
     initialize: function() {
         this.bindEvents();

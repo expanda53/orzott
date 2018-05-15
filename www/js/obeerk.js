@@ -453,14 +453,24 @@ OBeerk.prototype.getPositions=function(result){
 
 OBeerk.prototype.checkMarka = function (poz){
   /* gumipanel adatok ellenorzese*/
-  index=-1;
+  indexMarka=-1;
+  indexMeret=-1;
+  indexMinta=-1;
+  tengely='';
   result=true;
   if  (this.currentItem!='bFelni') {
-      if (poz=='bJE' || poz=='bBE')  index=9;
-      if (poz=='bJH' || poz=='bBH')  index=12;
-      if (poz=='bPOT' )  index=15;
-      if (index!=-1) {
-        if (beerk.rszAdatok[index].trim()=='' || beerk.rszAdatok[index].trim()=='nincs') {showMessage('Az adott tengelyen nincs méret, minta beállítva! Állítsd be!');result=false;}
+      if (poz=='bJE' || poz=='bBE')  {indexMarka=9;indexMeret=10;indexMinta=11;tengely='A';}
+      if (poz=='bJH' || poz=='bBH')  {indexMarka=12;indexMeret=13;indexMinta=14;tengely='B';}
+      if (poz=='bPOT' )  {indexMarka=15;indexMeret=16;indexMinta=17;tengely='P'}
+      if (indexMarka!=-1 || indexMinta!=-1 || indexMeret!=-1) {
+            uzenet='';
+            if (beerk.rszAdatok[indexMarka].trim()=='' || beerk.rszAdatok[indexMarka].trim().toUpperCase()=='NINCS') uzenet+="márka\n";
+            if (beerk.rszAdatok[indexMeret].trim()=='' || beerk.rszAdatok[indexMeret].trim().toUpperCase()=='NINCS') uzenet+="méret\n";
+            if (beerk.rszAdatok[indexMinta].trim()=='' || beerk.rszAdatok[indexMinta].trim().toUpperCase()=='NINCS') uzenet+="minta\n";
+            if (uzenet!='') {
+                uzenet="Hiányos "+tengely+" tengely adatok! Hiányzik:\n" + uzenet;
+                result = false;
+            }
       }
   }
   return result;
@@ -739,7 +749,9 @@ OBeerk.prototype.selectPosition = function (obj) {
                             beerk.mentes(azon,sorsz,drb2,tip,poz);
                         }
                         fegu = beerk.fedb+"/"+beerk.gudb;
-                        dataString="ORZOTTCIMKE" + " " + rsz+" "+tipstr+" "+pozstr+" "+rsz+"_"+ppoz+ptip+" "+fegu;
+                        printerNum='';
+                        if (app.tcpPrinterNr>1) printerNum='P'+app.tcpPrinterNr;
+                        dataString="ORZOTTCIMKE" +printerNum+ " " + rsz+" "+tipstr+" "+pozstr+" "+rsz+"_"+ppoz+ptip+" "+fegu;
                         if (beerk.currentItem!='bGumiFelni' || mindenre_nyomtat) tcpClient.send(app.tcpServerIP,app.tcpServerPort,dataString,cbPrint);
                         if (beerk.currentItem=='bGumiFelni' && !mindenre_nyomtat) cbPrint();
                     }

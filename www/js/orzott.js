@@ -45,7 +45,10 @@ function ajaxError(func){
     alert('ajax hiba a függvénynél:' + func);
 }
 
-
+function setTcpPrinter() {
+   $('#divSettings').hide();
+    tcpprinterDialog.show();
+}
 
 
 function showMenu() {

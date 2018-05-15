@@ -308,6 +308,7 @@ OElrak.prototype.hkodDelInit=function(){
 }
 OElrak.prototype.hkodDel=function(result){
 	/*hkod torles eredmenye */
+    elrak.allapotClose(false);
 	for (var i = 0;i < result.length;i++){	
 		res = result[i];
 		if (res.RESULT=='OK') {
@@ -398,6 +399,27 @@ OElrak.prototype.hkodSaveCheck = function (result){
 					errormsg='Más helykódon is van ez a rendszám!';
 					showMessage(errormsg,clearObj);
 					break;					
+				case 'DEEP': 
+					errormsg='Mélységmérés nem lett elvégezve!';
+					showMessage(errormsg,clearObj);
+					meresKell=true;
+                    
+                    elrak.hideHkod();
+                    $('#dataHkod').val('');
+                    
+                    /* ha merni kell */
+					panelName='elrak_meres';
+					$.get( "views/"+panelName+".tpl", function( data ) { 
+						rsz = $('#rendszam').val();
+						mibiz = $('#hMIBIZ').val();
+						$('#divmeres').html(data);
+						$('#divmeres').show();
+						fn = 'elrak.getMelyseg'; /* query */
+						ajaxCall(fn,{'poz':elrak.currentPosition, 'login':login_id,'tip':elrak.currentItem},true, fn);
+					});
+
+                    
+					break;
 				default:
 					errormsg = res.RESULTTEXT;
 					showMessage(errormsg,clearObj);

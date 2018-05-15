@@ -73,7 +73,13 @@
     },
         
     showNext:function(){
-        if (app.currentModule=='') showMenu();
+        if (app.currentModule=='') {
+            if (app.printerType=='tcp') {
+                setTcpPrinter();
+            }
+            else
+            showMenu();
+        }
         else {
             $('#divSettings').hide();
             $('#divContent').show();

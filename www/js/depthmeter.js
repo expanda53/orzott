@@ -12,7 +12,8 @@
 				depthMeterDialog.createTable();				
 				
 				$('#btNext').bind('click', function() {
-					app.getPrinters();
+					//app.getPrinters(); bt nyomtatok nincsenek hasznalva
+                    printerDialog.showNext();
 				})
 				
 			});
@@ -23,7 +24,9 @@
 				sorok = "";
                 var connected = function(){
                     showMessage('Mélységmérő OK.','',2)
-                    app.getPrinters();
+					//app.getPrinters(); bt nyomtatok nincsenek hasznalva
+                    printerDialog.showNext();
+
                 }
                 
 				app.depthMeters.forEach(function(meter){
@@ -35,9 +38,9 @@
 					
 				})
 				if (sorok=="") {
-					//showMenu();
-					//$('#tplDM').hide();
-					app.getPrinters();
+					//app.getPrinters(); bt nyomtatok nincsenek hasznalva
+                    printerDialog.showNext();
+
 				}
 				else {
 					$("#tableprinter tbody").html(sorok);

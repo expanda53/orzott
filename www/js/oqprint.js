@@ -185,7 +185,9 @@ OQPrint.prototype.print = function (printtext) {
                 printing=true;
                 cbPrint = function(){
                 }
-                dataString="ORZOTTCIMKEGYORS" + " " + rsz+" "+tipstr+" "+pozstr+" "+rszprint;
+                printerNum='';
+                if (app.tcpPrinterNr>1) printerNum='P'+app.tcpPrinterNr;
+                dataString="ORZOTTCIMKEGYORS"+printerNum + " " + rsz+" "+tipstr+" "+pozstr+" "+rszprint;
                 tcpClient.send(app.tcpServerIP,app.tcpServerPort,dataString,cbPrint);
             }
             finally {
@@ -312,7 +314,10 @@ OQPrint.prototype.printLabel = function(aktbutton){
             try {
                 printing=true;
                 cbPrint = function(){};
-                dataString="ORZOTTCIMKE" + " " + rsz+" "+tipstr+" "+pozstr+" "+rszprint+" "+qprint.fegu;
+                printerNum='';
+                if (app.tcpPrinterNr>1) printerNum='P'+app.tcpPrinterNr;
+               
+                dataString="ORZOTTCIMKE" +printerNum+ " " + rsz+" "+tipstr+" "+pozstr+" "+rszprint+" "+qprint.fegu;
                 tcpClient.send(app.tcpServerIP,app.tcpServerPort,dataString,cbPrint);
             }
             finally {
